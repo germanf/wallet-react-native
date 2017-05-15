@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
-import {View, Alert, AsyncStorage} from 'react-native'
+import {View, Alert, AsyncStorage, StyleSheet} from 'react-native'
 import {NavigationActions} from 'react-navigation'
 import LoginComponent from './../components/signupComponent'
 
 export default class Signup extends Component {
   static navigationOptions = {
-    title: 'Register',
+    title: 'Create New Account',
   }
 
   constructor() {
@@ -87,7 +87,7 @@ export default class Signup extends Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <LoginComponent
           firstnameChanged={this.updateFirstName}
           lastnameChanged={this.updateLastname}
@@ -103,3 +103,11 @@ export default class Signup extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex:1,
+    backgroundColor:'white',
+    padding:15,
+  },
+})

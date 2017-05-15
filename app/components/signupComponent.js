@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import {ScrollView, View, StyleSheet, TouchableHighlight, Text, TextInput} from 'react-native'
+import {ScrollView, StyleSheet, TouchableHighlight, Text, TextInput, KeyboardAvoidingView} from 'react-native'
 
 export default class SignupComponent extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <ScrollView>
+      <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
+        <ScrollView keyboardDismissMode={'interactive'}>
           <TextInput
             style={styles.input}
             placeholder="First Name"
@@ -53,44 +53,40 @@ export default class SignupComponent extends Component {
             secureTextEntry
             onChangeText={this.props.confirmPasswordChanged}
           />
-          <TouchableHighlight
-            style={styles.submit}
-            onPress={this.props.signup}>
-            <Text>
-              Sign Up
-            </Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={styles.submit}
-            onPress={this.props.login}>
-            <Text>
-                Already Registered
-            </Text>
-          </TouchableHighlight>
         </ScrollView>
-      </View>
+        <TouchableHighlight
+          style={styles.submit}
+          onPress={this.props.signup}>
+          <Text style={{color:'white'}}>
+            Sign Up
+          </Text>
+        </TouchableHighlight>
+      </KeyboardAvoidingView>
     );
   }
 }
 
 const styles = StyleSheet.create({
    container: {
-      justifyContent:'center',
-      paddingTop: 50,
+      flex:1,
+      flexDirection: 'column',
    },
    input: {
-      margin: 15,
-      height: 40,
-      width: "90%",
-      borderColor: 'grey',
+      height: 60,
+      width: "100%",
+      padding: 10,
+      marginTop: 20,
+      borderColor: 'white',
       borderWidth: 1,
    },
    submit: {
-      backgroundColor: 'silver',
-      margin: 15,
       padding: 10,
-      height: 40,
-      width: "90%",
+      marginTop: 20,
+      height: 50,
+      borderRadius: 8,
+      backgroundColor: 'dodgerblue',
+      width: "100%",
+      alignSelf: 'stretch',
       alignItems: 'center',
       justifyContent:'center',
    },

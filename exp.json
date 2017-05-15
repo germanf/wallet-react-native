@@ -1,7 +1,7 @@
 {
-  "name": "test-project",
-  "description": "An empty new project",
-  "slug": "test-project",
+  "name": "wallet",
+  "description": "A react native project",
+  "slug": "wallet",
   "privacy": "public",
   "sdkVersion": "16.0.0",
   "version": "1.0.0",

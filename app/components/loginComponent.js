@@ -27,42 +27,73 @@ export default class LoginComponent extends Component {
           onChangeText={this.props.passwordChanged}
         />
         <TouchableHighlight
-          style={styles.submit}
+          style={styles.login}
           onPress={this.props.login}>
-          <Text>
+          <Text style={{color:'white'}}>
                Login
           </Text>
         </TouchableHighlight>
         <TouchableHighlight
-          style={styles.submit}
+          style={styles.forgetPassword}
+          onPress={this.props.forgetPassword}>
+          <Text style={{color:'blue'}}>
+               Forgot Password?
+          </Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={styles.register}
           onPress={this.props.signup}>
-          <Text>
-               Register Here
+          <Text style={{color:'blue'}}>
+               Create New Account
           </Text>
         </TouchableHighlight>
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
    container: {
-      justifyContent:'center',
-      paddingTop: 50,
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
    },
    input: {
-      margin: 15,
-      height: 40,
-      width: "90%",
-      borderColor: 'grey',
+      height: 60,
+      width: "100%",
+      padding: 10,
+      marginTop: 20,
+      borderColor: 'white',
       borderWidth: 1,
    },
-   submit: {
-      backgroundColor: 'silver',
-      margin: 15,
+   login: {
       padding: 10,
+      marginTop: 20,
+      height: 50,
+      backgroundColor: 'dodgerblue',
+      width: "100%",
+      borderRadius: 8,
+      alignItems: 'center',
+      justifyContent:'center',
+   },
+   register: {
+      padding: 10,
+      marginTop: 20,
       height: 40,
-      width: "90%",
+      backgroundColor: 'white',
+      width: "60%",
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: 'blue',
+      alignItems: 'center',
+      justifyContent:'center',
+   },
+   forgetPassword: {
+      padding: 10,
+      height: 50,
+      backgroundColor: 'white',
+      width: "100%",
+      borderColor : 'blue',
       alignItems: 'center',
       justifyContent:'center',
    },

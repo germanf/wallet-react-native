@@ -1,20 +1,18 @@
 import React, {Component} from 'react'
 import {View, Alert, AsyncStorage, StyleSheet} from 'react-native'
 import {NavigationActions} from 'react-navigation'
-import LoginComponent from './../components/loginComponent'
+import ForgetPasswordComponent from './../components/forgetPasswordComponent'
 
-export default class Login extends Component {
+export default class ForgetPassword extends Component {
   static navigationOptions = {
-    title: 'Login',
+    title: 'Forget Password',
   }
 
   constructor() {
       super()
-      this.checkLoggedIn()
       this.state = {
          email: '',
          company: '',
-         password: '',
       }
    }
 
@@ -35,27 +33,11 @@ export default class Login extends Component {
    updateCompany = (text) => {
       this.setState({company: text})
    }
-   updatePassword = (text) => {
-      this.setState({password: text})
+   goToLogin = () => {
+     this.props.navigation.dispatch(NavigationActions.back())
    }
-   goToHome = () => {
-     const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Home'}),
-      ],
-    })
-    this.props.navigation.dispatch(resetAction)
-   }
-   goToSignup = () => {
-     this.props.navigation.navigate("Signup")
-   }
-   goToForgetPassword = () => {
-     this.props.navigation.navigate("ForgetPassword")
-   }
-
-   login = () => {
-     fetch('https://rehive.com/api/3/auth/login/', {
+   sendEmail = () => {
+     fetch('https://rehive.com/api/3/auth/password/reset/', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -64,16 +46,14 @@ export default class Login extends Component {
         body: JSON.stringify({
           "identifier": this.state.email,
           "company_id": this.state.company,
-          "password": this.state.password,
         }),
       })
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status === "success") {
-          const loginInfo = responseJson.data;
-          AsyncStorage.setItem("token", loginInfo.token)
-          AsyncStorage.setItem("user", JSON.stringify(loginInfo.user))
-          this.goToHome()
+          Alert.alert('Success',
+            responseJson.message,
+            [{text: 'OK', onPress: () => this.goToLogin()}])
         }
         else {
           Alert.alert('Error',
@@ -91,13 +71,10 @@ export default class Login extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <LoginComponent
+        <ForgetPasswordComponent
           emailChanged={this.updateEmail}
           companyChanged={this.updateCompany}
-          passwordChanged={this.updatePassword}
-          login={this.login}
-          signup={this.goToSignup}
-          forgetPassword={this.goToForgetPassword}
+          sendEmail={this.sendEmail}
         />
       </View>
     );

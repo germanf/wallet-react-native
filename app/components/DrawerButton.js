@@ -6,7 +6,8 @@ const DrawerButton = ({ navigation }) => (
   <TouchableOpacity style={{ padding: 10 }}>
     <Icon
       name="menu"
-      size={30}
+      size={35}
+      color="white"
       onPress={() => navigation.navigate('DrawerOpen')}
     />
   </TouchableOpacity>

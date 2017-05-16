@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
-import {View, StyleSheet, TouchableHighlight, Text, TextInput} from 'react-native'
+import {KeyboardAvoidingView, StyleSheet, TouchableHighlight, Text, TextInput} from 'react-native'
 
 export default class LoginComponent extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -36,18 +36,18 @@ export default class LoginComponent extends Component {
         <TouchableHighlight
           style={styles.forgetPassword}
           onPress={this.props.forgetPassword}>
-          <Text style={{color:'blue'}}>
+          <Text style={{color:'#2070A0'}}>
                Forgot Password?
           </Text>
         </TouchableHighlight>
         <TouchableHighlight
           style={styles.register}
           onPress={this.props.signup}>
-          <Text style={{color:'blue'}}>
+          <Text style={{color:'#2070A0'}}>
                Create New Account
           </Text>
         </TouchableHighlight>
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
       padding: 10,
       marginTop: 20,
       height: 50,
-      backgroundColor: 'dodgerblue',
+      backgroundColor: '#2070A0',
       width: "100%",
       borderRadius: 8,
       alignItems: 'center',
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
       width: "60%",
       borderRadius: 8,
       borderWidth: 1,
-      borderColor: 'blue',
+      borderColor: '#2070A0',
       alignItems: 'center',
       justifyContent:'center',
    },

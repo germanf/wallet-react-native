@@ -1,26 +1,15 @@
 import React, {Component} from 'react'
-import {View, AsyncStorage, Alert} from 'react-native'
+import {View, AsyncStorage, Alert, Text} from 'react-native'
 import {NavigationActions} from 'react-navigation'
-import HomeComponent from './../components/homeComponent'
 
 export default class Home extends Component {
-  static navigationOptions = {
-    title: 'Home',
-  }
+
   constructor() {
       super()
-      this.state = {
-         userInfo: {},
-      }
 
-      this.getUserInfo()
-   }
-
-  getUserInfo = () => {
-    AsyncStorage.getItem('user').then((value) => {
-         this.setState({'userInfo': JSON.parse(value)});
-      });
+      this.logout()
   }
+
   goToLogin = () => {
     const resetAction = NavigationActions.reset({
         index: 0,
@@ -30,12 +19,15 @@ export default class Home extends Component {
       })
       this.props.navigation.dispatch(resetAction)
   }
-  logout = () => {
+
+  logout = async () => {
+    const value = await AsyncStorage.getItem('token');
     fetch('https://rehive.com/api/3/auth/logout/', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+          'Authorization': 'Token ' + value,
         },
       })
       .then((response) => response.json())
@@ -54,13 +46,14 @@ export default class Home extends Component {
         Alert.alert('Error',
             error,
             [{text: 'OK'}])
+        this.props.navigation.goBack()
       })
    }
 
   render() {
     return (
-      <View style={{flex:1}}>
-        <HomeComponent name={this.state.userInfo.first_name + " " + this.state.userInfo.last_name} logout={this.logout} />
+      <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:'white'}}>
+        <Text style={{fontSize:30}}>Logging Out</Text>
       </View>
     )
   }

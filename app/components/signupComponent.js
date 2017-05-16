@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
       marginTop: 20,
       height: 50,
       borderRadius: 8,
-      backgroundColor: 'dodgerblue',
+      backgroundColor: '#2070A0',
       width: "100%",
       alignSelf: 'stretch',
       alignItems: 'center',

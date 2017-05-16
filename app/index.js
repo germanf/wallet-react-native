@@ -1,8 +1,8 @@
 import {StackNavigator} from 'react-navigation'
-import Home from './screens/home'
-import Login from './screens/login'
-import Signup from './screens/signup'
-import ForgetPassword from './screens/forgetPassword'
+import Home from './screens/home/index'
+import Login from './screens/auth/login'
+import Signup from './screens/auth/signup'
+import ForgetPassword from './screens/auth/forgetPassword'
 
 const RouteConfigs = {
   Login: {
@@ -22,7 +22,7 @@ const RouteConfigs = {
 const App = StackNavigator(RouteConfigs, {
     navigationOptions : {
       headerStyle: {
-          backgroundColor: 'dodgerblue',
+          backgroundColor: '#2070A0',
       },
       headerTintColor: 'white',
     },

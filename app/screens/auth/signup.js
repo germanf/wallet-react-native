@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {View, Alert, AsyncStorage, StyleSheet} from 'react-native'
 import {NavigationActions} from 'react-navigation'
-import LoginComponent from './../components/signupComponent'
+import LoginComponent from './../../components/signupComponent'
 
 export default class Signup extends Component {
   static navigationOptions = {

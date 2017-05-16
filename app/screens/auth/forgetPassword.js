@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {View, Alert, AsyncStorage, StyleSheet} from 'react-native'
 import {NavigationActions} from 'react-navigation'
-import ForgetPasswordComponent from './../components/forgetPasswordComponent'
+import ForgetPasswordComponent from './../../components/forgetPasswordComponent'
 
 export default class ForgetPassword extends Component {
   static navigationOptions = {

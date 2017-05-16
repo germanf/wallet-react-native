@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
-import {View, StyleSheet, TouchableHighlight, Text, TextInput} from 'react-native'
+import {KeyboardAvoidingView, StyleSheet, TouchableHighlight, Text, TextInput} from 'react-native'
 
 export default class ForgetPasswordComponent extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -26,7 +26,7 @@ export default class ForgetPasswordComponent extends Component {
                Send Reset Email
           </Text>
         </TouchableHighlight>
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
       marginTop: 20,
       height: 50,
       borderRadius: 8,
-      backgroundColor: 'dodgerblue',
+      backgroundColor: '#2070A0',
       width: "100%",
       alignItems: 'center',
       justifyContent:'center',

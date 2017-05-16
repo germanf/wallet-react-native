@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {View, Alert, AsyncStorage, StyleSheet} from 'react-native'
 import {NavigationActions} from 'react-navigation'
-import LoginComponent from './../components/loginComponent'
+import LoginComponent from './../../components/loginComponent'
 
 export default class Login extends Component {
   static navigationOptions = {
@@ -20,7 +20,7 @@ export default class Login extends Component {
 
    checkLoggedIn = async () => {
      try {
-        const value = await AsyncStorage.getItem('token');
+        const value = await AsyncStorage.getItem('token')
         if (value != null) {
           this.goToHome()
         }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text} from 'react-native'
+import {View, Text, StyleSheet} from 'react-native'
 
 export default class Withdraw extends Component {
   static navigationOptions = {
@@ -8,7 +8,7 @@ export default class Withdraw extends Component {
 
   render() {
     return (
-      <View style={{flex:1}}>
+      <View style={styles.container}>
         <Text>
           Withdraw Page
         </Text>
@@ -16,3 +16,11 @@ export default class Withdraw extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    borderColor: 'black',
+    height: 80,
+    backgroundColor: 'white',
+  },
+})

@@ -2,17 +2,9 @@ import React, {Component} from 'react'
 import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default class Withdraw extends Component {
+export default class BankAccounts extends Component {
   static navigationOptions = {
-    title: 'Withdraw',
-  }
-
-  goToBankAccounts = () => {
-    this.props.navigation.navigate("BankAccounts")
-  }
-
-  goToBitcoinAddresses = () => {
-    this.props.navigation.navigate("BitcoinAddresses")
+    title: 'Select Bank Account',
   }
 
   render() {
@@ -22,9 +14,15 @@ export default class Withdraw extends Component {
           style={styles.options}
           onPress={this.goToBankAccounts}>
           <View style={styles.optionsElement}>
-            <Text style={styles.optionsText}>
-              Bank Account
-            </Text>
+            <View style={styles.optionsText}>
+              <Icon
+                name="bank"
+                size={35}
+              />
+              <Text style={{fontSize:22}}>
+                Bank Account 1
+              </Text>
+            </View>
             <View style={styles.optionsIcon}>
               <Icon
                 name="angle-double-right"
@@ -37,9 +35,15 @@ export default class Withdraw extends Component {
           style={styles.options}
           onPress={this.goToBitcoinAddresses}>
           <View style={styles.optionsElement}>
-            <Text style={styles.optionsText}>
-              Bitcoin Address
-            </Text>
+            <View style={styles.optionsText}>
+              <Icon
+                name="bank"
+                size={35}
+              />
+              <Text style={{fontSize:22}}>
+                Bank Account 2
+              </Text>
+            </View>
             <View style={styles.optionsIcon}>
               <Icon
                 name="angle-double-right"
@@ -75,8 +79,10 @@ const styles = StyleSheet.create({
     justifyContent:'center',
   },
   optionsText: {
-    flex:1,
-    fontSize:22,
+    flex:2,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   optionsIcon: {
     flex:1,

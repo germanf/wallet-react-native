@@ -7,20 +7,12 @@ export default class Withdraw extends Component {
     title: 'Withdraw',
   }
 
-  goToBankAccounts = () => {
-    this.props.navigation.navigate("BankAccounts")
-  }
-
-  goToBitcoinAddresses = () => {
-    this.props.navigation.navigate("BitcoinAddresses")
-  }
-
   render() {
     return (
       <View style={styles.container}>
         <TouchableHighlight
           style={styles.options}
-          onPress={this.goToBankAccounts}>
+          onPress={this.props.signup}>
           <View style={styles.optionsElement}>
             <Text style={styles.optionsText}>
               Bank Account
@@ -35,7 +27,7 @@ export default class Withdraw extends Component {
         </TouchableHighlight>
         <TouchableHighlight
           style={styles.options}
-          onPress={this.goToBitcoinAddresses}>
+          onPress={this.props.signup}>
           <View style={styles.optionsElement}>
             <Text style={styles.optionsText}>
               Bitcoin Address

@@ -16,10 +16,12 @@ export default class Transections extends Component {
         rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2),
       }),
     }
+  }
+  componentWillMount() {
     this.getData()
   }
   getData = async () => {
-    const value = await AsyncStorage.getItem('token');
+    const value = await AsyncStorage.getItem('token')
     fetch('https://www.rehive.com/api/3/transactions/', {
         method: 'GET',
         headers: {
@@ -40,9 +42,7 @@ export default class Transections extends Component {
           })
         }
         else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
+          this.props.logout()
         }
       })
       .catch((error) => {
@@ -53,7 +53,7 @@ export default class Transections extends Component {
   }
   render() {
     return (
-      <View style={{flex: 1, paddingTop: 22}}>
+      <View style={{flex: 1, paddingTop: 10}}>
         <ListView
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <Transection data={rowData} />}

@@ -8,11 +8,13 @@ export default class CurrentBalance extends Component {
   constructor() {
       super()
       this.state = {
-         balance: 8.00,
-         symbol: 'R',
+         balance: 0,
+         symbol: '',
       }
+   }
 
-      this.getBalanceInfo()
+   componentWillMount() {
+     this.getBalanceInfo()
    }
 
   setBalance = (balance, divisibility) => {
@@ -37,14 +39,12 @@ export default class CurrentBalance extends Component {
       .then((responseJson) => {
         if (responseJson.status === "success") {
           const account = responseJson.data.results[0].balances[0]
-          console.log(account)
+          AsyncStorage.setItem('currency', JSON.stringify(account.currency))
           this.setState({symbol: account.currency.symbol})
           this.setBalance(account.balance, account.currency.divisibility)
         }
         else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
+          this.props.logout()
         }
       })
       .catch((error) => {

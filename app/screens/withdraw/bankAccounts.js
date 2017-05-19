@@ -1,56 +1,71 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {View, ListView, StyleSheet, Alert, AsyncStorage, TouchableHighlight, Text} from 'react-native'
+import Account from './../../components/account'
 
 export default class BankAccounts extends Component {
   static navigationOptions = {
     title: 'Select Bank Account',
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2),
+      }),
+    }
+  }
+  componentWillMount() {
+    this.getData()
+  }
+  getAmount = (reference) => {
+    this.props.navigation.navigate("WithdrawalAmountEntry", {reference})
+  }
+  getData = async () => {
+    const value = await AsyncStorage.getItem('token');
+    fetch('https://rehive.com/api/3/user/bank_accounts/', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + value,
+        },
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success") {
+          const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2)});
+          const data = responseJson.data;
+          console.log(data)
+          let ids = data.map((obj, index) => index);
+          this.setState({
+            dataSource: ds.cloneWithRows(data, ids),
+          })
+        }
+        else {
+          this.props.logout()
+        }
+      })
+      .catch((error) => {
+        Alert.alert('Error',
+            error,
+            [{text: 'OK'}])
+      })
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(rowData) => <Account getAmount={this.getAmount} reference={rowData.code} name={rowData.bank_name} />}
+        />
         <TouchableHighlight
-          style={styles.options}
-          onPress={this.goToBankAccounts}>
-          <View style={styles.optionsElement}>
-            <View style={styles.optionsText}>
-              <Icon
-                name="bank"
-                size={35}
-              />
-              <Text style={{fontSize:22}}>
-                Bank Account 1
-              </Text>
-            </View>
-            <View style={styles.optionsIcon}>
-              <Icon
-                name="angle-double-right"
-                size={50}
-              />
-            </View>
-          </View>
-        </TouchableHighlight>
-        <TouchableHighlight
-          style={styles.options}
-          onPress={this.goToBitcoinAddresses}>
-          <View style={styles.optionsElement}>
-            <View style={styles.optionsText}>
-              <Icon
-                name="bank"
-                size={35}
-              />
-              <Text style={{fontSize:22}}>
-                Bank Account 2
-              </Text>
-            </View>
-            <View style={styles.optionsIcon}>
-              <Icon
-                name="angle-double-right"
-                size={50}
-              />
-            </View>
-          </View>
+          style={styles.submit}
+          onPress={() => this.props.navigation.navigate("AddBankAccount", {onGoBack: this.getData()})}>
+          <Text style={{color:'white', fontSize:20}}>
+            Add Bank Account
+          </Text>
         </TouchableHighlight>
       </View>
     )
@@ -63,30 +78,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'white',
   },
-  options: {
-    padding: 20,
-    height: 80,
+  submit: {
+    padding: 10,
+    height: 70,
+    backgroundColor: '#2070A0',
     width: "100%",
-    borderBottomWidth: 1,
-    borderBottomColor: "lightgray",
-    alignItems: 'flex-start',
-    justifyContent:'center',
-  },
-  optionsElement: {
-    flex:1,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent:'center',
-  },
-  optionsText: {
-    flex:2,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+    alignSelf: 'stretch',
     alignItems: 'center',
-  },
-  optionsIcon: {
-    flex:1,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
+    justifyContent:'center',
   },
 })

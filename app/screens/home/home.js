@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
-import {View, StyleSheet, TouchableHighlight, Text} from 'react-native'
+import {View, StyleSheet, TouchableHighlight, Text, AsyncStorage} from 'react-native'
+import {NavigationActions} from 'react-navigation'
 import Transections from './../transections/index'
 import CurrentBalance from './currentBalance'
 
@@ -8,12 +9,23 @@ export default class Home extends Component {
     title: 'Home',
   }
 
+  goToHome = () => {
+     AsyncStorage.clear()
+     const resetAction = NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Login'}),
+      ],
+    })
+    this.props.navigation.dispatch(resetAction)
+   }
+
   render() {
     return (
       <View style={styles.container}>
-        <CurrentBalance style={styles.balance} />
+        <CurrentBalance logout={this.goToHome} style={styles.balance} />
         <View style={styles.transection} >
-          <Transections />
+          <Transections logout={this.goToHome} />
           <TouchableHighlight
             style={styles.submit}
             onPress={this.props.signup}>
@@ -41,13 +53,13 @@ const styles = StyleSheet.create({
     backgroundColor:'white',
   },
   submit: {
-      padding: 10,
-      height: 70,
-      backgroundColor: '#2070A0',
-      width: "100%",
-      alignSelf: 'stretch',
-      alignItems: 'center',
-      justifyContent:'center',
-   },
+    padding: 10,
+    height: 70,
+    backgroundColor: '#2070A0',
+    width: "100%",
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent:'center',
+  },
 })
 

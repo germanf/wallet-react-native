@@ -5,6 +5,8 @@ import Signup from './screens/auth/signup'
 import ForgetPassword from './screens/auth/forgetPassword'
 import BankAccounts from './screens/withdraw/bankAccounts'
 import BitcoinAddresses from './screens/withdraw/bitcoinAddresses'
+import WithdrawalAmountEntry from './screens/withdraw/amountEntry'
+import AddBankAccount from './screens/settings/addBankAccount'
 
 const RouteConfigs = {
   Login: {
@@ -24,6 +26,12 @@ const RouteConfigs = {
   },
   BitcoinAddresses: {
     screen: BitcoinAddresses,
+  },
+  WithdrawalAmountEntry: {
+    screen: WithdrawalAmountEntry,
+  },
+  AddBankAccount: {
+    screen: AddBankAccount,
   },
 }
 

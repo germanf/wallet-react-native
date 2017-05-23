@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {ScrollView, StyleSheet, TouchableHighlight, Text, TextInput, KeyboardAvoidingView} from 'react-native'
 
-export default class SignupComponent extends Component {
+export default class BankAccountComponent extends Component {
 
   render() {
     return (

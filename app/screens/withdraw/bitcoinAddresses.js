@@ -62,7 +62,7 @@ export default class BitcoinAddresses extends Component {
         />
         <TouchableHighlight
           style={styles.submit}
-          onPress={this.props.signup}>
+          onPress={() => this.props.navigation.navigate("AddBitcoinAddress")}>
           <Text style={{color:'white', fontSize:20}}>
             Add Bitcoin Address
           </Text>

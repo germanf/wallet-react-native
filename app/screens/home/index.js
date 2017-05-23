@@ -7,6 +7,7 @@ import Settings from './../settings/index'
 import Withdraw from './../withdraw/index'
 import About from './../about/index'
 import Logout from './../auth/logout'
+import Accounts from './../accounts/index'
 import DrawerHeader from './../../components/drawerHeaderComponent'
 import DrawerButton from './../../components/DrawerButton'
 
@@ -22,6 +23,9 @@ const RouteConfigs = {
   },
   Withdraw: {
     screen: Withdraw,
+  },
+  Accounts: {
+    screen: Accounts,
   },
   About: {
     screen: About,

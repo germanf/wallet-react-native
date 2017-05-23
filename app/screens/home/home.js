@@ -28,7 +28,7 @@ export default class Home extends Component {
           <Transections logout={this.goToHome} />
           <TouchableHighlight
             style={styles.submit}
-            onPress={this.props.signup}>
+            onPress={() => this.props.navigation.navigate("SendMoney")}>
             <Text style={{color:'white', fontSize:20}}>
               Send
             </Text>

@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
-import {View, ListView, StyleSheet, Alert, AsyncStorage, TouchableHighlight, Text} from 'react-native'
-import Account from './../../components/account'
+import {View, ListView, StyleSheet, Alert, AsyncStorage} from 'react-native'
+import Account from './account'
 
-export default class BankAccounts extends Component {
+export default class Accounts extends Component {
   static navigationOptions = {
-    title: 'Select Bank Account',
+    title: 'Accounts',
   }
 
   constructor(props) {
@@ -18,12 +18,12 @@ export default class BankAccounts extends Component {
   componentWillMount() {
     this.getData()
   }
-  getAmount = (reference) => {
-    this.props.navigation.navigate("WithdrawalAmountEntry", {reference})
+  getCurrencies = (reference) => {
+    this.props.navigation.navigate("AccountCurrencies", {reference})
   }
   getData = async () => {
     const value = await AsyncStorage.getItem('token');
-    fetch('https://rehive.com/api/3/user/bank_accounts/', {
+    fetch('https://rehive.com/api/3/accounts/', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -35,7 +35,7 @@ export default class BankAccounts extends Component {
       .then((responseJson) => {
         if (responseJson.status === "success") {
           const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2)});
-          const data = responseJson.data;
+          const data = responseJson.data.results;
           console.log(data)
           let ids = data.map((obj, index) => index);
           this.setState({
@@ -58,15 +58,8 @@ export default class BankAccounts extends Component {
       <View style={styles.container}>
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={(rowData) => <Account getAmount={this.getAmount} reference={rowData.code} name={rowData.bank_name} />}
+          renderRow={(rowData) => <Account getCurrencies={this.getCurrencies} reference={rowData.reference} name={rowData.name} />}
         />
-        <TouchableHighlight
-          style={styles.submit}
-          onPress={() => this.props.navigation.navigate("AddBankAccount")}>
-          <Text style={{color:'white', fontSize:20}}>
-            Add Bank Account
-          </Text>
-        </TouchableHighlight>
       </View>
     )
   }
@@ -77,14 +70,5 @@ const styles = StyleSheet.create({
     flex:1,
     flexDirection: 'column',
     backgroundColor: 'white',
-  },
-  submit: {
-    padding: 10,
-    height: 70,
-    backgroundColor: '#2070A0',
-    width: "100%",
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    justifyContent:'center',
   },
 })

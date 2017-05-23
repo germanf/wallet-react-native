@@ -7,6 +7,10 @@ import BankAccounts from './screens/withdraw/bankAccounts'
 import BitcoinAddresses from './screens/withdraw/bitcoinAddresses'
 import WithdrawalAmountEntry from './screens/withdraw/amountEntry'
 import AddBankAccount from './screens/settings/addBankAccount'
+import AddBitcoinAddress from './screens/settings/addBitcoinAddress'
+import SendMoney from './screens/transfer/amountEntry'
+import SendTo from './screens/transfer/sendTo'
+import AccountCurrencies from './screens/accounts/accountCurrencies'
 
 const RouteConfigs = {
   Login: {
@@ -32,6 +36,18 @@ const RouteConfigs = {
   },
   AddBankAccount: {
     screen: AddBankAccount,
+  },
+  AddBitcoinAddress: {
+    screen: AddBitcoinAddress,
+  },
+  SendMoney: {
+    screen: SendMoney,
+  },
+  SendTo: {
+    screen: SendTo,
+  },
+  AccountCurrencies: {
+    screen: AccountCurrencies,
   },
 }
 

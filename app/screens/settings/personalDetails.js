@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {View, Alert, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TextInput, AsyncStorage, TouchableHighlight} from 'react-native'
+import CountryPicker from 'react-native-country-picker-modal';
 
 export default class Settings extends Component {
   static navigationOptions = {
@@ -10,9 +11,12 @@ export default class Settings extends Component {
     super()
 
     this.state = {
+      nationality: 'ZA',
       first_name: '',
       last_name: '',
       id_number: '',
+      skype_name: '',
+      mobile_number: '',
     }
   }
 
@@ -25,15 +29,18 @@ export default class Settings extends Component {
 
     const user = JSON.parse(value)
 
-    Alert.alert(
-      "User",
-      value
-    )
+    // Alert.alert(
+    //   "User",
+    //   value
+    // )
 
     this.setState({
       first_name: user.first_name,
       last_name: user.last_name,
       id_number: user.id_number,
+      nationality: user.nationality,
+      skype_name: user.skype_name,
+      mobile_number: user.mobile_number,
     })
   }
 
@@ -76,6 +83,43 @@ export default class Settings extends Component {
                 autoCapitalize="none"
                 value={this.state.id_number}
                 onChangeText={(text) => this.setState({id_number: text})}
+              />
+            </View>
+            <View style={styles.pickerContainer}>
+              <Text style={[styles.text, {flex:1}]}>
+                Country
+              </Text>
+              <CountryPicker
+                onChange={(value) => {
+                  this.setState({nationality: value.cca2});
+                }}
+                cca2={this.state.nationality}
+                translation="eng"
+                styles={{flex:1, justifyContent: 'center'}}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.text}>
+                Skype Name
+              </Text>
+              <TextInput
+                style={styles.input}
+                placeholder=""
+                autoCapitalize="none"
+                value={this.state.skype_name}
+                onChangeText={(text) => this.setState({skype_name: text})}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.text}>
+                Mobile Number
+              </Text>
+              <TextInput
+                style={styles.input}
+                placeholder=""
+                autoCapitalize="none"
+                value={this.state.mobile_number}
+                onChangeText={(text) => this.setState({mobile_number: text})}
               />
             </View>
           </ScrollView>
@@ -124,6 +168,13 @@ const styles = StyleSheet.create({
     flexDirection:'column',
     width:'100%',
     paddingTop: 10,
+  },
+  pickerContainer: {
+    flexDirection:'row',
+    width:'100%',
+    paddingTop: 5,
+    alignItems: 'center',
+    justifyContent:'center',
   },
 })
 

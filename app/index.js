@@ -6,11 +6,22 @@ import ForgetPassword from './screens/auth/forgetPassword'
 import BankAccounts from './screens/withdraw/bankAccounts'
 import BitcoinAddresses from './screens/withdraw/bitcoinAddresses'
 import WithdrawalAmountEntry from './screens/withdraw/amountEntry'
-import AddBankAccount from './screens/settings/addBankAccount'
-import AddBitcoinAddress from './screens/settings/addBitcoinAddress'
+import AddBankAccount from './screens/withdraw/addBankAccount'
+import AddBitcoinAddress from './screens/withdraw/addBitcoinAddress'
 import SendMoney from './screens/transfer/amountEntry'
 import SendTo from './screens/transfer/sendTo'
 import AccountCurrencies from './screens/accounts/accountCurrencies'
+import SettingsProfileImage from './screens/settings/profileImage'
+import SettingsPersonalDetails from './screens/settings/personalDetails'
+import SettingsMobileNumbers from './screens/settings/mobileNumbers'
+import SettingsEmailAddresses from './screens/settings/emailAddresses'
+import SettingsGetVerified from './screens/settings/getVerified'
+import SettingsAddress from './screens/settings/address'
+import SettingsBankAccounts from './screens/settings/bankAccounts'
+import SettingsBitcoinAddresses from './screens/settings/bitcoinAddresses'
+import SettingsCards from './screens/settings/cards'
+import SettingsSecurity from './screens/settings/security'
+import SettingsNotifications from './screens/settings/notifications'
 
 const RouteConfigs = {
   Login: {
@@ -48,6 +59,39 @@ const RouteConfigs = {
   },
   AccountCurrencies: {
     screen: AccountCurrencies,
+  },
+  SettingsProfileImage: {
+    screen: SettingsProfileImage,
+  },
+  SettingsPersonalDetails: {
+    screen: SettingsPersonalDetails,
+  },
+  SettingsMobileNumbers: {
+    screen: SettingsMobileNumbers,
+  },
+  SettingsEmailAddresses: {
+    screen: SettingsEmailAddresses,
+  },
+  SettingsGetVerified: {
+    screen: SettingsGetVerified,
+  },
+  SettingsAddress: {
+    screen: SettingsAddress,
+  },
+  SettingsBankAccounts: {
+    screen: SettingsBankAccounts,
+  },
+  SettingsBitcoinAddresses: {
+    screen: SettingsBitcoinAddresses,
+  },
+  SettingsCards: {
+    screen: SettingsCards,
+  },
+  SettingsSecurity: {
+    screen: SettingsSecurity,
+  },
+  SettingsNotifications: {
+    screen: SettingsNotifications,
   },
 }
 

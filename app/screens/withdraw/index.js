@@ -65,14 +65,14 @@ const styles = StyleSheet.create({
     width: "100%",
     borderBottomWidth: 1,
     borderBottomColor: "lightgray",
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent:'center',
   },
   optionsElement: {
     flex:1,
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent:'center',
+    alignItems: 'center',
+    justifyContent:'flex-start',
   },
   optionsText: {
     flex:1,

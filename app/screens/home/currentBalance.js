@@ -13,7 +13,7 @@ export default class CurrentBalance extends Component {
       }
    }
 
-   componentWillMount() {
+   componentDidMount() {
      this.getBalanceInfo()
    }
 

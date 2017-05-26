@@ -8,6 +8,8 @@ import Withdraw from './../withdraw/index'
 import About from './../about/index'
 import Logout from './../auth/logout'
 import Accounts from './../accounts/index'
+import Receive from './../receive/index'
+import Promotions from './../promotions/index'
 import DrawerHeader from './../../components/drawerHeaderComponent'
 import DrawerButton from './../../components/DrawerButton'
 
@@ -18,14 +20,20 @@ const RouteConfigs = {
   Deposit: {
     screen: Deposit,
   },
-  Settings: {
-    screen: Settings,
-  },
   Withdraw: {
     screen: Withdraw,
   },
+  Receive: {
+    screen: Receive,
+  },
   Accounts: {
     screen: Accounts,
+  },
+  Promotions: {
+    screen: Promotions,
+  },
+  Settings: {
+    screen: Settings,
   },
   About: {
     screen: About,
@@ -45,7 +53,7 @@ const CustomDrawerContentComponent = (props) => (
         activeBackgroundColor="#207080"
         inactiveTintColor="white"
         inactiveBackgroundColor="transparent"
-        labelStyle={{fontSize:18}}
+        labelStyle={{fontSize:16}}
       />
     </ScrollView>
   </View>

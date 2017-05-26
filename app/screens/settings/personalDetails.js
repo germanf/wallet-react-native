@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Alert, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TextInput, AsyncStorage, TouchableHighlight} from 'react-native'
+import {View, Picker, Alert, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TextInput, AsyncStorage, TouchableHighlight} from 'react-native'
 import CountryPicker from 'react-native-country-picker-modal';
 
 export default class Settings extends Component {
@@ -11,12 +11,13 @@ export default class Settings extends Component {
     super()
 
     this.state = {
-      nationality: 'ZA',
+      nationality: '',
       first_name: '',
       last_name: '',
       id_number: '',
       skype_name: '',
       mobile_number: '',
+      language: '',
     }
   }
 
@@ -41,7 +42,39 @@ export default class Settings extends Component {
       nationality: user.nationality,
       skype_name: user.skype_name,
       mobile_number: user.mobile_number,
+      language: user.language,
     })
+  }
+
+  save = async () => {
+    const value = await AsyncStorage.getItem('token')
+     fetch('https://rehive.com/api/3/user/', {
+        method: 'PATCH',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + value,
+        },
+        body: JSON.stringify(this.state),
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success") {
+          AsyncStorage.removeItem('user')
+          AsyncStorage.setItem('user', JSON.stringify(responseJson.data))
+          this.props.navigation.goBack()
+        }
+        else {
+          Alert.alert('Error',
+            responseJson.message,
+            [{text: 'OK'}])
+        }
+      })
+      .catch((error) => {
+        Alert.alert('Error',
+            error,
+            [{text: 'OK'}])
+      })
   }
 
   render() {
@@ -98,6 +131,20 @@ export default class Settings extends Component {
                 styles={{flex:1, justifyContent: 'center'}}
               />
             </View>
+            <View style={[styles.pickerContainer, {height:58}]}>
+              <Text style={[styles.text, {flex:2}]}>
+                Language
+              </Text>
+              <Picker
+                selectedValue={this.state.language}
+                style={{flex:1, justifyContent:'center'}}
+                onValueChange={(lang) => {
+                  this.setState({language: lang})
+                }}>
+                <Picker.Item label="English" value="en" />
+                <Picker.Item label="Africans" value="af" />
+              </Picker>
+            </View>
             <View style={styles.inputContainer}>
               <Text style={styles.text}>
                 Skype Name
@@ -125,7 +172,7 @@ export default class Settings extends Component {
           </ScrollView>
           <TouchableHighlight
             style={styles.submit}
-            onPress={null}>
+            onPress={() => this.save()}>
             <Text style={{color:'white'}}>
               Save
             </Text>
@@ -172,7 +219,8 @@ const styles = StyleSheet.create({
   pickerContainer: {
     flexDirection:'row',
     width:'100%',
-    paddingTop: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
     alignItems: 'center',
     justifyContent:'center',
   },

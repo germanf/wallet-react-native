@@ -18,7 +18,7 @@ export default class Settings extends Component {
           <Option name="Profile Image" gotoAddress="SettingsProfileImage" goTo={this.goTo} />
           <Option name="Personal Details" gotoAddress="SettingsPersonalDetails" goTo={this.goTo} />
           <Option name="Mobile Numbers" gotoAddress="SettingsMobileNumbers" goTo={this.goTo} />
-          <Option name="EmailAddresses" gotoAddress="SettingsEmailAddresses" goTo={this.goTo} />
+          <Option name="Email Addresses" gotoAddress="SettingsEmailAddresses" goTo={this.goTo} />
           <Option name="Get Verified" gotoAddress="SettingsGetVerified" goTo={this.goTo} />
           <Option name="Address" gotoAddress="SettingsAddress" goTo={this.goTo} />
           <Option name="Bank Accounts" gotoAddress="SettingsBankAccounts" goTo={this.goTo} />

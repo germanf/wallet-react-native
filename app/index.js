@@ -13,8 +13,11 @@ import SendTo from './screens/transfer/sendTo'
 import AccountCurrencies from './screens/accounts/accountCurrencies'
 import SettingsProfileImage from './screens/settings/profileImage'
 import SettingsPersonalDetails from './screens/settings/personalDetails'
-import SettingsMobileNumbers from './screens/settings/mobileNumbers'
-import SettingsEmailAddresses from './screens/settings/emailAddresses'
+import SettingsMobileNumbers from './screens/settings/mobileNumbers/index'
+import AddMobileNumber from './screens/settings/mobileNumbers/addMobileNumber'
+import VerifyMobileNumber from './screens/settings/mobileNumbers/verifyMobile'
+import SettingsEmailAddresses from './screens/settings/emailAddresses/index'
+import AddEmailAddress from './screens/settings/emailAddresses/addEmailAddress'
 import SettingsGetVerified from './screens/settings/getVerified'
 import SettingsAddress from './screens/settings/address'
 import SettingsBankAccounts from './screens/settings/bankAccounts'
@@ -69,8 +72,17 @@ const RouteConfigs = {
   SettingsMobileNumbers: {
     screen: SettingsMobileNumbers,
   },
+  AddMobileNumber: {
+    screen: AddMobileNumber,
+  },
+  VerifyMobileNumber: {
+    screen: VerifyMobileNumber,
+  },
   SettingsEmailAddresses: {
     screen: SettingsEmailAddresses,
+  },
+  AddEmailAddress: {
+    screen: AddEmailAddress,
   },
   SettingsGetVerified: {
     screen: SettingsGetVerified,

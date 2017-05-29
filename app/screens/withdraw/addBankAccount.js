@@ -62,6 +62,7 @@ export default class AddBankAccount extends Component {
     })
     this.props.navigation.dispatch(resetAction)
    }
+
    add = async() => {
      //console.log(this.state)
      const value = await AsyncStorage.getItem('token')

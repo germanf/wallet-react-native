@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {View, Picker, Alert, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TextInput, AsyncStorage, TouchableHighlight} from 'react-native'
-import CountryPicker from 'react-native-country-picker-modal';
+import CountryPicker from 'react-native-country-picker-modal'
 
 export default class Settings extends Component {
   static navigationOptions = {

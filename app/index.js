@@ -6,8 +6,6 @@ import ForgetPassword from './screens/auth/forgetPassword'
 import BankAccounts from './screens/withdraw/bankAccounts'
 import BitcoinAddresses from './screens/withdraw/bitcoinAddresses'
 import WithdrawalAmountEntry from './screens/withdraw/amountEntry'
-import AddBankAccount from './screens/withdraw/addBankAccount'
-import AddBitcoinAddress from './screens/withdraw/addBitcoinAddress'
 import SendMoney from './screens/transfer/amountEntry'
 import SendTo from './screens/transfer/sendTo'
 import AccountCurrencies from './screens/accounts/accountCurrencies'
@@ -20,11 +18,15 @@ import SettingsEmailAddresses from './screens/settings/emailAddresses/index'
 import AddEmailAddress from './screens/settings/emailAddresses/addEmailAddress'
 import SettingsGetVerified from './screens/settings/getVerified'
 import SettingsAddress from './screens/settings/address'
-import SettingsBankAccounts from './screens/settings/bankAccounts'
-import SettingsBitcoinAddresses from './screens/settings/bitcoinAddresses'
+import SettingsBankAccounts from './screens/settings/bankAccounts/index'
+import SettingsBitcoinAddresses from './screens/settings/bitcoinAddresses/index'
+import AddBankAccount from './screens/settings/bankAccounts/addBankAccount'
+import EditBankAccount from './screens/settings/bankAccounts/editBankAccount'
+import AddBitcoinAddress from './screens/settings/bitcoinAddresses/addBitcoinAddress'
+import EditBitcoinAddress from './screens/settings/bitcoinAddresses/editBitcoinAddress'
 import SettingsCards from './screens/settings/cards'
 import SettingsSecurity from './screens/settings/security'
-import SettingsNotifications from './screens/settings/notifications'
+import SettingsNotifications from './screens/settings/notifications/index'
 
 const RouteConfigs = {
   Login: {
@@ -47,12 +49,6 @@ const RouteConfigs = {
   },
   WithdrawalAmountEntry: {
     screen: WithdrawalAmountEntry,
-  },
-  AddBankAccount: {
-    screen: AddBankAccount,
-  },
-  AddBitcoinAddress: {
-    screen: AddBitcoinAddress,
   },
   SendMoney: {
     screen: SendMoney,
@@ -95,6 +91,18 @@ const RouteConfigs = {
   },
   SettingsBitcoinAddresses: {
     screen: SettingsBitcoinAddresses,
+  },
+  AddBankAccount: {
+    screen: AddBankAccount,
+  },
+  EditBankAccount: {
+    screen: EditBankAccount,
+  },
+  AddBitcoinAddress: {
+    screen: AddBitcoinAddress,
+  },
+  EditBitcoinAddress : {
+    screen: EditBitcoinAddress,
   },
   SettingsCards: {
     screen: SettingsCards,

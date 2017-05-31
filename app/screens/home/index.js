@@ -11,7 +11,7 @@ import Accounts from './../accounts/index'
 import Receive from './../receive/index'
 import Promotions from './../promotions/index'
 import DrawerHeader from './../../components/drawerHeaderComponent'
-import DrawerButton from './../../components/DrawerButton'
+import DrawerButton from './../../components/drawerButton'
 
 const RouteConfigs = {
   Home: {

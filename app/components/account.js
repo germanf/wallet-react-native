@@ -8,7 +8,7 @@ export default class Account extends Component {
     return (
       <TouchableHighlight
         style={styles.options}
-        onPress={() => this.props.getAmount(this.props.reference)}>
+        onPress={() => this.props.onPress(this.props.reference)}>
         <View style={styles.optionsElement}>
           <View style={styles.optionsText}>
             <Icon

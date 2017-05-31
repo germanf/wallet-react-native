@@ -58,11 +58,11 @@ export default class BankAccounts extends Component {
       <View style={styles.container}>
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={(rowData) => <Account getAmount={this.getAmount} reference={rowData.code} name={rowData.bank_name} />}
+          renderRow={(rowData) => <Account onPress={this.getAmount} reference={rowData.code} name={rowData.bank_name} />}
         />
         <TouchableHighlight
           style={styles.submit}
-          onPress={() => this.props.navigation.navigate("AddBankAccount")}>
+          onPress={() => this.props.navigation.navigate("AddBankAccount", {parentRoute: 'Withdraw', nextRoute: 'BankAccounts'})}>
           <Text style={{color:'white', fontSize:20}}>
             Add Bank Account
           </Text>

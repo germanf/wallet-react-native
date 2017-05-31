@@ -1,52 +1,25 @@
 import React, {Component} from 'react'
 import {View, Alert, AsyncStorage, StyleSheet} from 'react-native'
 import {NavigationActions} from 'react-navigation'
-import AddBankAccountComponent from './../../components/addBankAccount'
+import AddBitcoinAddressComponent from './bitcoinAddressComponent'
 
 export default class AddBankAccount extends Component {
   static navigationOptions = {
-    title: 'Add New Account',
+    title: 'Add New Address',
   }
 
   constructor() {
       super()
       this.state = {
-        name: '',
-        number: '',
-        type: '',
-        bank_name: '',
-        branch_code: '',
-        swift: '',
-        iban: '',
-        bic: '',
+        address: '',
       }
    }
 
-   updateName = (name) => {
-      this.setState({name})
-   }
-   updateNumber = (number) => {
-      this.setState({number})
-   }
-   updateType = (type) => {
-      this.setState({type})
-   }
-   updateBank = (bank_name) => {
-      this.setState({bank_name})
-   }
-   updateBranch = (branch_code) => {
-      this.setState({branch_code})
-   }
-   updateSwift = (swift) => {
-      this.setState({swift})
-   }
-   updateIBAN = (iban) => {
-      this.setState({iban})
-   }
-   updateBIC = (bic) => {
-      this.setState({bic})
+   updateAddress = (address) => {
+      this.setState({address})
    }
    goToHome = () => {
+     const params = this.props.navigation.state.params
     const resetAction = NavigationActions.reset({
       index: 1,
       actions: [
@@ -55,18 +28,17 @@ export default class AddBankAccount extends Component {
           params: {},
 
           // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Withdraw'}),
+          action: NavigationActions.navigate({ routeName: params.parentRoute}),
         }),
-        NavigationActions.navigate({ routeName: 'BankAccounts'}),
+        NavigationActions.navigate({ routeName: params.nextRoute}),
       ],
     })
     this.props.navigation.dispatch(resetAction)
    }
-
    add = async() => {
      //console.log(this.state)
      const value = await AsyncStorage.getItem('token')
-     fetch('https://rehive.com/api/3/user/bank_accounts/', {
+     fetch('https://rehive.com/api/3/user/bitcoin_accounts/', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -96,16 +68,10 @@ export default class AddBankAccount extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <AddBankAccountComponent
-          updateName={this.updateName}
-          updateNumber={this.updateNumber}
-          updateType={this.updateType}
-          updateBank={this.updateBank}
-          updateBranch={this.updateBranch}
-          updateSwift={this.updateSwift}
-          updateIBAN={this.updateIBAN}
-          updateBIC={this.updateBIC}
-          add={this.add}
+        <AddBitcoinAddressComponent
+          updateAddress={this.updateAddress}
+          values={this.state}
+          onPress={this.add}
         />
       </View>
     );

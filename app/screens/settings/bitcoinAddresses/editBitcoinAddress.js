@@ -1,17 +1,19 @@
 import React, {Component} from 'react'
 import {View, Alert, AsyncStorage, StyleSheet} from 'react-native'
 import {NavigationActions} from 'react-navigation'
-import AddBankAccountComponent from './../../components/addBitcoinAddress'
+import EditBitcoinAddressComponent from './bitcoinAddressComponent'
 
 export default class AddBankAccount extends Component {
   static navigationOptions = {
-    title: 'Add New Account',
+    title: 'Edit Bitcoin Address',
   }
 
-  constructor() {
-      super()
+  constructor(props) {
+      super(props)
+      const params = this.props.navigation.state.params.reference
       this.state = {
-        address: '',
+        id: params.id,
+        address: params.address,
       }
    }
 
@@ -27,18 +29,18 @@ export default class AddBankAccount extends Component {
           params: {},
 
           // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Withdraw'}),
+          action: NavigationActions.navigate({ routeName: 'Settings'}),
         }),
-        NavigationActions.navigate({ routeName: 'BitcoinAddresses'}),
+        NavigationActions.navigate({ routeName: 'SettingsBitcoinAddresses'}),
       ],
     })
     this.props.navigation.dispatch(resetAction)
    }
-   add = async() => {
+   update = async() => {
      //console.log(this.state)
      const value = await AsyncStorage.getItem('token')
-     fetch('https://rehive.com/api/3/user/bitcoin_accounts/', {
-        method: 'POST',
+     fetch('https://rehive.com/api/3/user/bitcoin_accounts/' + this.state.id + '/', {
+        method: 'PATCH',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -67,9 +69,10 @@ export default class AddBankAccount extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <AddBankAccountComponent
+        <EditBitcoinAddressComponent
           updateAddress={this.updateAddress}
-          add={this.add}
+          values={this.state}
+          onPress={this.update}
         />
       </View>
     );

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {View, ListView, StyleSheet, Alert, AsyncStorage, TouchableHighlight, Text} from 'react-native'
-import Account from './../../components/account'
+import Account from './../../../components/account'
 
 export default class BitcoinAddresses extends Component {
   static navigationOptions = {
@@ -18,8 +18,8 @@ export default class BitcoinAddresses extends Component {
   componentWillMount() {
     this.getData()
   }
-  getAmount = (reference) => {
-    this.props.navigation.navigate("WithdrawalAmountEntry", {reference})
+  goToEdit = (reference) => {
+    this.props.navigation.navigate("EditBitcoinAddress", {reference})
   }
   getData = async () => {
     const value = await AsyncStorage.getItem('token');
@@ -58,11 +58,11 @@ export default class BitcoinAddresses extends Component {
       <View style={styles.container}>
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={(rowData) => <Account onPress={this.getAmount} reference={rowData.code} name={rowData.address} />}
+          renderRow={(rowData) => <Account onPress={this.goToEdit} reference={rowData} name={rowData.address} />}
         />
         <TouchableHighlight
           style={styles.submit}
-          onPress={() => this.props.navigation.navigate("AddBitcoinAddress", {parentRoute: 'Withdraw', nextRoute: 'BitcoinAddresses'})}>
+          onPress={() => this.props.navigation.navigate("AddBitcoinAddress", {parentRoute: 'Settings', nextRoute: 'SettingsBitcoinAddresses'})}>
           <Text style={{color:'white', fontSize:20}}>
             Add Bitcoin Address
           </Text>

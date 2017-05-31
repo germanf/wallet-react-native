@@ -11,14 +11,15 @@ export default class BitcoinAddressComponent extends Component {
             style={styles.input}
             placeholder="Bitcoin Address"
             autoCapitalize="none"
+            value={this.props.values.address}
             onChangeText={this.props.updateAddress}
           />
         </ScrollView>
         <TouchableHighlight
           style={styles.submit}
-          onPress={this.props.add}>
+          onPress={this.props.onPress}>
           <Text style={{color:'white'}}>
-            Add
+            Save
           </Text>
         </TouchableHighlight>
       </KeyboardAvoidingView>

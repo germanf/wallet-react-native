@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {View, ListView, StyleSheet, Alert, AsyncStorage, TouchableHighlight, Text} from 'react-native'
-import Account from './../../components/account'
+import Account from './../../../components/account'
 
-export default class BitcoinAddresses extends Component {
+export default class BankAccounts extends Component {
   static navigationOptions = {
-    title: 'Select Bitcoin Addresses',
+    title: 'Select Bank Account',
   }
 
   constructor(props) {
@@ -18,12 +18,13 @@ export default class BitcoinAddresses extends Component {
   componentWillMount() {
     this.getData()
   }
-  getAmount = (reference) => {
-    this.props.navigation.navigate("WithdrawalAmountEntry", {reference})
+  goToEdit = (reference) => {
+    console.log(reference)
+    this.props.navigation.navigate("EditBankAccount", {reference})
   }
   getData = async () => {
     const value = await AsyncStorage.getItem('token');
-    fetch('https://rehive.com/api/3/user/bitcoin_accounts/', {
+    fetch('https://rehive.com/api/3/user/bank_accounts/', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -58,13 +59,13 @@ export default class BitcoinAddresses extends Component {
       <View style={styles.container}>
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={(rowData) => <Account onPress={this.getAmount} reference={rowData.code} name={rowData.address} />}
+          renderRow={(rowData) => <Account onPress={this.goToEdit} reference={rowData} name={rowData.bank_name} />}
         />
         <TouchableHighlight
           style={styles.submit}
-          onPress={() => this.props.navigation.navigate("AddBitcoinAddress", {parentRoute: 'Withdraw', nextRoute: 'BitcoinAddresses'})}>
+          onPress={() => this.props.navigation.navigate("AddBankAccount", {parentRoute: 'Settings', nextRoute: 'SettingsBankAccounts'})}>
           <Text style={{color:'white', fontSize:20}}>
-            Add Bitcoin Address
+            Add Bank Account
           </Text>
         </TouchableHighlight>
       </View>

@@ -11,56 +11,64 @@ export default class BankAccountComponent extends Component {
             style={styles.input}
             placeholder="Account Holder"
             autoCapitalize="none"
+            value={this.props.values.name}
             onChangeText={this.props.updateName}
           />
           <TextInput
             style={styles.input}
             placeholder="Account Number"
             autoCapitalize="none"
+            value={this.props.values.number}
             onChangeText={this.props.updateNumber}
           />
           <TextInput
             style={styles.input}
             placeholder="Account Type"
             autoCapitalize="none"
+            value={this.props.values.type}
             onChangeText={this.props.updateType}
           />
           <TextInput
             style={styles.input}
             placeholder="Bank Name"
             autoCapitalize="none"
+            value={this.props.values.bank_name}
             onChangeText={this.props.updateBank}
           />
           <TextInput
             style={styles.input}
             placeholder="Branch Code"
             autoCapitalize="none"
+            value={this.props.values.branch_code}
             onChangeText={this.props.updateBranch}
           />
           <TextInput
             style={styles.input}
             placeholder="Swift Code"
             autoCapitalize="none"
+            value={this.props.values.swift}
             onChangeText={this.props.updateSwift}
           />
           <TextInput
             style={styles.input}
             placeholder="IBAN Number"
             autoCapitalize="none"
+            value={this.props.values.iban}
             onChangeText={this.props.updateIBAN}
           />
           <TextInput
             style={styles.input}
             placeholder="BIC Number"
             autoCapitalize="none"
+            value={this.props.values.bic}
             onChangeText={this.props.updateBIC}
           />
         </ScrollView>
         <TouchableHighlight
           style={styles.submit}
-          onPress={this.props.add}>
+          onPress={this.props.save}>
           <Text style={{color:'white'}}>
-            Add
+            Save
           </Text>
         </TouchableHighlight>
       </KeyboardAvoidingView>

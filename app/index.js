@@ -9,7 +9,8 @@ import WithdrawalAmountEntry from './screens/withdraw/amountEntry'
 import SendMoney from './screens/transfer/amountEntry'
 import SendTo from './screens/transfer/sendTo'
 import AccountCurrencies from './screens/accounts/accountCurrencies'
-import SettingsProfileImage from './screens/settings/profileImage'
+import SettingsProfileImage from './screens/settings/profileImage/index'
+import UploadImage from './screens/settings/profileImage/uploadImage'
 import SettingsPersonalDetails from './screens/settings/personalDetails'
 import SettingsMobileNumbers from './screens/settings/mobileNumbers/index'
 import AddMobileNumber from './screens/settings/mobileNumbers/addMobileNumber'
@@ -61,6 +62,9 @@ const RouteConfigs = {
   },
   SettingsProfileImage: {
     screen: SettingsProfileImage,
+  },
+  UploadImage: {
+    screen: UploadImage,
   },
   SettingsPersonalDetails: {
     screen: SettingsPersonalDetails,

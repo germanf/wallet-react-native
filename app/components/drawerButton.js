@@ -11,7 +11,7 @@ const DrawerButton = ({ navigation }) => (
       onPress={() => navigation.navigate('DrawerOpen')}
     />
   </TouchableOpacity>
-);
+)
 
 DrawerButton.propTypes = {
   navigation: React.PropTypes.object.isRequired,

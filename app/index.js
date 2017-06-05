@@ -1,4 +1,5 @@
 import {StackNavigator} from 'react-navigation'
+import Expo from 'expo'
 import Home from './screens/home/index'
 import Login from './screens/auth/login'
 import Signup from './screens/auth/signup'
@@ -122,7 +123,9 @@ const RouteConfigs = {
 const App = StackNavigator(RouteConfigs, {
     navigationOptions : {
       headerStyle: {
-          backgroundColor: '#2070A0',
+        backgroundColor: '#2070A0',
+        paddingTop: Expo.Constants.statusBarHeight,
+        height: 50 + Expo.Constants.statusBarHeight,
       },
       headerTintColor: 'white',
     },

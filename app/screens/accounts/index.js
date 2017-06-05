@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, ListView, StyleSheet, Alert, AsyncStorage} from 'react-native'
+import {View, ListView, StyleSheet, Alert, AsyncStorage, RefreshControl} from 'react-native'
 import Account from './account'
 
 export default class Accounts extends Component {
@@ -10,18 +10,22 @@ export default class Accounts extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      refreshing: false,
       dataSource: new ListView.DataSource({
         rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2),
       }),
     }
   }
-  componentWillMount() {
+  componentDidMount() {
     this.getData()
   }
   getCurrencies = (reference) => {
     this.props.navigation.navigate("AccountCurrencies", {reference})
   }
   getData = async () => {
+    this.setState({
+        refreshing: true,
+      })
     const value = await AsyncStorage.getItem('token');
     fetch('https://rehive.com/api/3/accounts/', {
         method: 'GET',
@@ -40,6 +44,7 @@ export default class Accounts extends Component {
           let ids = data.map((obj, index) => index);
           this.setState({
             dataSource: ds.cloneWithRows(data, ids),
+            refreshing: false,
           })
         }
         else {
@@ -57,6 +62,7 @@ export default class Accounts extends Component {
     return (
       <View style={styles.container}>
         <ListView
+          refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getData.bind(this)} />}
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <Account getCurrencies={this.getCurrencies} reference={rowData.reference} name={rowData.name} />}
         />

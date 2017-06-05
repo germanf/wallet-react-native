@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   optionsText: {
     flex:1,
-    fontSize:22,
+    fontSize:20,
   },
   optionsIcon: {
     flex:1,

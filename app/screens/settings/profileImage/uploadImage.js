@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {View, StyleSheet, Image, AsyncStorage, Alert, Text, TouchableHighlight} from 'react-native'
-
+import {NavigationActions} from 'react-navigation'
 export default class UploadImage extends Component {
   static navigationOptions = {
     title: 'Upload Image',
@@ -14,24 +14,48 @@ export default class UploadImage extends Component {
     }
   }
 
+  goBackAndReload = () => {
+    const resetAction = NavigationActions.reset({
+      index: 1,
+      actions: [
+        NavigationActions.navigate({
+          routeName: 'Home',
+          params: {},
+
+          // navigate can have a nested navigate action that will be run inside the child router
+          action: NavigationActions.navigate({ routeName: 'Settings'}),
+        }),
+        NavigationActions.navigate({ routeName: 'SettingsProfileImage'}),
+      ],
+    })
+    this.props.navigation.dispatch(resetAction)
+  }
+
   saveImage = async () => {
+    console.log(this.state.image)
+    const uri = this.state.image.uri
+    const parts = uri.split("/")
+    const name = parts[parts.length - 1]
     const file = {
-      uri: this.state.image.uri,
+      uri,
+      name,
       type: 'image/jpg',
     }
 
     const body = new FormData()
     body.append('profile', file)
 
+    //console.log(body)
+
     const value = await AsyncStorage.getItem('token')
      fetch('https://rehive.com/api/3/user/', {
         method: 'PATCH',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'Authorization': 'Token ' + value,
         },
-        body: JSON.stringify(body),
+        body,
       })
       .then((response) => response.json())
       .then((responseJson) => {
@@ -39,7 +63,7 @@ export default class UploadImage extends Component {
         if (responseJson.status === "success") {
           AsyncStorage.removeItem('user')
           AsyncStorage.setItem('user', JSON.stringify(responseJson.data))
-          this.props.navigation.goBack()
+          this.goBackAndReload()
         }
         else {
           Alert.alert('Error',

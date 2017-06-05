@@ -10,8 +10,8 @@ import Logout from './../auth/logout'
 import Accounts from './../accounts/index'
 import Receive from './../receive/index'
 import Promotions from './../promotions/index'
-import DrawerHeader from './../../components/drawerHeaderComponent'
 import DrawerButton from './../../components/drawerButton'
+import DrawerHeader from './../../components/drawerHeaderComponent'
 
 const RouteConfigs = {
   Home: {

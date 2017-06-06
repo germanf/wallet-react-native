@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {View, StyleSheet, Image, AsyncStorage, Alert, Text, TouchableHighlight} from 'react-native'
 import {NavigationActions} from 'react-navigation'
+import Spinner from 'react-native-loading-spinner-overlay'
+
 export default class UploadImage extends Component {
   static navigationOptions = {
     title: 'Upload Image',
@@ -11,6 +13,7 @@ export default class UploadImage extends Component {
     const params = this.props.navigation.state.params
     this.state = {
       image: params.image,
+      loading: false,
     }
   }
 
@@ -32,6 +35,7 @@ export default class UploadImage extends Component {
   }
 
   saveImage = async () => {
+    this.setState({loading:true})
     console.log(this.state.image)
     const uri = this.state.image.uri
     const parts = uri.split("/")
@@ -76,11 +80,16 @@ export default class UploadImage extends Component {
             error,
             [{text: 'OK'}])
       })
-  };
+  }
 
   render() {
     return (
       <View style={styles.container}>
+        <Spinner
+          visible={this.state.loading}
+          textContent={"Uploading..."}
+          textStyle={{color: '#FFF'}}
+        />
         <TouchableHighlight onPress={null}>
           <Image
             style={{height: this.state.image.height, width: this.state.image.width}}

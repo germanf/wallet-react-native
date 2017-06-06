@@ -32,6 +32,11 @@ export default class AmountEntry extends Component {
         if (responseJson.status === "success") {
           this.props.navigation.navigate("VerifyMobileNumber")
         }
+        else {
+          Alert.alert('Error',
+            responseJson.message,
+            [{text: 'OK'}])
+        }
       })
       .catch((error) => {
         Alert.alert('Error',

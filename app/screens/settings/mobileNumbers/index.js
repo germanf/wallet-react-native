@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-import {View, StyleSheet, ListView, Alert, AsyncStorage, TouchableHighlight, Text} from 'react-native'
+import {View, StyleSheet, ListView, Alert, AsyncStorage, TouchableHighlight, Text, RefreshControl} from 'react-native'
 import {NavigationActions} from 'react-navigation'
+import Spinner from 'react-native-loading-spinner-overlay'
 import MobileNumber from './mobileNumberComponent'
 
 export default class Settings extends Component {
@@ -11,6 +12,9 @@ export default class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      refreshing: false,
+      loading: false,
+      loadingMessage: "",
       dataSource: new ListView.DataSource({
         rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2),
       }),
@@ -22,6 +26,7 @@ export default class Settings extends Component {
   }
 
   getData = async () => {
+    this.setState({refreshing: true})
     const value = await AsyncStorage.getItem('token');
     fetch('https://www.rehive.com/api/3/user/mobiles/', {
         method: 'GET',
@@ -39,6 +44,7 @@ export default class Settings extends Component {
           console.log(data)
           let ids = data.map((obj, index) => index);
           this.setState({
+            refreshing: false,
             dataSource: ds.cloneWithRows(data, ids),
           })
         }
@@ -68,6 +74,10 @@ export default class Settings extends Component {
   }
 
   makePrimary = async (id) => {
+    this.setState({
+      loading:true,
+      loadingMessage: 'Updating...',
+    })
     const value = await AsyncStorage.getItem('token');
     fetch('https://rehive.com/api/3/user/mobiles/' + id + '/', {
         method: 'PATCH',
@@ -94,6 +104,10 @@ export default class Settings extends Component {
   }
 
   verify = async(number) => {
+    this.setState({
+      loading:true,
+      loadingMessage: 'Sending Verification Code...',
+    })
     const value = await AsyncStorage.getItem('token');
     const userData = await AsyncStorage.getItem('user')
 
@@ -114,6 +128,7 @@ export default class Settings extends Component {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status === "success") {
+          this.setState({loading: false})
           this.props.navigation.navigate("VerifyMobileNumber")
         }
       })
@@ -125,6 +140,10 @@ export default class Settings extends Component {
   }
 
   delete = async(id) => {
+    this.setState({
+      loading:true,
+      loadingMessage: 'Deleting...',
+    })
     const value = await AsyncStorage.getItem('token');
     fetch('https://rehive.com/api/3/user/mobiles/' + id + '/', {
         method: 'DELETE',
@@ -150,7 +169,13 @@ export default class Settings extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Spinner
+          visible={this.state.loading}
+          textContent={this.state.loadingMessage}
+          textStyle={{color: '#FFF'}}
+        />
         <ListView
+          refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getData.bind(this)} />}
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <MobileNumber mobile={rowData} makePrimary={this.makePrimary} verify={this.verify} delete={this.delete} reload={this.reload} />}
         />

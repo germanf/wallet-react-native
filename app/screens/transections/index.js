@@ -26,7 +26,7 @@ export default class Transections extends Component {
     this.getData()
   }
   getData = async () => {
-    this.setState({refreshing: true});
+    this.setState({refreshing: true})
     const value = await AsyncStorage.getItem('token')
     fetch('https://www.rehive.com/api/3/transactions/', {
         method: 'GET',

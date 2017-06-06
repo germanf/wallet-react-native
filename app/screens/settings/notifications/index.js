@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-import {View, StyleSheet, ListView, Alert, AsyncStorage} from 'react-native'
+import {View, StyleSheet, ListView, Alert, AsyncStorage, RefreshControl} from 'react-native'
 import {NavigationActions} from 'react-navigation'
+import Spinner from 'react-native-loading-spinner-overlay'
 import Notification from './notification'
 
 export default class Settings extends Component {
@@ -11,6 +12,8 @@ export default class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      refreshing: false,
+      loading: false,
       dataSource: new ListView.DataSource({
         rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2),
       }),
@@ -22,6 +25,7 @@ export default class Settings extends Component {
   }
 
   getData = async () => {
+    this.setState({refreshing: true})
     const value = await AsyncStorage.getItem('token');
     fetch('https://www.rehive.com/api/3/user/notifications/', {
         method: 'GET',
@@ -39,6 +43,7 @@ export default class Settings extends Component {
           console.log(data)
           let ids = data.map((obj, index) => index);
           this.setState({
+            refreshing: false,
             dataSource: ds.cloneWithRows(data, ids),
           })
         }
@@ -68,6 +73,8 @@ export default class Settings extends Component {
   }
 
   enableEmail = async(id, previous) => {
+    this.setState({loading: true})
+
     const value = await AsyncStorage.getItem('token')
 
     fetch('https://www.rehive.com/api/3/user/notifications/' + id + '/', {
@@ -95,6 +102,8 @@ export default class Settings extends Component {
   }
 
   enableSMS = async(id, previous) => {
+    this.setState({loading:true})
+
     const value = await AsyncStorage.getItem('token')
 
     fetch('https://www.rehive.com/api/3/user/notifications/' + id + '/', {
@@ -124,7 +133,13 @@ export default class Settings extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Spinner
+          visible={this.state.loading}
+          textContent={"Updating..."}
+          textStyle={{color: '#FFF'}}
+        />
         <ListView
+          refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getData.bind(this)} />}
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <Notification data={rowData} enableEmail={this.enableEmail} enableSMS={this.enableSMS} />}
         />

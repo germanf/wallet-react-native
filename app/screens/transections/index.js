@@ -5,15 +5,18 @@ import {
   AsyncStorage,
   Alert,
   RefreshControl,
-} from 'react-native';
+} from 'react-native'
+import InfiniteScrollView from 'react-native-infinite-scroll-view'
 import Transection from './transection'
-//import InfiniteScrollView from 'react-native-infinite-scroll-view';
+
 
 export default class Transections extends Component {
   constructor(props) {
     super(props);
     this.state = {
       refreshing: false,
+      nextUrl: null,
+      data: [],
       dataSource: new ListView.DataSource({
         rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2),
       }),
@@ -36,13 +39,45 @@ export default class Transections extends Component {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status === "success") {
-          const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2)});
-          const data = responseJson.data.results;
-          //console.log(data)
-          let ids = data.map((obj, index) => index);
+          const data = responseJson.data.results
           this.setState({
-            dataSource: ds.cloneWithRows(data, ids),
+            data,
+            dataSource: this.state.dataSource.cloneWithRows(data),
             refreshing: false,
+            nextUrl: responseJson.data.next,
+          })
+        }
+        else {
+          this.props.logout()
+        }
+      })
+      .catch((error) => {
+        Alert.alert('Error',
+            error,
+            [{text: 'OK'}])
+      })
+  }
+
+  loadMoreData = async() => {
+    this.setState({refreshing: true});
+    const value = await AsyncStorage.getItem('token')
+    fetch(this.state.nextUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + value,
+        },
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success") {
+          const data = this.state.data.concat(responseJson.data.results)
+          this.setState({
+            data,
+            dataSource: this.state.dataSource.cloneWithRows(data),
+            refreshing: false,
+            nextUrl: responseJson.data.next,
           })
         }
         else {
@@ -59,9 +94,12 @@ export default class Transections extends Component {
     return (
       <View style={{flex: 1, paddingTop: 10}}>
         <ListView
+          renderScrollComponent={(props) => <InfiniteScrollView {...props} />}
           refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getData.bind(this)} />}
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <Transection data={rowData} />}
+          canLoadMore={!!this.state.nextUrl}
+          onLoadMoreAsync={this.loadMoreData.bind(this)}
         />
       </View>
     );

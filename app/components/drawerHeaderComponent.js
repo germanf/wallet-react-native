@@ -5,6 +5,7 @@ export default class DrawerHeader extends Component {
   constructor() {
       super()
       this.state = {
+         altImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgmT5tM-IGcFDpqZ87p9zKGaWQuzpvAcDKfOTPYfx5A9zOmbTh8RMMFg',
          userInfo: {},
       }
 
@@ -22,7 +23,7 @@ export default class DrawerHeader extends Component {
       <View style={styles.container}>
         <Image
           style={styles.stretch}
-          source={{uri: this.state.userInfo.profile}}
+          source={{uri: this.state.userInfo.profile !== null ? this.state.userInfo.profile : this.state.altImage}}
         />
         <View style={styles.outerContainer}>
           <Text style={{color:'white', fontSize:16}}>

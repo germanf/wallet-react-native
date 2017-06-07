@@ -22,7 +22,9 @@ export default class ProfileImage extends Component {
   getData = async () => {
     const value = await AsyncStorage.getItem('user');
     const user = JSON.parse(value)
-    this.setState({imageURI: user.profile})
+    if (user.profile !== null) {
+      this.setState({imageURI: user.profile})
+    }
   }
 
   pickImage = async () => {

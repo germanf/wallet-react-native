@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {View, AsyncStorage, Alert, Text} from 'react-native'
 import {NavigationActions} from 'react-navigation'
+import AuthService from './../../services/authService'
 
 export default class Home extends Component {
 
@@ -20,34 +21,28 @@ export default class Home extends Component {
       this.props.navigation.dispatch(resetAction)
   }
 
+  fetchSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
+      AsyncStorage.clear()
+      this.goToLogin()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{text: 'OK', onPress: () => this.props.navigation.goBack()}])
+    }
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
+        error,
+        [{text: 'OK', onPress: () => this.props.navigation.goBack()}]
+      )
+  }
+
   logout = async () => {
-    const value = await AsyncStorage.getItem('token');
-    fetch('https://rehive.com/api/3/auth/logout/', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          AsyncStorage.clear()
-          this.goToLogin()
-        }
-        else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-        this.props.navigation.goBack()
-      })
+    const token = await AsyncStorage.getItem('token');
+    AuthService.logout(token, this.fetchSuccess, this.fetchError)
    }
 
   render() {

@@ -9,6 +9,7 @@ import BitcoinAddresses from './screens/withdraw/bitcoinAddresses'
 import WithdrawalAmountEntry from './screens/withdraw/amountEntry'
 import SendMoney from './screens/transfer/amountEntry'
 import SendTo from './screens/transfer/sendTo'
+import QRcodeScanner from './screens/transfer/qrcodeScanner'
 import AccountCurrencies from './screens/accounts/accountCurrencies'
 import SettingsProfileImage from './screens/settings/profileImage/index'
 import UploadImage from './screens/settings/profileImage/uploadImage'
@@ -57,6 +58,9 @@ const RouteConfigs = {
   },
   SendTo: {
     screen: SendTo,
+  },
+  QRcodeScanner: {
+    screen: QRcodeScanner,
   },
   AccountCurrencies: {
     screen: AccountCurrencies,

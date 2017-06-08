@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import InfiniteScrollView from 'react-native-infinite-scroll-view'
 import Transection from './transection'
+import TransectionService from './../../services/transectionService'
 
 
 export default class Transections extends Component {
@@ -25,71 +26,50 @@ export default class Transections extends Component {
   componentDidMount() {
     this.getData()
   }
-  getData = async () => {
-    this.setState({refreshing: true})
-    const value = await AsyncStorage.getItem('token')
-    fetch('https://www.rehive.com/api/3/transactions/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          const data = responseJson.data.results
-          this.setState({
-            data,
-            dataSource: this.state.dataSource.cloneWithRows(data),
-            refreshing: false,
-            nextUrl: responseJson.data.next,
-          })
-        }
-        else {
-          this.props.logout()
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
+
+  errorOnFetch = (error) => {
+    Alert.alert('Error',
             error,
             [{text: 'OK'}])
+  }
+
+  onGetDataSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
+      const data = this.state.data.concat(responseJson.data.results)
+      this.setState({
+        data,
+        dataSource: this.state.dataSource.cloneWithRows(data),
+        refreshing: false,
+        nextUrl: responseJson.data.next,
       })
+    }
+    else {
+      this.setState({
+        refreshing: false,
+      })
+      Alert.alert('Error',
+        responseJson.message,
+        [{text: 'OK'}])
+    }
+  }
+
+  getData = async () => {
+    this.setState({
+      refreshing: true,
+      data: [],
+    })
+    const token = await AsyncStorage.getItem('token')
+    TransectionService.getAllTransections(token, this.onGetDataSuccess, this.errorOnFetch)
   }
 
   loadMoreData = async() => {
-    this.setState({refreshing: true});
-    const value = await AsyncStorage.getItem('token')
-    fetch(this.state.nextUrl, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          const data = this.state.data.concat(responseJson.data.results)
-          this.setState({
-            data,
-            dataSource: this.state.dataSource.cloneWithRows(data),
-            refreshing: false,
-            nextUrl: responseJson.data.next,
-          })
-        }
-        else {
-          this.props.logout()
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+    if (this.state.refreshing !== true) {
+      this.setState({refreshing: true})
+      const token = await AsyncStorage.getItem('token')
+      TransectionService.getNextTransections(this.state.nextUrl, token, this.onGetDataSuccess, this.errorOnFetch)
+    }
   }
+
   render() {
     return (
       <View style={{flex: 1, paddingTop: 10}}>

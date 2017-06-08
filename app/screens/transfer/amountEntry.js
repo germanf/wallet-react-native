@@ -23,7 +23,20 @@ export default class AmountEntry extends Component {
       )
     }
     else {
-      this.props.navigation.navigate("SendTo", {amount: this.state.amount, note: this.state.note})
+      this.props.navigation.navigate("SendTo", {amount: this.state.amount, note: this.state.note, reference: ''})
+    }
+  }
+
+  goToBarcodeScanner = () => {
+    if (this.state.amount <= 0) {
+      Alert.alert(
+         'Invalid',
+          'Enter valid amount',
+         [[{text: 'OK'}]]
+      )
+    }
+    else {
+      this.props.navigation.navigate("QRcodeScanner", {amount: this.state.amount, note: this.state.note})
     }
   }
 
@@ -60,6 +73,13 @@ export default class AmountEntry extends Component {
           onPress={this.goToSendTo}>
           <Text style={{color:'white', fontSize:20}}>
             Next
+          </Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={[styles.submit, {marginTop: 5}]}
+          onPress={this.goToBarcodeScanner}>
+          <Text style={{color:'white', fontSize:20}}>
+            Scan QR code
           </Text>
         </TouchableHighlight>
       </KeyboardAvoidingView>

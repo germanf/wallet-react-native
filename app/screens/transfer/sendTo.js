@@ -15,8 +15,8 @@ export default class AmountEntry extends Component {
       ready: false,
       amount: params.amount,
       note : params.note,
-      reference: "",
-      searchText: "",
+      reference: params.reference,
+      searchText: params.reference,
       data: [],
       contacts: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
     }

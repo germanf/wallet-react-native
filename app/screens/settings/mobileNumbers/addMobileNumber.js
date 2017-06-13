@@ -47,7 +47,7 @@ export default class AmountEntry extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
+      <KeyboardAvoidingView style={styles.container} behavior={'padding'} keyboardVerticalOffset={70}>
         <View style={{flex:1}}>
           <TextInput
             style={styles.input}
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     height: 60,
     width: "100%",
     padding: 10,
-    marginTop: 20,
+    marginTop: 10,
     borderColor: 'white',
     borderWidth: 1,
   },

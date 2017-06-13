@@ -72,7 +72,7 @@ export default class Login extends Component {
   render() {
     return (
       <View style={styles.mainContainer}>
-        <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
+        <KeyboardAvoidingView style={styles.container} behavior={'padding'} keyboardVerticalOffset={70}>
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
   login: {
     padding: 10,
-    marginTop: 20,
+    marginTop: 10,
     height: 50,
     backgroundColor: '#2070A0',
     width: "100%",

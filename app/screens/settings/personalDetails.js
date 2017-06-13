@@ -80,7 +80,7 @@ export default class Settings extends Component {
   render() {
     return (
       <View style={{flex:1}}>
-        <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
+        <KeyboardAvoidingView style={styles.container} behavior={'padding'} keyboardVerticalOffset={70}>
           <ScrollView keyboardDismissMode={'interactive'}>
             <View style={styles.inputContainer}>
               <Text style={styles.text}>
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   },
   submit: {
     padding: 10,
-    marginTop: 20,
+    marginTop: 10,
     height: 60,
     backgroundColor: '#2070A0',
     width: "100%",

@@ -5,7 +5,7 @@ export default class BankAccountComponent extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
+      <KeyboardAvoidingView style={styles.container} behavior={'padding'} keyboardVerticalOffset={70}>
         <ScrollView keyboardDismissMode={'interactive'}>
           <TextInput
             style={styles.input}
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
    },
    submit: {
       padding: 10,
-      marginTop: 20,
+      marginTop: 10,
       height: 50,
       borderRadius: 8,
       backgroundColor: '#2070A0',

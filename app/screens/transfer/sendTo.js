@@ -187,7 +187,7 @@ export default class AmountEntry extends Component {
   render() {
     if (!this.state.ready) {
       return (
-        <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
+        <KeyboardAvoidingView style={styles.container} behavior={'padding'} keyboardVerticalOffset={70}>
           <View style={{ flex: 1 }}>
             <TextInput
               style={styles.input}

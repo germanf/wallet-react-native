@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {View, KeyboardAvoidingView, StyleSheet, TextInput, TouchableHighlight, Text, Alert, AsyncStorage} from 'react-native'
 import {NavigationActions} from 'react-navigation'
+import SettingsService from './../../../services/settingsService'
+
 export default class AmountEntry extends Component {
   static navigationOptions = {
     title: 'Verify Mobile Number',
@@ -30,32 +32,27 @@ export default class AmountEntry extends Component {
     this.props.navigation.dispatch(resetAction)
   }
 
-  verify = async() => {
-    const value = await AsyncStorage.getItem('token')
-
-    fetch('https://rehive.com/api/3/auth/mobile/verify/', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-        body: JSON.stringify(this.state),
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
+  fetchSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
           this.reload()
         }
         else {
-          console.log(responseJson)
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
+          Alert.alert('Error',
+            responseJson.message,
             [{text: 'OK'}])
-      })
+        }
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
+      error,
+      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
+  }
+
+  verify = async() => {
+    const token = await AsyncStorage.getItem('token')
+
+    SettingsService.verifyMobile(token, this.state, this.fetchSuccess, this.fetchError)
   }
 
   render() {

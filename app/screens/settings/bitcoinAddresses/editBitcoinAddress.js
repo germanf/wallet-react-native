@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {View, Alert, AsyncStorage, StyleSheet} from 'react-native'
 import {NavigationActions} from 'react-navigation'
 import EditBitcoinAddressComponent from './bitcoinAddressComponent'
+import SettingsService from './../../../services/settingsService'
 
 export default class AddBankAccount extends Component {
   static navigationOptions = {
@@ -36,34 +37,28 @@ export default class AddBankAccount extends Component {
     })
     this.props.navigation.dispatch(resetAction)
    }
+   
+   fetchSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
+      this.goToHome()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
+          error,
+          [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
+  }
+
    update = async() => {
      //console.log(this.state)
-     const value = await AsyncStorage.getItem('token')
-     fetch('https://rehive.com/api/3/user/bitcoin_accounts/' + this.state.id + '/', {
-        method: 'PATCH',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-        body: JSON.stringify(this.state),
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          this.goToHome()
-        }
-        else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK', onPress: () => console.log('OK Pressed!')}])
-      })
+     const token = await AsyncStorage.getItem('token')
+     SettingsService.editBitcoinAddresses(token, this.state.id, this.state, this.fetchSuccess, this.fetchError)
    }
 
   render() {

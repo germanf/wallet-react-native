@@ -4,9 +4,9 @@ var baseService = {
 
   get: (endPoint, headers, successFunc, errorFunc) => {
     fetch(baseUrl + endPoint, {
-        method: 'GET',
-        headers,
-      })
+      method: 'GET',
+      headers,
+    })
       .then((response) => response.json())
       .then((responseJson) => {
         successFunc(responseJson)
@@ -18,9 +18,9 @@ var baseService = {
 
   getWithFullUrl: (url, headers, successFunc, errorFunc) => {
     fetch(url, {
-        method: 'GET',
-        headers,
-      })
+      method: 'GET',
+      headers,
+    })
       .then((response) => response.json())
       .then((responseJson) => {
         successFunc(responseJson)
@@ -32,10 +32,10 @@ var baseService = {
 
   post: (endPoint, headers, body, successFunc, errorFunc) => {
     fetch(baseUrl + endPoint, {
-        method: 'POST',
-        headers,
-        body,
-      })
+      method: 'POST',
+      headers,
+      body,
+    })
       .then((response) => response.json())
       .then((responseJson) => {
         successFunc(responseJson)
@@ -47,9 +47,9 @@ var baseService = {
 
   postWithoutBody: (endPoint, headers, successFunc, errorFunc) => {
     fetch(baseUrl + endPoint, {
-        method: 'POST',
-        headers,
-      })
+      method: 'POST',
+      headers,
+    })
       .then((response) => response.json())
       .then((responseJson) => {
         successFunc(responseJson)
@@ -60,11 +60,12 @@ var baseService = {
   },
 
   patch: (endPoint, headers, body, successFunc, errorFunc) => {
+    console.log(baseUrl + endPoint + ' ' + body)
     fetch(baseUrl + endPoint, {
-        method: 'PATCH',
-        headers,
-        body,
-      })
+      method: 'PATCH',
+      headers,
+      body,
+    })
       .then((response) => response.json())
       .then((responseJson) => {
         successFunc(responseJson)
@@ -76,10 +77,10 @@ var baseService = {
 
   put: (endPoint, headers, body, successFunc, errorFunc) => {
     fetch(baseUrl + endPoint, {
-        method: 'PUT',
-        headers,
-        body,
-      })
+      method: 'PUT',
+      headers,
+      body,
+    })
       .then((response) => response.json())
       .then((responseJson) => {
         successFunc(responseJson)
@@ -87,6 +88,20 @@ var baseService = {
       .catch((error) => {
         errorFunc(error)
       })
+  },
+
+  delete: (endPoint, headers, successFunc, errorFunc) => {
+    fetch(baseUrl + endPoint, {
+      method: 'DELETE',
+      headers,
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      successFunc(responseJson)
+    })
+    .catch((error) => {
+      errorFunc(error)
+    })
   },
 }
 

@@ -1,8 +1,9 @@
-import React, {Component} from 'react'
-import {View, StyleSheet, ListView, Alert, AsyncStorage, TouchableHighlight, Text, RefreshControl} from 'react-native'
-import {NavigationActions} from 'react-navigation'
+import React, { Component } from 'react'
+import { View, StyleSheet, ListView, Alert, AsyncStorage, TouchableHighlight, Text, RefreshControl } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
 import EmailAddress from './emailAddressComponent'
+import SettingsService from './../../../services/settingsService'
 
 export default class Settings extends Component {
   static navigationOptions = {
@@ -25,35 +26,32 @@ export default class Settings extends Component {
     this.getData()
   }
 
+  fetchSuccessOnGetData = (responseJson) => {
+    if (responseJson.status === "success") {
+      const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) });
+      const data = responseJson.data;
+      //console.log(data)
+      let ids = data.map((obj, index) => index);
+      this.setState({
+        dataSource: ds.cloneWithRows(data, ids),
+      })
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
+      error,
+      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
+  }
+
   getData = async () => {
-    this.setState({refreshing: true})
-    const value = await AsyncStorage.getItem('token');
-    fetch('https://www.rehive.com/api/3/user/emails/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2)});
-          const data = responseJson.data;
-          console.log(data)
-          let ids = data.map((obj, index) => index);
-          this.setState({
-            refreshing: false,
-            dataSource: ds.cloneWithRows(data, ids),
-          })
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+    const token = await AsyncStorage.getItem('token');
+    SettingsService.getAllEmails(token, this.fetchSuccessOnGetData, this.fetchError)
   }
 
   reload = () => {
@@ -65,108 +63,75 @@ export default class Settings extends Component {
           params: {},
 
           // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Settings'}),
+          action: NavigationActions.navigate({ routeName: 'Settings' }),
         }),
-        NavigationActions.navigate({ routeName: 'SettingsEmailAddresses'}),
+        NavigationActions.navigate({ routeName: 'SettingsEmailAddresses' }),
       ],
     })
     this.props.navigation.dispatch(resetAction)
   }
 
-  makePrimary = async (id) => {
-    this.setState({
-      loading:true,
-      loadingMessage: 'Updating...',
-    })
-    const value = await AsyncStorage.getItem('token');
-    fetch('https://rehive.com/api/3/user/emails/' + id + '/', {
-        method: 'PATCH',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-        body: JSON.stringify({
-          primary: true,
-      }),
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          this.reload()
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+  fetchSuccessAndReload = (responseJson) => {
+    if (responseJson.status === "success") {
+      this.reload()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
-  verify = async(email) => {
+  makePrimary = async (id) => {
     this.setState({
-      loading:true,
-      loadingMessage: 'Sending Email...',
+      loading: true,
+      loadingMessage: 'Updating...',
     })
-    const value = await AsyncStorage.getItem('token');
+    const token = await AsyncStorage.getItem('token')
+    const body = { "primary": true }
+    SettingsService.makeEmailPrimary(token, id, body, this.fetchSuccessAndReload, this.fetchError)
+  }
+
+  fetchSuccessOnResendVerification = (responseJson) => {
+    if (responseJson.status === "success") {
+      Alert.alert(
+        "Email Sent",
+        "A verification email has been sent, please check your email box.",
+        [{ text: 'OK', onPress: () => this.setState({ loading: false }) }],
+      )
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
+  }
+
+  verify = async (number) => {
+    this.setState({
+      loading: true,
+      loadingMessage: 'Sending Verification Code...',
+    })
+    const token = await AsyncStorage.getItem('token');
     const userData = await AsyncStorage.getItem('user')
 
     const user = JSON.parse(userData)
 
-    fetch('https://www.rehive.com/api/3/auth/email/verify/resend/', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-        body: JSON.stringify({
-          identifier: email,
-          company_id: user.company,
-      }),
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          Alert.alert(
-            "Email Sent",
-            "A verification email has been sent, please check your email box.",
-            [{text: 'OK', onPress: () => this.setState({loading: false})}],
-          )
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+    const body = {
+      identifier: number,
+      company_id: user.company,
+    }
+
+    SettingsService.resendEmailVerification(token, body, this.fetchSuccessOnResendVerification, this.fetchError)
   }
 
-  delete = async(id) => {
+  delete = async (id) => {
     this.setState({
-      loading:true,
+      loading: true,
       loadingMessage: 'Deleting...',
     })
-    const value = await AsyncStorage.getItem('token');
-    fetch('https://rehive.com/api/3/user/emails/' + id + '/', {
-        method: 'DELETE',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          this.reload()
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+    const token = await AsyncStorage.getItem('token');
+    SettingsService.deleteEmail(token, id, this.fetchSuccessAndReload, this.fetchError)
   }
 
   render() {
@@ -175,7 +140,7 @@ export default class Settings extends Component {
         <Spinner
           visible={this.state.loading}
           textContent={this.state.loadingMessage}
-          textStyle={{color: '#FFF'}}
+          textStyle={{ color: '#FFF' }}
         />
         <ListView
           refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getData.bind(this)} />}
@@ -185,7 +150,7 @@ export default class Settings extends Component {
         <TouchableHighlight
           style={styles.submit}
           onPress={() => this.props.navigation.navigate("AddEmailAddress")}>
-          <Text style={{color:'white', fontSize:20}}>
+          <Text style={{ color: 'white', fontSize: 20 }}>
             Add Email Address
           </Text>
         </TouchableHighlight>
@@ -196,7 +161,7 @@ export default class Settings extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },
@@ -207,6 +172,6 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
 })

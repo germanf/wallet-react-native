@@ -12,56 +12,56 @@ export default class BankAccountComponent extends Component {
             placeholder="Account Holder"
             autoCapitalize="none"
             value={this.props.values.name}
-            onChangeText={this.props.updateName}
+            onChangeText={(text) => this.props.updateName(text)}
           />
           <TextInput
             style={styles.input}
             placeholder="Account Number"
             autoCapitalize="none"
             value={this.props.values.number}
-            onChangeText={this.props.updateNumber}
+            onChangeText={(text) => this.props.updateNumber(text)}
           />
           <TextInput
             style={styles.input}
             placeholder="Account Type"
             autoCapitalize="none"
             value={this.props.values.type}
-            onChangeText={this.props.updateType}
+            onChangeText={(text) => this.props.updateType(text)}
           />
           <TextInput
             style={styles.input}
             placeholder="Bank Name"
             autoCapitalize="none"
             value={this.props.values.bank_name}
-            onChangeText={this.props.updateBank}
+            onChangeText={(text) => this.props.updateBank(text)}
           />
           <TextInput
             style={styles.input}
             placeholder="Branch Code"
             autoCapitalize="none"
             value={this.props.values.branch_code}
-            onChangeText={this.props.updateBranch}
+            onChangeText={(text) => this.props.updateBranch(text)}
           />
           <TextInput
             style={styles.input}
             placeholder="Swift Code"
             autoCapitalize="none"
             value={this.props.values.swift}
-            onChangeText={this.props.updateSwift}
+            onChangeText={(text) => this.props.updateSwift(text)}
           />
           <TextInput
             style={styles.input}
             placeholder="IBAN Number"
             autoCapitalize="none"
             value={this.props.values.iban}
-            onChangeText={this.props.updateIBAN}
+            onChangeText={(text) => this.props.updateIBAN(text)}
           />
           <TextInput
             style={styles.input}
             placeholder="BIC Number"
             autoCapitalize="none"
             value={this.props.values.bic}
-            onChangeText={this.props.updateBIC}
+            onChangeText={(text) => this.props.updateBIC(text)}
           />
         </ScrollView>
         <TouchableHighlight

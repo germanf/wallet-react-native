@@ -1,7 +1,8 @@
-import React, {Component} from 'react'
-import {View, Alert, AsyncStorage, StyleSheet} from 'react-native'
-import {NavigationActions} from 'react-navigation'
+import React, { Component } from 'react'
+import { View, Alert, AsyncStorage, StyleSheet } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import AddBitcoinAddressComponent from './bitcoinAddressComponent'
+import SettingsService from './../../../services/settingsService'
 
 export default class AddBankAccount extends Component {
   static navigationOptions = {
@@ -9,17 +10,17 @@ export default class AddBankAccount extends Component {
   }
 
   constructor() {
-      super()
-      this.state = {
-        address: '',
-      }
-   }
+    super()
+    this.state = {
+      address: '',
+    }
+  }
 
-   updateAddress = (address) => {
-      this.setState({address})
-   }
-   goToHome = () => {
-     const params = this.props.navigation.state.params
+  updateAddress = (address) => {
+    this.setState({ address })
+  }
+  goToHome = () => {
+    const params = this.props.navigation.state.params
     const resetAction = NavigationActions.reset({
       index: 1,
       actions: [
@@ -28,42 +29,36 @@ export default class AddBankAccount extends Component {
           params: {},
 
           // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: params.parentRoute}),
+          action: NavigationActions.navigate({ routeName: params.parentRoute }),
         }),
-        NavigationActions.navigate({ routeName: params.nextRoute}),
+        NavigationActions.navigate({ routeName: params.nextRoute }),
       ],
     })
     this.props.navigation.dispatch(resetAction)
-   }
-   add = async() => {
-     //console.log(this.state)
-     const value = await AsyncStorage.getItem('token')
-     fetch('https://rehive.com/api/3/user/bitcoin_accounts/', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-        body: JSON.stringify(this.state),
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          this.goToHome()
-        }
-        else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK', onPress: () => console.log('OK Pressed!')}])
-      })
-   }
+  }
+
+  fetchSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
+      this.goToHome()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
+          error,
+          [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
+  }
+
+  add = async () => {
+    //console.log(this.state)
+    const token = await AsyncStorage.getItem('token')
+    SettingsService.addBitcoinAddresses(token, this.state, this.fetchSuccess, this.fetchError)
+  }
 
   render() {
     return (
@@ -80,8 +75,8 @@ export default class AddBankAccount extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-    backgroundColor:'white',
-    padding:15,
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 15,
   },
 })

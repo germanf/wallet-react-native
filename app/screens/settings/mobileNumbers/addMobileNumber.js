@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {View, KeyboardAvoidingView, StyleSheet, TextInput, AsyncStorage, TouchableHighlight, Text, Alert} from 'react-native'
+import SettingsService from './../../../services/settingsService'
 
 export default class AmountEntry extends Component {
   static navigationOptions = {
@@ -14,22 +15,8 @@ export default class AmountEntry extends Component {
     }
   }
 
-  add = async() => {
-    const value = await AsyncStorage.getItem('token')
-
-    fetch('https://www.rehive.com/api/3/user/mobiles/', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-        body: JSON.stringify(this.state),
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson)
-        if (responseJson.status === "success") {
+  fetchSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
           this.props.navigation.navigate("VerifyMobileNumber")
         }
         else {
@@ -37,12 +24,18 @@ export default class AmountEntry extends Component {
             responseJson.message,
             [{text: 'OK'}])
         }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
+      error,
+      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
+  }
+
+  add = async() => {
+    const token = await AsyncStorage.getItem('token')
+
+    SettingsService.addMobile(token, this.state, this.fetchSuccess, this.fetchError)
   }
 
   render() {

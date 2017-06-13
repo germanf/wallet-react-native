@@ -1,8 +1,9 @@
-import React, {Component} from 'react'
-import {View, StyleSheet, ListView, Alert, AsyncStorage, RefreshControl} from 'react-native'
-import {NavigationActions} from 'react-navigation'
+import React, { Component } from 'react'
+import { View, StyleSheet, ListView, Alert, AsyncStorage, RefreshControl } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
 import Notification from './notification'
+import SettingsService from './../../../services/settingsService'
 
 export default class Settings extends Component {
   static navigationOptions = {
@@ -24,35 +25,32 @@ export default class Settings extends Component {
     this.getData()
   }
 
+  fetchSuccessOnGetData = (responseJson) => {
+    if (responseJson.status === "success") {
+      const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) });
+      const data = responseJson.data;
+      //console.log(data)
+      let ids = data.map((obj, index) => index);
+      this.setState({
+        dataSource: ds.cloneWithRows(data, ids),
+      })
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
+      error,
+      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
+  }
+
   getData = async () => {
-    this.setState({refreshing: true})
-    const value = await AsyncStorage.getItem('token');
-    fetch('https://www.rehive.com/api/3/user/notifications/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2)});
-          const data = responseJson.data;
-          console.log(data)
-          let ids = data.map((obj, index) => index);
-          this.setState({
-            refreshing: false,
-            dataSource: ds.cloneWithRows(data, ids),
-          })
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+    const token = await AsyncStorage.getItem('token');
+    SettingsService.getAllNotifications(token, this.fetchSuccessOnGetData, this.fetchError)
   }
 
   reload = () => {
@@ -64,70 +62,43 @@ export default class Settings extends Component {
           params: {},
 
           // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Settings'}),
+          action: NavigationActions.navigate({ routeName: 'Settings' }),
         }),
-        NavigationActions.navigate({ routeName: 'SettingsNotifications'}),
+        NavigationActions.navigate({ routeName: 'SettingsNotifications' }),
       ],
     })
     this.props.navigation.dispatch(resetAction)
   }
 
-  enableEmail = async(id, previous) => {
-    this.setState({loading: true})
-
-    const value = await AsyncStorage.getItem('token')
-
-    fetch('https://www.rehive.com/api/3/user/notifications/' + id + '/', {
-        method: 'PATCH',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-        body: JSON.stringify({
-          email_enabled: !previous,
-      }),
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          this.reload()
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+  fetchSuccessOnEnableNotification = (responseJson) => {
+    if (responseJson.status === "success") {
+      this.reload()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
-  enableSMS = async(id, previous) => {
-    this.setState({loading:true})
+  enableEmail = async (id, previous) => {
+    this.setState({ loading: true })
 
-    const value = await AsyncStorage.getItem('token')
+    const token = await AsyncStorage.getItem('token')
+    const body = {
+      email_enabled: !previous,
+    }
+    SettingsService.changeStateOfEmailNotification(token, id, body, this.fetchSuccessOnEnableNotification, this.fetchError)
+  }
 
-    fetch('https://www.rehive.com/api/3/user/notifications/' + id + '/', {
-        method: 'PATCH',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-        body: JSON.stringify({
-          sms_enabled: !previous,
-      }),
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          this.reload()
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+  enableSMS = async (id, previous) => {
+    this.setState({ loading: true })
+
+    const token = await AsyncStorage.getItem('token')
+    const body = {
+      sms_enabled: !previous,
+    }
+    SettingsService.changeStateOfMobileNotification(token, id, body, this.fetchSuccessOnEnableNotification, this.fetchError)
   }
 
   render() {
@@ -136,7 +107,7 @@ export default class Settings extends Component {
         <Spinner
           visible={this.state.loading}
           textContent={"Updating..."}
-          textStyle={{color: '#FFF'}}
+          textStyle={{ color: '#FFF' }}
         />
         <ListView
           refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getData.bind(this)} />}
@@ -150,7 +121,7 @@ export default class Settings extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },
@@ -161,6 +132,6 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
 })

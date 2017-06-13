@@ -1,6 +1,7 @@
-import React, {Component} from 'react'
-import {View, ListView, StyleSheet, Alert, AsyncStorage, TouchableHighlight, Text, RefreshControl} from 'react-native'
+import React, { Component } from 'react'
+import { View, ListView, StyleSheet, Alert, AsyncStorage, TouchableHighlight, Text, RefreshControl } from 'react-native'
 import Account from './../../components/account'
+import SettingsService from './../../services/settingsService'
 
 export default class BitcoinAddresses extends Component {
   static navigationOptions = {
@@ -20,42 +21,41 @@ export default class BitcoinAddresses extends Component {
     this.getData()
   }
   getAmount = (reference) => {
-    this.props.navigation.navigate("WithdrawalAmountEntry", {reference})
+    this.props.navigation.navigate("WithdrawalAmountEntry", { reference })
   }
+  fetchSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
+      const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) });
+      const data = responseJson.data;
+      console.log(data)
+      let ids = data.map((obj, index) => index);
+      this.setState({
+        refreshing: false,
+        dataSource: ds.cloneWithRows(data, ids),
+      })
+    }
+    else {
+      this.setState({
+        refreshing: false,
+      })
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
+      error,
+      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
+  }
+
   getData = async () => {
     this.setState({
-        refreshing: true,
-      })
-    const value = await AsyncStorage.getItem('token');
-    fetch('https://rehive.com/api/3/user/bitcoin_accounts/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2)});
-          const data = responseJson.data;
-          console.log(data)
-          let ids = data.map((obj, index) => index);
-          this.setState({
-            refreshing: false,
-            dataSource: ds.cloneWithRows(data, ids),
-          })
-        }
-        else {
-          this.props.logout()
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+      refreshing: true,
+    })
+    const token = await AsyncStorage.getItem('token');
+    SettingsService.getAllBitcoinAddresses(token, this.fetchSuccess, this.fetchError)
   }
 
   render() {
@@ -68,8 +68,8 @@ export default class BitcoinAddresses extends Component {
         />
         <TouchableHighlight
           style={styles.submit}
-          onPress={() => this.props.navigation.navigate("AddBitcoinAddress", {parentRoute: 'Withdraw', nextRoute: 'BitcoinAddresses'})}>
-          <Text style={{color:'white', fontSize:20}}>
+          onPress={() => this.props.navigation.navigate("AddBitcoinAddress", { parentRoute: 'Withdraw', nextRoute: 'BitcoinAddresses' })}>
+          <Text style={{ color: 'white', fontSize: 20 }}>
             Add Bitcoin Address
           </Text>
         </TouchableHighlight>
@@ -80,7 +80,7 @@ export default class BitcoinAddresses extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },
@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
 })

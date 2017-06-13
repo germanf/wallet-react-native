@@ -3,6 +3,10 @@ import { Text, View, StyleSheet, TouchableHighlight } from 'react-native'
 import Expo, { Permissions } from 'expo'
 
 export default class QRcodeScanner extends Component {
+  static navigationOptions = {
+    title: 'QR Code Scanner',
+  }
+
   constructor(props) {
     super(props)
     const params = this.props.navigation.state.params

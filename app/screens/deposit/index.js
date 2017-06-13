@@ -1,5 +1,6 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, AsyncStorage, Alert} from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, AsyncStorage, Alert } from 'react-native'
+import UserInfoService from './../../services/userInfoService'
 
 export default class Deposit extends Component {
   static navigationOptions = {
@@ -15,45 +16,40 @@ export default class Deposit extends Component {
       currencyCode: '',
     }
   }
+
   componentDidMount() {
     this.getBankInfo()
     this.getCurrencyCode()
   }
 
-  getBankInfo = async () => {
-    const value = await AsyncStorage.getItem('token');
-    fetch('https://www.rehive.com/api/3/company/bank/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          if (responseJson.data[0]) {
-            this.setState({
-              bank: responseJson.data[0],
-              bankAccount: responseJson.data[0].bank_account,
-            })
-          }
-        }
-        else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+  fetchSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
+      if (responseJson.data[0]) {
+        this.setState({
+          bank: responseJson.data[0],
+          bankAccount: responseJson.data[0].bank_account,
+        })
+      }
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
-  getCurrencyCode = async() => {
+  fetchError = (error) => {
+    Alert.alert('Error',
+      error,
+      [{ text: 'OK' }])
+  }
+
+  getBankInfo = async () => {
+    const token = await AsyncStorage.getItem('token');
+    UserInfoService.getDepositInfo(token, this.fetchSuccess, this.fetchError)
+  }
+
+  getCurrencyCode = async () => {
     const currencyStr = await AsyncStorage.getItem('currency')
     const currency = JSON.parse(currencyStr)
     this.setState({
@@ -137,7 +133,7 @@ export default class Deposit extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     backgroundColor: 'white',
   },
   comment: {
@@ -164,7 +160,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   bankInfo: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     padding: 20,
   },

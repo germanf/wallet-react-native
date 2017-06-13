@@ -1,6 +1,7 @@
-import React, {Component} from 'react'
-import {View, ListView, StyleSheet, Alert,  AsyncStorage, RefreshControl} from 'react-native'
-import {NavigationActions} from 'react-navigation'
+import React, { Component } from 'react'
+import { View, ListView, StyleSheet, Alert, AsyncStorage, RefreshControl } from 'react-native'
+import { NavigationActions } from 'react-navigation'
+import AccountService from './../../services/accountService'
 import Currency from './currency'
 
 export default class Accounts extends Component {
@@ -19,41 +20,53 @@ export default class Accounts extends Component {
       }),
     }
   }
-  componentWillMount() {
+  componentDidMount() {
     this.getData()
+  }
+
+  fetchSuccessOnGetData = (responseJson) => {
+    if (responseJson.status === "success") {
+      const data = responseJson.data.results;
+      console.log(data)
+      this.setState({
+        refreshing: false,
+        dataSource: this.state.dataSource.cloneWithRows(data),
+      })
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{
+          text: 'OK',
+          onPress: () => this.props.navigation.navigate('Home'),
+        }])
+    }
+  }
+
+  fetchSuccessOnSetActive = (responseJson) => {
+    if (responseJson.status === "success") {
+      this.reload()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{
+          text: 'OK',
+        }])
+    }
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
+      error,
+      [{ text: 'OK' }])
   }
   getData = async () => {
     this.setState({
-        refreshing: true,
-      })
-    const value = await AsyncStorage.getItem('token');
-    fetch('https://rehive.com/api/3/accounts/' + this.state.reference + '/currencies/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          const data = responseJson.data.results;
-          console.log(data)
-          this.setState({
-            refreshing: false,
-            dataSource: this.state.dataSource.cloneWithRows(data),
-          })
-        }
-        else {
-          this.props.logout()
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+      refreshing: true,
+    })
+    const token = await AsyncStorage.getItem('token');
+    AccountService.getAllAccountCurrencies(this.state.reference, token, this.fetchSuccessOnGetData, this.fetchError)
   }
   reload = () => {
     const resetAction = NavigationActions.reset({
@@ -64,38 +77,16 @@ export default class Accounts extends Component {
           params: {},
 
           // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Accounts'}),
+          action: NavigationActions.navigate({ routeName: 'Accounts' }),
         }),
-        NavigationActions.navigate({ routeName: 'AccountCurrencies', params: {reference: this.state.reference}}),
+        NavigationActions.navigate({ routeName: 'AccountCurrencies', params: { reference: this.state.reference } }),
       ],
     })
     this.props.navigation.dispatch(resetAction)
-   }
-  setActive = async(code) => {
-    const value = await AsyncStorage.getItem('token');
-    console.log(this.state.reference)
-    fetch('https://rehive.com/api/3/accounts/' + this.state.reference + '/currencies/' + code + '/', {
-        method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-        body: JSON.stringify({
-        active: true,
-      }),
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          this.reload()
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+  }
+  setActive = async (code) => {
+    const token = await AsyncStorage.getItem('token');
+    AccountService.setActiveCurrency(this.state.reference, code, token, this.fetchSuccessOnSetActive, this.fetchError)
   }
 
   render() {
@@ -113,7 +104,7 @@ export default class Accounts extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },

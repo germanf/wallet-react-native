@@ -9,7 +9,7 @@ export default class Home extends Component {
     title: 'Home',
   }
 
-  goToHome = () => {
+  logout = () => {
      AsyncStorage.clear()
      const resetAction = NavigationActions.reset({
       index: 0,
@@ -23,9 +23,9 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <CurrentBalance logout={this.goToHome} style={styles.balance} />
+        <CurrentBalance logout={this.logout} style={styles.balance} />
         <View style={styles.transection} >
-          <Transections logout={this.goToHome} />
+          <Transections logout={this.logout} />
           <TouchableHighlight
             style={styles.submit}
             onPress={() => this.props.navigation.navigate("SendMoney")}>

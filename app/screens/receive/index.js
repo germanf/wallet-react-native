@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, Image, Alert, AsyncStorage} from 'react-native'
+import {View, Text, StyleSheet, Image,  AsyncStorage} from 'react-native'
 
 export default class Receive extends Component {
   static navigationOptions = {
@@ -14,41 +14,11 @@ export default class Receive extends Component {
     }
   }
 
-  componentDidMount() {
-    this.getData()
-  }
-
-  getData = async () => {
-    const value = await AsyncStorage.getItem('token');
-    fetch('https://rehive.com/api/3/user/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          let email = responseJson.data.email
-          let uri = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' + email + '&choe=UTF-8'
-          this.setState({
-            imageURI: uri,
-          })
-          console.log(this.state)
-        }
-        else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+  async componentWillMount() {
+    const value = await AsyncStorage.getItem('user');
+    const user = JSON.parse(value)
+    const imageURI = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' + user.email + '&choe=UTF-8'
+    this.setState({imageURI})
   }
 
   render() {

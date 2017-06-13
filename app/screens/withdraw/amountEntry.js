@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {View, KeyboardAvoidingView, StyleSheet, TextInput, TouchableHighlight, AsyncStorage, Text, Alert} from 'react-native'
+import TransectionService from './../../services/transectionService'
 
 export default class AmountEntry extends Component {
   static navigationOptions = {
@@ -45,30 +46,8 @@ export default class AmountEntry extends Component {
     }
   }
 
-  withdrawConfirmed = async() => {
-    const data = await AsyncStorage.getItem('currency')
-    const currency = JSON.parse(data)
-    let amount = this.state.amount
-    for (let i = 0; i < currency.divisibility; i++) {
-      amount = amount * 10
-    }
-
-    const value = await AsyncStorage.getItem('token')
-    fetch('https://rehive.com/api/3/transactions/withdraw/', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + value,
-      },
-      body: JSON.stringify({
-        amount,
-        "reference": this.state.reference,
-      }),
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      if (responseJson.status === "success") {
+  fetchSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
         Alert.alert('Success',
           "TX Code: " + responseJson.data.tx_code,
           [{text: 'OK', onPress: this.withdrawCenceled}])
@@ -78,12 +57,24 @@ export default class AmountEntry extends Component {
           responseJson.message,
           [{text: 'OK'}])
       }
-    })
-    .catch((error) => {
-      Alert.alert('Error',
+  }
+
+  fetchError = (error) => {
+     Alert.alert('Error',
           error,
           [{text: 'OK'}])
-    })
+  }
+
+  withdrawConfirmed = async() => {
+    const data = await AsyncStorage.getItem('currency')
+    const currency = JSON.parse(data)
+    let amount = this.state.amount
+    for (let i = 0; i < currency.divisibility; i++) {
+      amount = amount * 10
+    }
+
+    const token = await AsyncStorage.getItem('token')
+    TransectionService.withdraw(token, amount, this.state.reference, this.fetchSuccess, this.fetchError)
   }
 
   withdrawCenceled = () => {

@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, Image, Alert, AsyncStorage, Linking} from 'react-native'
+import UserInfoService from './../../services/userInfoService'
 
 export default class About extends Component {
   static navigationOptions = {
@@ -18,19 +19,8 @@ export default class About extends Component {
     this.getData()
   }
 
-  getData = async () => {
-    const value = await AsyncStorage.getItem('token');
-    fetch('https://rehive.com/api/3/company/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
+  fetchSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
           this.setState({
             company: responseJson.data,
           })
@@ -40,12 +30,17 @@ export default class About extends Component {
             responseJson.message,
             [{text: 'OK'}])
         }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
             error,
             [{text: 'OK'}])
-      })
+  }
+
+  getData = async () => {
+    const token = await AsyncStorage.getItem('token');
+    UserInfoService.getCompany(token, this.fetchSuccess, this.fetchError)
   }
 
   openLink = () => {

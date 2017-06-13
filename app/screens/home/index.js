@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
 
 const App = DrawerNavigator(RouteConfigs, {
   drawerWidth: 280,
+  initialRouteName : 'Home',
   navigationOptions : ({navigation}) => ({
     headerLeft: <DrawerButton navigation={navigation} />,
     headerStyle: {

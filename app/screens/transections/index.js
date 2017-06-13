@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   ListView,
@@ -29,8 +29,8 @@ export default class Transections extends Component {
 
   errorOnFetch = (error) => {
     Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
+      error,
+      [{ text: 'OK' }])
   }
 
   onGetDataSuccess = (responseJson) => {
@@ -49,7 +49,7 @@ export default class Transections extends Component {
       })
       Alert.alert('Error',
         responseJson.message,
-        [{text: 'OK'}])
+        [{ text: 'OK', onPress: () => this.props.logout() }])
     }
   }
 
@@ -62,9 +62,9 @@ export default class Transections extends Component {
     TransectionService.getAllTransections(token, this.onGetDataSuccess, this.errorOnFetch)
   }
 
-  loadMoreData = async() => {
+  loadMoreData = async () => {
     if (this.state.refreshing !== true) {
-      this.setState({refreshing: true})
+      this.setState({ refreshing: true })
       const token = await AsyncStorage.getItem('token')
       TransectionService.getNextTransections(this.state.nextUrl, token, this.onGetDataSuccess, this.errorOnFetch)
     }
@@ -72,7 +72,7 @@ export default class Transections extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, paddingTop: 10}}>
+      <View style={{ flex: 1, paddingTop: 10 }}>
         <ListView
           renderScrollComponent={(props) => <InfiniteScrollView {...props} />}
           refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getData.bind(this)} />}
@@ -80,6 +80,7 @@ export default class Transections extends Component {
           renderRow={(rowData) => <Transection data={rowData} />}
           canLoadMore={!!this.state.nextUrl}
           onLoadMoreAsync={this.loadMoreData.bind(this)}
+          enableEmptySections
         />
       </View>
     );

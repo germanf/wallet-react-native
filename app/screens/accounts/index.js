@@ -1,5 +1,6 @@
-import React, {Component} from 'react'
-import {View, ListView, StyleSheet, Alert, AsyncStorage, RefreshControl} from 'react-native'
+import React, { Component } from 'react'
+import { View, ListView, StyleSheet, Alert, AsyncStorage, RefreshControl } from 'react-native'
+import AccountService from './../../services/accountService'
 import Account from './account'
 
 export default class Accounts extends Component {
@@ -20,42 +21,40 @@ export default class Accounts extends Component {
     this.getData()
   }
   getCurrencies = (reference) => {
-    this.props.navigation.navigate("AccountCurrencies", {reference})
+    this.props.navigation.navigate("AccountCurrencies", { reference })
+  }
+  fetchSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
+      const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) });
+      const data = responseJson.data.results;
+      console.log(data)
+      let ids = data.map((obj, index) => index);
+      this.setState({
+        dataSource: ds.cloneWithRows(data, ids),
+        refreshing: false,
+      })
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{
+          text: 'OK',
+          onPress: () => this.props.navigation.navigate('Home'),
+        }])
+    }
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
+          error,
+          [{ text: 'OK' }])
   }
   getData = async () => {
     this.setState({
-        refreshing: true,
-      })
-    const value = await AsyncStorage.getItem('token');
-    fetch('https://rehive.com/api/3/accounts/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2)});
-          const data = responseJson.data.results;
-          console.log(data)
-          let ids = data.map((obj, index) => index);
-          this.setState({
-            dataSource: ds.cloneWithRows(data, ids),
-            refreshing: false,
-          })
-        }
-        else {
-          this.props.logout()
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+      refreshing: true,
+    })
+    const token = await AsyncStorage.getItem('token');
+    AccountService.getAllAccounts(token, this.fetchSuccess, this.fetchError)
   }
 
   render() {
@@ -73,7 +72,7 @@ export default class Accounts extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },

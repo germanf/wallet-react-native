@@ -1,6 +1,7 @@
-import React, {Component} from 'react'
-import {View, KeyboardAvoidingView, StyleSheet, TextInput, AsyncStorage, TouchableHighlight, Text, Alert, ListView, ActivityIndicator} from 'react-native'
+import React, { Component } from 'react'
+import { View, KeyboardAvoidingView, StyleSheet, TextInput, AsyncStorage, TouchableHighlight, Text, Alert, ListView, ActivityIndicator } from 'react-native'
 import Expo from 'expo'
+import TransectionService from './../../services/transectionService'
 import Contact from './contact'
 
 export default class AmountEntry extends Component {
@@ -14,20 +15,20 @@ export default class AmountEntry extends Component {
     this.state = {
       ready: false,
       amount: params.amount,
-      note : params.note,
+      note: params.note,
       reference: params.reference,
       searchText: params.reference,
       data: [],
-      contacts: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+      contacts: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }),
     }
   }
 
   componentWillMount() {
-    this.showFirstContactAsync()
+    this.showContactsAsync()
   }
 
-  showFirstContactAsync = async () => {
-  // Ask for permission to query contacts.
+  showContactsAsync = async () => {
+    // Ask for permission to query contacts.
     const permission = await Expo.Permissions.askAsync(Expo.Permissions.CONTACTS);
     if (permission.status !== 'granted') {
       Alert.alert(
@@ -56,7 +57,7 @@ export default class AmountEntry extends Component {
 
     var data = []
     contacts.data.forEach((node) => {
-      if (typeof(node.phoneNumbers) !== "undefined") {
+      if (typeof (node.phoneNumbers) !== "undefined") {
         node.phoneNumbers.forEach((number) => {
           var newData = {
             name: node.name,
@@ -65,7 +66,7 @@ export default class AmountEntry extends Component {
           data.push(newData)
         })
       }
-      if (typeof(node.emails) !== "undefined") {
+      if (typeof (node.emails) !== "undefined") {
         node.emails.forEach((email) => {
           var newData = {
             name: node.name,
@@ -84,7 +85,7 @@ export default class AmountEntry extends Component {
         return 1
       }
       else {
-       return 0
+        return 0
       }
     })
     this.setState({
@@ -95,12 +96,12 @@ export default class AmountEntry extends Component {
   }
 
   selectAContact = (contact) => {
-    this.setState({searchText: contact})
+    this.setState({ searchText: contact })
   }
 
   searchTextChanged = (event) => {
     let searchText = event.nativeEvent.text
-    this.setState({searchText})
+    this.setState({ searchText })
 
     if (searchText === '') {
       this.setState({
@@ -130,13 +131,13 @@ export default class AmountEntry extends Component {
   send = async () => {
     if (this.state.searchText === '') {
       Alert.alert(
-          'Error',
-          'Enter a reference..',
+        'Error',
+        'Enter a reference..',
       )
       return
     }
     else {
-      this.setState({reference: this.state.searchText})
+      this.setState({ reference: this.state.searchText })
     }
 
     const data = await AsyncStorage.getItem('currency')
@@ -146,48 +147,37 @@ export default class AmountEntry extends Component {
       amount = amount * 10
     }
     Alert.alert(
-        'Are you sure?',
-        'Send ' + currency.symbol + this.state.amount + ' to ' + this.state.reference,
-        [
-          {text: 'Yes', onPress: () => this.transferConfirmed(amount)},
-          {text: 'No', onPress: this.transferCenceled, style: 'cancel'},
-        ]
+      'Are you sure?',
+      'Send ' + currency.symbol + this.state.amount + ' to ' + this.state.reference,
+      [
+        { text: 'Yes', onPress: () => this.transferConfirmed(amount) },
+        { text: 'No', onPress: this.transferCenceled, style: 'cancel' },
+      ]
     )
   }
 
-  transferConfirmed = async(amount) => {
-    const value = await AsyncStorage.getItem('token')
-    fetch('https://rehive.com/api/3/transactions/transfer/', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + value,
-      },
-      body: JSON.stringify({
-        amount,
-        reference: this.state.reference,
-        note: this.state.note,
-      }),
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      if (responseJson.status === "success") {
-        Alert.alert('Success',
-          "TX Code: " + responseJson.data.tx_code,
-          [{text: 'OK', onPress: this.transferCenceled}])
-      }
-      else {
-        Alert.alert('Error',
-          responseJson.message,
-          [{text: 'OK'}])
-      }
-    })
-    .catch((error) => {
+  transferConfirmed = async (amount) => {
+    const token = await AsyncStorage.getItem('token')
+    TransectionService.sendMoney(token, amount, this.state.reference, this.state.note, this.fetchSuccess, this.fetchError)
+  }
+
+  fetchSuccess = (responseJson) => {
+    if (responseJson.status === "success") {
+      Alert.alert('Success',
+        "TX Code: " + responseJson.data.tx_code,
+        [{ text: 'OK', onPress: this.transferCenceled }])
+    }
+    else {
       Alert.alert('Error',
-          error,
-          [{text: 'OK'}])
-    })
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
+  }
+
+  fetchError = (error) => {
+    Alert.alert('Error',
+      error,
+      [{ text: 'OK' }])
   }
 
   transferCenceled = () => {
@@ -198,7 +188,7 @@ export default class AmountEntry extends Component {
     if (!this.state.ready) {
       return (
         <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
-          <View style={{flex:1}}>
+          <View style={{ flex: 1 }}>
             <TextInput
               style={styles.input}
               placeholder="Enter name/email/mobile"
@@ -212,7 +202,7 @@ export default class AmountEntry extends Component {
               </Text>
               <ActivityIndicator
                 animating
-                style={{height: 80}}
+                style={{ height: 80 }}
                 size="large"
               />
             </View>
@@ -220,7 +210,7 @@ export default class AmountEntry extends Component {
           <TouchableHighlight
             style={styles.submit}
             onPress={this.send}>
-            <Text style={{color:'white', fontSize:20}}>
+            <Text style={{ color: 'white', fontSize: 20 }}>
               Send
             </Text>
           </TouchableHighlight>
@@ -229,7 +219,7 @@ export default class AmountEntry extends Component {
     }
     return (
       <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
           <TextInput
             style={styles.input}
             placeholder="Enter name/email/mobile"
@@ -237,7 +227,7 @@ export default class AmountEntry extends Component {
             value={this.state.searchText}
             onChange={this.searchTextChanged.bind(this)}
           />
-          <View style={{flex:1, padding:10}}>
+          <View style={{ flex: 1, padding: 10 }}>
             <ListView
               dataSource={this.state.contacts}
               enableEmptySections
@@ -248,7 +238,7 @@ export default class AmountEntry extends Component {
         <TouchableHighlight
           style={styles.submit}
           onPress={this.send}>
-          <Text style={{color:'white', fontSize:20}}>
+          <Text style={{ color: 'white', fontSize: 20 }}>
             Send
           </Text>
         </TouchableHighlight>
@@ -259,14 +249,14 @@ export default class AmountEntry extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },
   spinner: {
     flex: 1,
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   submit: {
     padding: 10,
@@ -275,7 +265,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   input: {
     height: 60,
@@ -289,6 +279,6 @@ const styles = StyleSheet.create({
     height: 40,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
 })

@@ -22,17 +22,17 @@ export default class CurrentBalance extends Component {
       balance = balance / 10
     }
 
-    this.setState({balance})
+    return balance
   }
 
   getBalanceInfo = async () => {
-    const value = await AsyncStorage.getItem('token');
+    const token = await AsyncStorage.getItem('token')
     fetch('https://rehive.com/api/3/accounts/?active=true', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
+          'Authorization': 'Token ' + token,
         },
       })
       .then((response) => response.json())
@@ -41,7 +41,7 @@ export default class CurrentBalance extends Component {
           const account = responseJson.data.results[0].balances[0]
           AsyncStorage.setItem('currency', JSON.stringify(account.currency))
           this.setState({symbol: account.currency.symbol})
-          this.setBalance(account.balance, account.currency.divisibility)
+          this.setState({balance: this.setBalance(account.balance, account.currency.divisibility)})
         }
         else {
           this.props.logout()

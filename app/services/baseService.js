@@ -61,7 +61,22 @@ var baseService = {
 
   patch: (endPoint, headers, body, successFunc, errorFunc) => {
     fetch(baseUrl + endPoint, {
-        method: 'GET',
+        method: 'PATCH',
+        headers,
+        body,
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        successFunc(responseJson)
+      })
+      .catch((error) => {
+        errorFunc(error)
+      })
+  },
+
+  put: (endPoint, headers, body, successFunc, errorFunc) => {
+    fetch(baseUrl + endPoint, {
+        method: 'PUT',
         headers,
         body,
       })

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet} from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class Withdraw extends Component {
 
@@ -18,7 +18,7 @@ export default class Withdraw extends Component {
         <View style={styles.left}>
           <View style={styles.icon}>
             <Icon
-              name={this.props.data.amount > 0 ? 'attach-money' : 'money-off'}
+              name={'ios-arrow-dropright-outline'}
               size={50}
             />
           </View>
@@ -32,7 +32,7 @@ export default class Withdraw extends Component {
           </View>
         </View>
         <View style={styles.right}>
-          <Text style={{fontSize:20, color:this.props.data.amount > 0 ? 'green' : 'red'}}>
+          <Text style={{fontSize:20, color: 'black'}}>
             {this.props.data.currency.symbol + " " + this.getAmount(this.props.data.amount, this.props.data.currency.divisibility)}
           </Text>
           <Text style={{fontSize:13, color:'darkgray'}}>
@@ -56,8 +56,6 @@ const styles = StyleSheet.create({
   left:{
     flex:3,
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
   },
   icon: {
     flex:1,

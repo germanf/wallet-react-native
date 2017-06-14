@@ -40,18 +40,18 @@ export default class DrawerHeader extends Component {
 
 const styles = StyleSheet.create({
   container:{
-    marginLeft:10,
     height:100,
     flexDirection: "row",
     alignItems: 'center',
     justifyContent:'center',
-    marginTop: 10,
+    marginTop: -10,
     marginBottom: 10,
+    marginLeft:15,
   },
   stretch: {
     flex: 1,
     height: 70,
-    borderRadius: 50,
+    borderRadius: 30,
   },
   outerContainer: {
     flex: 3,

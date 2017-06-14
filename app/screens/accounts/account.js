@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 export default class Account extends Component {
 
@@ -11,8 +12,8 @@ export default class Account extends Component {
         onPress={() => this.props.getCurrencies(this.props.reference)}>
         <View style={styles.optionsElement}>
           <View style={styles.icon}>
-            <Icon
-              name="bank"
+            <MaterialIcons
+              name="radio-button-unchecked"
               size={50}
             />
           </View>

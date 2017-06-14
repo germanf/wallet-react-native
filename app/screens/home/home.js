@@ -6,7 +6,7 @@ import CurrentBalance from './currentBalance'
 
 export default class Home extends Component {
   static navigationOptions = {
-    title: 'Home',
+    label: 'Home',
   }
 
   logout = () => {
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     flex:1,
   },
   transection: {
-    flex:3,
+    flex:4,
     backgroundColor:'white',
   },
   submit: {

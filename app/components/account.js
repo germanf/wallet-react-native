@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 export default class Account extends Component {
 
@@ -11,16 +12,16 @@ export default class Account extends Component {
         onPress={() => this.props.onPress(this.props.reference)}>
         <View style={styles.optionsElement}>
           <View style={styles.optionsText}>
-            <Icon
-              name="bank"
-              size={35}
+            <MaterialIcons
+              name="radio-button-unchecked"
+              size={50}
             />
             <Text style={{fontSize:22}}>
               {this.props.name}
             </Text>
           </View>
           <View style={styles.optionsIcon}>
-            <Icon
+            <IconFontAwesome
               name="angle-double-right"
               size={50}
             />
@@ -33,19 +34,15 @@ export default class Account extends Component {
 
 const styles = StyleSheet.create({
   options: {
-    padding: 20,
+    padding: 10,
     height: 80,
     width: "100%",
     borderBottomWidth: 1,
     borderBottomColor: "lightgray",
-    alignItems: 'flex-start',
-    justifyContent:'center',
   },
   optionsElement: {
     flex:1,
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent:'center',
   },
   optionsText: {
     flex:2,

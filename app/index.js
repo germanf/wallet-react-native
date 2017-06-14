@@ -1,4 +1,4 @@
-import {StackNavigator} from 'react-navigation'
+import { StackNavigator } from 'react-navigation'
 import Expo from 'expo'
 import Home from './screens/home/index'
 import Login from './screens/auth/login'
@@ -110,7 +110,7 @@ const RouteConfigs = {
   AddBitcoinAddress: {
     screen: AddBitcoinAddress,
   },
-  EditBitcoinAddress : {
+  EditBitcoinAddress: {
     screen: EditBitcoinAddress,
   },
   SettingsCards: {
@@ -125,14 +125,20 @@ const RouteConfigs = {
 }
 
 const App = StackNavigator(RouteConfigs, {
-    navigationOptions : {
-      headerStyle: {
-        backgroundColor: '#2070A0',
-        paddingTop: Expo.Constants.statusBarHeight,
-        height: 50 + Expo.Constants.statusBarHeight,
+  navigationOptions: {
+    headerStyle: {
+      backgroundColor: '#2070A0',
+      paddingTop: Expo.Constants.statusBarHeight,
+      height: 50 + Expo.Constants.statusBarHeight,
+      borderColor: '#2070A0',
+      shadowOpacity: 0,
+      shadowOffset: {
+        height: 0,
       },
-      headerTintColor: 'white',
+      elevation: 0,
     },
+    headerTintColor: 'white',
+  },
 });
 
 export default App

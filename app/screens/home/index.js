@@ -1,6 +1,6 @@
 import React from 'react'
-import {ScrollView, View, StyleSheet} from 'react-native'
-import {DrawerNavigator, DrawerItems} from 'react-navigation'
+import { ScrollView, View, StyleSheet } from 'react-native'
+import { DrawerNavigator, DrawerItems } from 'react-navigation'
 import Home from './home'
 import Deposit from './../deposit/index'
 import Settings from './../settings/index'
@@ -53,7 +53,7 @@ const CustomDrawerContentComponent = (props) => (
         activeBackgroundColor="#207080"
         inactiveTintColor="white"
         inactiveBackgroundColor="transparent"
-        labelStyle={{fontSize:16}}
+        labelStyle={{ fontSize: 16, margin: 8, paddingLeft: 7 }}
       />
     </ScrollView>
   </View>
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
 
 const App = DrawerNavigator(RouteConfigs, {
   drawerWidth: 280,
-  initialRouteName : 'Home',
-  navigationOptions : ({navigation}) => ({
+  initialRouteName: 'Home',
+  navigationOptions: ({ navigation }) => ({
     headerLeft: <DrawerButton navigation={navigation} />,
     headerStyle: {
       backgroundColor: '#2070A0',

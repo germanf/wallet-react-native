@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {View, Alert, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TextInput, AsyncStorage, TouchableHighlight} from 'react-native'
 import CountryPicker from 'react-native-country-picker-modal'
-import Picker from 'react-native-picker'
+import { Picker } from 'react-native-picker-dropdown'
 
 export default class Settings extends Component {
   static navigationOptions = {
@@ -30,7 +30,9 @@ export default class Settings extends Component {
     const value = await AsyncStorage.getItem('user')
 
     const user = JSON.parse(value)
-
+    if (user.language === '') {
+      user.language = 'en'
+    }
     this.setState({
       first_name: user.first_name,
       last_name: user.last_name,
@@ -40,10 +42,6 @@ export default class Settings extends Component {
       mobile_number: user.mobile_number,
       language: user.language,
     })
-  }
-
-  showPicker = () => {
-    console.log(Picker)
   }
 
   save = async () => {
@@ -135,13 +133,15 @@ export default class Settings extends Component {
               <Text style={[styles.text, {flex:2}]}>
                 Language
               </Text>
-              <TouchableHighlight
-                onPress={this.showPicker.bind(this)}
-                style={{flex:1, justifyContent:'center'}}>
-                <Text>
-                  {this.state.language}
-                </Text>
-              </TouchableHighlight>
+              <Picker
+                selectedValue={this.state.language}
+                style={{flex:1, justifyContent:'center'}}
+                onValueChange={(lang) => {
+                  this.setState({language: lang})
+                }}>
+                <Picker.Item label="English" value="en" />
+                <Picker.Item label="Africans" value="af" />
+              </Picker>
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.text}>
@@ -216,9 +216,7 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     flexDirection:'row',
-    width:'100%',
-    borderBottomWidth: 1,
-    borderBottomColor: 'black',
+    width:'100%', 
     alignItems: 'center',
     justifyContent:'center',
   },

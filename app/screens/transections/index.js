@@ -72,7 +72,7 @@ export default class Transections extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, paddingTop: 10 }}>
+      <View style={{ flex: 1 }}>
         <ListView
           renderScrollComponent={(props) => <InfiniteScrollView {...props} />}
           refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getData.bind(this)} />}

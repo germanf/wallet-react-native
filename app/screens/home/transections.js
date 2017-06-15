@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import {
   View,
   ListView,
-  AsyncStorage,
-  Alert,
   RefreshControl,
 } from 'react-native'
 import InfiniteScrollView from 'react-native-infinite-scroll-view'
-import Transection from './transection'
+import Transection from './../../components/transection'
 import TransectionService from './../../services/transectionService'
 
 
@@ -27,13 +25,7 @@ export default class Transections extends Component {
     this.getData()
   }
 
-  errorOnFetch = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK' }])
-  }
-
-  onGetDataSuccess = (responseJson) => {
+  setDataInListView = (responseJson) => {
     if (responseJson.status === "success") {
       const data = this.state.data.concat(responseJson.data.results)
       this.setState({
@@ -47,9 +39,7 @@ export default class Transections extends Component {
       this.setState({
         refreshing: false,
       })
-      Alert.alert('Error',
-        responseJson.message,
-        [{ text: 'OK', onPress: () => this.props.logout() }])
+      this.props.logout()
     }
   }
 
@@ -58,15 +48,17 @@ export default class Transections extends Component {
       refreshing: true,
       data: [],
     })
-    const token = await AsyncStorage.getItem('token')
-    TransectionService.getAllTransections(token, this.onGetDataSuccess, this.errorOnFetch)
+    let responseJson = await TransectionService.getAllTransections()
+    this.setDataInListView(responseJson)
   }
 
   loadMoreData = async () => {
     if (this.state.refreshing !== true) {
-      this.setState({ refreshing: true })
-      const token = await AsyncStorage.getItem('token')
-      TransectionService.getNextTransections(this.state.nextUrl, token, this.onGetDataSuccess, this.errorOnFetch)
+      this.setState({
+        refreshing: true,
+      })
+      let responseJson = await TransectionService.getNextTransections(this.state.nextUrl)
+      this.setDataInListView(responseJson)
     }
   }
 

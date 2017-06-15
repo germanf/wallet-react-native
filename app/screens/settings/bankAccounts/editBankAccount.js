@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Alert, AsyncStorage, StyleSheet } from 'react-native'
+import { View, Alert, StyleSheet } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import EditBankAccountComponent from './bankAccountComponent'
 import SettingsService from './../../../services/settingsService'
@@ -66,8 +66,9 @@ export default class EditBankAccount extends Component {
     this.props.navigation.dispatch(resetAction)
   }
 
-  fetchSuccess = (responseJson) => {
-    console.log(responseJson)
+  update = async () => {
+    let responseJson = await SettingsService.editBankAccount(this.state.id, this.state)
+
     if (responseJson.status === "success") {
       this.goToHome()
     }
@@ -76,17 +77,6 @@ export default class EditBankAccount extends Component {
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK'}])
-  }
-
-  update = async () => {
-    const token = await AsyncStorage.getItem('token')
-    SettingsService.editBankAccount(token, this.state.id, this.state, this.fetchSuccess, this.fetchError)
   }
 
   render() {

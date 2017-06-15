@@ -2,14 +2,13 @@ import React from 'react'
 import { ScrollView, View, StyleSheet } from 'react-native'
 import { DrawerNavigator, DrawerItems } from 'react-navigation'
 import Home from './../screens/home/home'
-import Deposit from './../screens/deposit/index'
-import Settings from './../screens/settings/index'
-import Withdraw from './../screens/withdraw/index'
-import About from './../screens/about/index'
+import Deposit from './../screens/deposit/deposit'
+import Settings from './../screens/settings/settings'
+import Withdraw from './../screens/withdraw/withdraw'
+import About from './../screens/about/about'
 import Logout from './../screens/auth/logout'
-import Accounts from './../screens/accounts/index'
-import Receive from './../screens/receive/index'
-import Promotions from './../screens/promotions/index'
+import Accounts from './../screens/accounts/accounts'
+import Receive from './../screens/receive/receive'
 import DrawerButton from './../components/drawerButton'
 import DrawerHeader from './../components/drawerHeaderComponent'
 
@@ -28,9 +27,6 @@ const RouteConfigs = {
   },
   Accounts: {
     screen: Accounts,
-  },
-  Promotions: {
-    screen: Promotions,
   },
   Settings: {
     screen: Settings,

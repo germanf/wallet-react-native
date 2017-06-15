@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { View, ListView, StyleSheet, Alert, AsyncStorage, RefreshControl } from 'react-native'
+import { View, ListView, StyleSheet, Alert, RefreshControl } from 'react-native'
+import InfiniteScrollView from 'react-native-infinite-scroll-view'
 import AccountService from './../../services/accountService'
-import Account from './account'
+import Account from './../../components/account'
 
 export default class Accounts extends Component {
   static navigationOptions = {
@@ -12,6 +13,8 @@ export default class Accounts extends Component {
     super(props);
     this.state = {
       refreshing: false,
+      nextUrl: null,
+      data: [],
       dataSource: new ListView.DataSource({
         rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2),
       }),
@@ -20,50 +23,63 @@ export default class Accounts extends Component {
   componentDidMount() {
     this.getData()
   }
+
   getCurrencies = (reference) => {
     this.props.navigation.navigate("AccountCurrencies", { reference })
   }
-  fetchSuccess = (responseJson) => {
+
+  setDataInListView = (responseJson) => {
     if (responseJson.status === "success") {
-      const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) });
-      const data = responseJson.data.results;
-      console.log(data)
-      let ids = data.map((obj, index) => index);
+      const data = this.state.data.concat(responseJson.data.results)
       this.setState({
-        dataSource: ds.cloneWithRows(data, ids),
+        data,
+        dataSource: this.state.dataSource.cloneWithRows(data),
         refreshing: false,
+        nextUrl: responseJson.data.next,
       })
     }
     else {
-      Alert.alert('Error',
+      this.setState({
+        refreshing: false,
+      })
+      Alert.alert(
+        "Error",
         responseJson.message,
-        [{
-          text: 'OK',
-          onPress: () => this.props.navigation.navigate('Home'),
-        }])
+        "Ok"
+      )
     }
   }
 
-  fetchError = (error) => {
-    Alert.alert('Error',
-          error,
-          [{ text: 'OK' }])
-  }
   getData = async () => {
     this.setState({
       refreshing: true,
+      data: [],
     })
-    const token = await AsyncStorage.getItem('token');
-    AccountService.getAllAccounts(token, this.fetchSuccess, this.fetchError)
+    let responseJson = await AccountService.getAllAccounts()
+    this.setDataInListView(responseJson)
+  }
+
+  loadMoreData = async () => {
+    if (this.state.refreshing !== true) {
+      this.setState({
+        refreshing: true,
+      })
+      let responseJson = await AccountService.getMoreAccounts(this.state.nextUrl)
+      this.setDataInListView(responseJson)
+    }
   }
 
   render() {
     return (
       <View style={styles.container}>
         <ListView
+          renderScrollComponent={(props) => <InfiniteScrollView {...props} />}
           refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getData.bind(this)} />}
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <Account getCurrencies={this.getCurrencies} reference={rowData.reference} name={rowData.name} />}
+          canLoadMore={!!this.state.nextUrl}
+          onLoadMoreAsync={this.loadMoreData.bind(this)}
+          enableEmptySections
         />
       </View>
     )

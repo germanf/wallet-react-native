@@ -1,127 +1,80 @@
 import BaseService from './baseService'
 
-var getHeaders = (token) => {
-  var headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Authorization': 'Token ' + token,
-  }
-
-  return headers
-}
-
 var settingsService = {
-  getAllBankAccounts: (token, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    BaseService.get('user/bank_accounts/', headers, successFunc, errorFunc)
+  getAllBankAccounts: () => {
+    return BaseService.get('user/bank_accounts/')
   },
 
-  addBankAccount: (token, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.post('user/bank_accounts/', headers, body, successFunc, errorFunc)
+  addBankAccount: (data) => {
+    return BaseService.post('user/bank_accounts/', data)
   },
 
-  editBankAccount: (token, id, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.patch('user/bank_accounts/' + id + '/', headers, body, successFunc, errorFunc)
+  editBankAccount: (id, data) => {
+    return BaseService.patch('user/bank_accounts/' + id + '/', data)
   },
 
-  getAllBitcoinAddresses: (token, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    BaseService.get('user/bitcoin_accounts/', headers, successFunc, errorFunc)
+  getAllBitcoinAddresses: () => {
+    return BaseService.get('user/bitcoin_accounts/')
   },
 
-  addBitcoinAddresses: (token, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.post('user/bitcoin_accounts/', headers, body, successFunc, errorFunc)
+  addBitcoinAddresses: (data) => {
+    return BaseService.post('user/bitcoin_accounts/', data)
   },
 
-  editBitcoinAddresses: (token, id, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.patch('user/bitcoin_accounts/' + id + '/', headers, body, successFunc, errorFunc)
+  editBitcoinAddresses: (id, data) => {
+    return BaseService.patch('user/bitcoin_accounts/' + id + '/', data)
   },
 
-  getAllMobiles: (token, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    BaseService.get('user/mobiles/', headers, successFunc, errorFunc)
+  getAllMobiles: () => {
+    return BaseService.get('user/mobiles/')
   },
 
-  addMobile: (token, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.post('user/mobiles/', headers, body, successFunc, errorFunc)
+  addMobile: (data) => {
+    return BaseService.post('user/mobiles/', data)
   },
 
-  makeMobilePrimary: (token, id, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.patch('user/mobiles/' + id + '/', headers, body, successFunc, errorFunc)
+  makeMobilePrimary: (id, data) => {
+    return BaseService.patch('user/mobiles/' + id + '/', data)
   },
 
-  verifyMobile: (token, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.post('auth/mobile/verify/', headers, body, successFunc, errorFunc)
+  verifyMobile: (data) => {
+    return BaseService.post('auth/mobile/verify/', data)
   },
 
-  resendMobileVerification: (token, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.post('auth/mobile/verify/resend/', headers, body, successFunc, errorFunc)
+  resendMobileVerification: (data) => {
+    return BaseService.post('auth/mobile/verify/resend/', data)
   },
 
-  deleteMobile: (token, id, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    BaseService.delete('user/mobiles/' + id + '/', headers, successFunc, errorFunc)
+  deleteMobile: (id) => {
+    return BaseService.delete('user/mobiles/' + id + '/')
   },
 
-  getAllEmails: (token, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    BaseService.get('user/emails/', headers, successFunc, errorFunc)
+  getAllEmails: () => {
+    return BaseService.get('user/emails/')
   },
 
-  addEmail: (token, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.post('user/emails/', headers, body, successFunc, errorFunc)
+  addEmail: (data) => {
+    return BaseService.post('user/emails/', data)
   },
 
-  makeEmailPrimary: (token, id, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.patch('user/emails/' + id + '/', headers, body, successFunc, errorFunc)
+  makeEmailPrimary: (id, data) => {
+    return BaseService.patch('user/emails/' + id + '/', data)
   },
 
-  resendEmailVerification: (token, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.post('auth/email/verify/resend/', headers, body, successFunc, errorFunc)
+  resendEmailVerification: (data) => {
+    return BaseService.post('auth/email/verify/resend/', data)
   },
 
-  deleteEmail: (token, id, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    BaseService.delete('user/emails/' + id + '/', headers, successFunc, errorFunc)
+  deleteEmail: (id) => {
+    return BaseService.delete('user/emails/' + id + '/')
   },
 
-  getAllNotifications: (token, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    BaseService.get('user/notifications/', headers, successFunc, errorFunc)
+  getAllNotifications: () => {
+    return BaseService.get('user/notifications/')
   },
 
-  changeStateOfEmailNotification: (token, id, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.patch('user/notifications/' + id + '/', headers, body, successFunc, errorFunc)
-  },
-
-  changeStateOfMobileNotification: (token, id, info, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify(info)
-    BaseService.patch('user/notifications/' + id + '/', headers, body, successFunc, errorFunc)
+  changeStateOfNotification: (id, data) => {
+    return BaseService.patch('user/notifications/' + id + '/', data)
   },
 }
 

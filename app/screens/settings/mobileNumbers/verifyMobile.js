@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
-import {View, KeyboardAvoidingView, StyleSheet, TextInput, TouchableHighlight, Text, Alert, AsyncStorage} from 'react-native'
-import {NavigationActions} from 'react-navigation'
+import React, { Component } from 'react'
+import { View, KeyboardAvoidingView, StyleSheet, TextInput, TouchableHighlight, Text, Alert} from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import SettingsService from './../../../services/settingsService'
 
 export default class AmountEntry extends Component {
@@ -11,7 +11,7 @@ export default class AmountEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      otp : '',
+      otp: '',
     }
   }
 
@@ -24,61 +24,51 @@ export default class AmountEntry extends Component {
           params: {},
 
           // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Settings'}),
+          action: NavigationActions.navigate({ routeName: 'Settings' }),
         }),
-        NavigationActions.navigate({ routeName: 'SettingsMobileNumbers'}),
+        NavigationActions.navigate({ routeName: 'SettingsMobileNumbers' }),
       ],
     })
     this.props.navigation.dispatch(resetAction)
   }
 
-  fetchSuccess = (responseJson) => {
+  verify = async () => {
+    let responseJson = await SettingsService.verifyMobile(this.state)
+
     if (responseJson.status === "success") {
-          this.reload()
-        }
-        else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
-        }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
-  }
-
-  verify = async() => {
-    const token = await AsyncStorage.getItem('token')
-
-    SettingsService.verifyMobile(token, this.state, this.fetchSuccess, this.fetchError)
+      this.reload()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
   render() {
     return (
       <KeyboardAvoidingView style={styles.container} behavior={'padding'} keyboardVerticalOffset={70}>
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
           <TextInput
             style={styles.input}
             placeholder="Enter OTP"
             autoCapitalize="none"
             keyboardType="numeric"
-            onChangeText={(otp) => this.setState({otp})}
+            onChangeText={(otp) => this.setState({ otp })}
           />
         </View>
         <View style={styles.buttons}>
           <TouchableHighlight
-            style={[styles.submit, {backgroundColor:'red'}]}
+            style={[styles.submit, { backgroundColor: 'red' }]}
             onPress={() => this.reload()}>
-            <Text style={{color:'white', fontSize:20}}>
+            <Text style={{ color: 'white', fontSize: 20 }}>
               Skip
             </Text>
           </TouchableHighlight>
           <TouchableHighlight
             style={styles.submit}
             onPress={this.verify}>
-            <Text style={{color:'white', fontSize:20}}>
+            <Text style={{ color: 'white', fontSize: 20 }}>
               Verify
             </Text>
           </TouchableHighlight>
@@ -90,17 +80,17 @@ export default class AmountEntry extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },
   submit: {
-    flex:1,
+    flex: 1,
     padding: 10,
     backgroundColor: '#2070A0',
     width: "100%",
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   input: {
     height: 60,

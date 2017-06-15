@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
-import {View, StyleSheet, TouchableHighlight, Text, AsyncStorage} from 'react-native'
-import {NavigationActions} from 'react-navigation'
-import Transections from './../transections/index'
+import React, { Component } from 'react'
+import { View, StyleSheet, TouchableHighlight, Text, AsyncStorage } from 'react-native'
+import { NavigationActions } from 'react-navigation'
+import Transections from './transections'
 import CurrentBalance from './currentBalance'
 
 export default class Home extends Component {
@@ -10,15 +10,15 @@ export default class Home extends Component {
   }
 
   logout = () => {
-     AsyncStorage.clear()
-     const resetAction = NavigationActions.reset({
+    AsyncStorage.clear()
+    const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({ routeName: 'Login'}),
+        NavigationActions.navigate({ routeName: 'Login' }),
       ],
     })
     this.props.navigation.dispatch(resetAction)
-   }
+  }
 
   render() {
     return (
@@ -29,7 +29,7 @@ export default class Home extends Component {
           <TouchableHighlight
             style={styles.submit}
             onPress={() => this.props.navigation.navigate("SendMoney")}>
-            <Text style={{color:'white', fontSize:20}}>
+            <Text style={{ color: 'white', fontSize: 20 }}>
               Send
             </Text>
           </TouchableHighlight>
@@ -41,16 +41,16 @@ export default class Home extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
-    backgroundColor:'white',
+    backgroundColor: 'white',
   },
   balance: {
-    flex:1,
+    flex: 1,
   },
   transection: {
-    flex:4,
-    backgroundColor:'white',
+    flex: 4,
+    backgroundColor: 'white',
   },
   submit: {
     padding: 10,
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
 })
 

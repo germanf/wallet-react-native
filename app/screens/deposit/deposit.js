@@ -22,7 +22,8 @@ export default class Deposit extends Component {
     this.getCurrencyCode()
   }
 
-  fetchSuccess = (responseJson) => {
+  getBankInfo = async () => {
+    let responseJson = await UserInfoService.getDepositInfo()
     if (responseJson.status === "success") {
       if (responseJson.data[0]) {
         this.setState({
@@ -36,17 +37,6 @@ export default class Deposit extends Component {
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK' }])
-  }
-
-  getBankInfo = async () => {
-    const token = await AsyncStorage.getItem('token');
-    UserInfoService.getDepositInfo(token, this.fetchSuccess, this.fetchError)
   }
 
   getCurrencyCode = async () => {

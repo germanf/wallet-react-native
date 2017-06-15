@@ -8,8 +8,8 @@ export default class Login extends Component {
     title: 'Login',
   }
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.checkLoggedIn()
     this.state = {
       email: '',
@@ -20,13 +20,12 @@ export default class Login extends Component {
 
   checkLoggedIn = async () => {
     try {
-      const value = await AsyncStorage.getItem('token')
-      if (value != null) {
+      const token = await AsyncStorage.getItem('token')
+      if (token != null) {
         this.goToHome()
       }
-      return value
+      return token
     } catch (error) {
-      //return null
     }
   }
 
@@ -40,13 +39,13 @@ export default class Login extends Component {
     this.props.navigation.dispatch(resetAction)
   }
 
-  errorOnFetch = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK' }])
-  }
-
-  loginAttempt = (responseJson) => {
+  login = async() => {
+    var body = {
+      "identifier": this.state.email,
+      "company_id": this.state.company,
+      "password": this.state.password,
+    }
+    let responseJson = await AuthService.login(body)
     if (responseJson.status === "success") {
       const loginInfo = responseJson.data;
       AsyncStorage.setItem("token", loginInfo.token)
@@ -58,15 +57,6 @@ export default class Login extends Component {
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  login = () => {
-    var body = JSON.stringify({
-      "identifier": this.state.email,
-      "company_id": this.state.company,
-      "password": this.state.password,
-    })
-    AuthService.login(body, this.loginAttempt, this.errorOnFetch)
   }
 
   render() {

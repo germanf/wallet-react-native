@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, ListView, Alert, AsyncStorage, RefreshControl } from 'react-native'
+import { View, StyleSheet, ListView, Alert, RefreshControl } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
-import Notification from './notification'
-import SettingsService from './../../../services/settingsService'
+import Notification from './../../components/notification'
+import SettingsService from './../../services/settingsService'
 
 export default class Settings extends Component {
   static navigationOptions = {
@@ -25,7 +25,8 @@ export default class Settings extends Component {
     this.getData()
   }
 
-  fetchSuccessOnGetData = (responseJson) => {
+  getData = async () => {
+    let responseJson = await SettingsService.getAllNotifications()
     if (responseJson.status === "success") {
       const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) });
       const data = responseJson.data;
@@ -40,17 +41,6 @@ export default class Settings extends Component {
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
-  }
-
-  getData = async () => {
-    const token = await AsyncStorage.getItem('token');
-    SettingsService.getAllNotifications(token, this.fetchSuccessOnGetData, this.fetchError)
   }
 
   reload = () => {
@@ -70,7 +60,15 @@ export default class Settings extends Component {
     this.props.navigation.dispatch(resetAction)
   }
 
-  fetchSuccessOnEnableNotification = (responseJson) => {
+  enableEmail = async (id, previous) => {
+    this.setState({ loading: true })
+
+    const body = {
+      email_enabled: !previous,
+    }
+
+    let responseJson = await SettingsService.changeStateOfNotification(id, body)
+
     if (responseJson.status === "success") {
       this.reload()
     }
@@ -81,24 +79,22 @@ export default class Settings extends Component {
     }
   }
 
-  enableEmail = async (id, previous) => {
-    this.setState({ loading: true })
-
-    const token = await AsyncStorage.getItem('token')
-    const body = {
-      email_enabled: !previous,
-    }
-    SettingsService.changeStateOfEmailNotification(token, id, body, this.fetchSuccessOnEnableNotification, this.fetchError)
-  }
-
   enableSMS = async (id, previous) => {
     this.setState({ loading: true })
 
-    const token = await AsyncStorage.getItem('token')
     const body = {
       sms_enabled: !previous,
     }
-    SettingsService.changeStateOfMobileNotification(token, id, body, this.fetchSuccessOnEnableNotification, this.fetchError)
+    let responseJson = await SettingsService.changeStateOfMobileNotification(id, body)
+
+    if (responseJson.status === "success") {
+      this.reload()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
   render() {

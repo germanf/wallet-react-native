@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, StyleSheet, ListView, Alert, AsyncStorage, TouchableHighlight, Text, RefreshControl } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
-import EmailAddress from './emailAddressComponent'
+import EmailAddress from './../../../components/emailAddress'
 import SettingsService from './../../../services/settingsService'
 
 export default class Settings extends Component {
@@ -26,7 +26,9 @@ export default class Settings extends Component {
     this.getData()
   }
 
-  fetchSuccessOnGetData = (responseJson) => {
+  getData = async () => {
+    let responseJson = await SettingsService.getAllEmails()
+
     if (responseJson.status === "success") {
       const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) });
       const data = responseJson.data;
@@ -41,17 +43,6 @@ export default class Settings extends Component {
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
-  }
-
-  getData = async () => {
-    const token = await AsyncStorage.getItem('token');
-    SettingsService.getAllEmails(token, this.fetchSuccessOnGetData, this.fetchError)
   }
 
   reload = () => {
@@ -71,7 +62,14 @@ export default class Settings extends Component {
     this.props.navigation.dispatch(resetAction)
   }
 
-  fetchSuccessAndReload = (responseJson) => {
+  makePrimary = async (id) => {
+    this.setState({
+      loading: true,
+      loadingMessage: 'Updating...',
+    })
+    const body = { "primary": true }
+    let responseJson = await SettingsService.makeEmailPrimary(id, body)
+
     if (responseJson.status === "success") {
       this.reload()
     }
@@ -82,17 +80,22 @@ export default class Settings extends Component {
     }
   }
 
-  makePrimary = async (id) => {
+  verify = async (number) => {
     this.setState({
       loading: true,
-      loadingMessage: 'Updating...',
+      loadingMessage: 'Sending Verification Code...',
     })
-    const token = await AsyncStorage.getItem('token')
-    const body = { "primary": true }
-    SettingsService.makeEmailPrimary(token, id, body, this.fetchSuccessAndReload, this.fetchError)
-  }
+    const userData = await AsyncStorage.getItem('user')
 
-  fetchSuccessOnResendVerification = (responseJson) => {
+    const user = JSON.parse(userData)
+
+    const body = {
+      identifier: number,
+      company_id: user.company,
+    }
+
+    let responseJson = await SettingsService.resendEmailVerification(body)
+
     if (responseJson.status === "success") {
       Alert.alert(
         "Email Sent",
@@ -107,31 +110,21 @@ export default class Settings extends Component {
     }
   }
 
-  verify = async (number) => {
-    this.setState({
-      loading: true,
-      loadingMessage: 'Sending Verification Code...',
-    })
-    const token = await AsyncStorage.getItem('token');
-    const userData = await AsyncStorage.getItem('user')
-
-    const user = JSON.parse(userData)
-
-    const body = {
-      identifier: number,
-      company_id: user.company,
-    }
-
-    SettingsService.resendEmailVerification(token, body, this.fetchSuccessOnResendVerification, this.fetchError)
-  }
-
   delete = async (id) => {
     this.setState({
       loading: true,
       loadingMessage: 'Deleting...',
     })
-    const token = await AsyncStorage.getItem('token');
-    SettingsService.deleteEmail(token, id, this.fetchSuccessAndReload, this.fetchError)
+    let responseJson = await SettingsService.deleteEmail(id)
+
+    if (responseJson.status === "success") {
+      this.reload()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
   render() {

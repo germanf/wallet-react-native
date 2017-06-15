@@ -14,10 +14,10 @@ import AccountCurrencies from './../screens/accounts/accountCurrencies'
 import SettingsProfileImage from './../screens/settings/profileImage/index'
 import UploadImage from './../screens/settings/profileImage/uploadImage'
 import SettingsPersonalDetails from './../screens/settings/personalDetails'
-import SettingsMobileNumbers from './../screens/settings/mobileNumbers/index'
+import SettingsMobileNumbers from './../screens/settings/mobileNumbers/mobileNumbers'
 import AddMobileNumber from './../screens/settings/mobileNumbers/addMobileNumber'
 import VerifyMobileNumber from './../screens/settings/mobileNumbers/verifyMobile'
-import SettingsEmailAddresses from './../screens/settings/emailAddresses/index'
+import SettingsEmailAddresses from './../screens/settings/emailAddresses/emailAddresses'
 import AddEmailAddress from './../screens/settings/emailAddresses/addEmailAddress'
 import SettingsGetVerified from './../screens/settings/getVerified'
 import SettingsAddress from './../screens/settings/address'
@@ -29,7 +29,7 @@ import AddBitcoinAddress from './../screens/settings/bitcoinAddresses/addBitcoin
 import EditBitcoinAddress from './../screens/settings/bitcoinAddresses/editBitcoinAddress'
 import SettingsCards from './../screens/settings/cards'
 import SettingsSecurity from './../screens/settings/security'
-import SettingsNotifications from './../screens/settings/notifications/index'
+import SettingsNotifications from './../screens/settings/notifications'
 
 const RouteConfigs = {
   Login: {

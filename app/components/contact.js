@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
 
-export default class Settings extends Component {
+export default class Contact extends Component {
 
   render() {
     return (

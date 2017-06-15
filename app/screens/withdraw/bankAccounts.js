@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, ListView, StyleSheet, Alert, AsyncStorage, TouchableHighlight, Text, RefreshControl } from 'react-native'
-import Account from './../../components/account'
+import { View, ListView, StyleSheet, Alert, TouchableHighlight, Text, RefreshControl } from 'react-native'
+import Account from './../../components/bankAccount'
 import SettingsService from './../../services/settingsService'
 
 export default class BankAccounts extends Component {
@@ -24,11 +24,18 @@ export default class BankAccounts extends Component {
     this.props.navigation.navigate("WithdrawalAmountEntry", { reference })
   }
 
-  fetchSuccess = (responseJson) => {
+  getData = async () => {
+    this.setState({
+      refreshing: true,
+    })
+    let responseJson = await SettingsService.getAllBankAccounts()
+
     if (responseJson.status === "success") {
-      const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) });
-      const data = responseJson.data;
-      console.log(data)
+      const ds = new ListView.DataSource({
+        rowHasChanged: (r1, r2) =>
+          JSON.stringify(r1) !== JSON.stringify(r2),
+      })
+      const data = responseJson.data
       let ids = data.map((obj, index) => index);
       this.setState({
         refreshing: false,
@@ -43,20 +50,6 @@ export default class BankAccounts extends Component {
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
-  }
-
-  getData = async () => {
-    this.setState({
-      refreshing: true,
-    })
-    const token = await AsyncStorage.getItem('token');
-    SettingsService.getAllBankAccounts(token, this.fetchSuccess, this.fetchError)
   }
 
   render() {

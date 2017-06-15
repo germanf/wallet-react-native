@@ -1,17 +1,14 @@
 import React, { Component } from 'react'
-import { View, AsyncStorage, Alert, Text } from 'react-native'
+import { View, AsyncStorage, Text } from 'react-native'
 import { NavigationActions } from 'react-navigation'
-import AuthService from './../../services/authService'
 
 export default class Home extends Component {
 
-  constructor() {
-    super()
-
+  componentWillMount() {
     this.logout()
   }
 
-  goToLogin = () => {
+  logout = async () => {
     AsyncStorage.clear()
     const resetAction = NavigationActions.reset({
       index: 0,
@@ -20,29 +17,6 @@ export default class Home extends Component {
       ],
     })
     this.props.navigation.dispatch(resetAction)
-  }
-
-  fetchSuccess = (responseJson) => {
-    if (responseJson.status === "success") {
-      this.goToLogin()
-    }
-    else {
-      Alert.alert('Error',
-        responseJson.message,
-        [{ text: 'OK', onPress: () => this.goToLogin() }])
-    }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK', onPress: () => this.props.navigation.goBack() }]
-    )
-  }
-
-  logout = async () => {
-    const token = await AsyncStorage.getItem('token');
-    AuthService.logout(token, this.fetchSuccess, this.fetchError)
   }
 
   render() {

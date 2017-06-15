@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ListView, StyleSheet, Alert, AsyncStorage, TouchableHighlight, Text } from 'react-native'
+import { View, ListView, StyleSheet, TouchableHighlight, Text } from 'react-native'
 import Account from './../../../components/account'
 import SettingsService from './../../../services/settingsService'
 
@@ -24,7 +24,8 @@ export default class BankAccounts extends Component {
     this.props.navigation.navigate("EditBankAccount", { reference })
   }
 
-  fetchSuccess = (responseJson) => {
+  getData = async () => {
+    let responseJson = await SettingsService.getAllBankAccounts()
     if (responseJson.status === "success") {
       const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) });
       const data = responseJson.data;
@@ -37,16 +38,6 @@ export default class BankAccounts extends Component {
     else {
       this.props.logout()
     }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-          error,
-          [{ text: 'OK' }])
-  }
-  getData = async () => {
-    const token = await AsyncStorage.getItem('token');
-    SettingsService.getAllBankAccounts(token, this.fetchSuccess, this.fetchError)
   }
 
   render() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ListView, StyleSheet, Alert, AsyncStorage, TouchableHighlight, Text } from 'react-native'
+import { View, ListView, StyleSheet, Alert, TouchableHighlight, Text } from 'react-native'
 import Account from './../../../components/account'
 import SettingsService from './../../../services/settingsService'
 
@@ -23,12 +23,12 @@ export default class BitcoinAddresses extends Component {
     this.props.navigation.navigate("EditBitcoinAddress", { reference })
   }
 
-  fetchSuccess = (responseJson) => {
+  getData = async () => {
+    let responseJson = await SettingsService.getAllBitcoinAddresses()
     if (responseJson.status === "success") {
-      const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) });
-      const data = responseJson.data;
-      //console.log(data)
-      let ids = data.map((obj, index) => index);
+      const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) })
+      const data = responseJson.data
+      let ids = data.map((obj, index) => index)
       this.setState({
         dataSource: ds.cloneWithRows(data, ids),
       })
@@ -38,17 +38,6 @@ export default class BitcoinAddresses extends Component {
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
-  }
-
-  getData = async () => {
-    const token = await AsyncStorage.getItem('token');
-    SettingsService.getAllBitcoinAddresses(token, this.fetchSuccess, this.fetchError)
   }
 
   render() {

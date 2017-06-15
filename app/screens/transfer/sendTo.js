@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, KeyboardAvoidingView, StyleSheet, TextInput, AsyncStorage, TouchableHighlight, Text, Alert, ListView, ActivityIndicator } from 'react-native'
 import Expo from 'expo'
 import TransectionService from './../../services/transectionService'
-import Contact from './contact'
+import Contact from './../../components/contact'
 
 export default class AmountEntry extends Component {
   static navigationOptions = {
@@ -29,13 +29,13 @@ export default class AmountEntry extends Component {
 
   showContactsAsync = async () => {
     // Ask for permission to query contacts.
-    const permission = await Expo.Permissions.askAsync(Expo.Permissions.CONTACTS);
+    const permission = await Expo.Permissions.askAsync(Expo.Permissions.CONTACTS)
     if (permission.status !== 'granted') {
       Alert.alert(
         'Error',
         'Permission denied'
-      );
-      return;
+      )
+      return
     }
     const getTotal = await Expo.Contacts.getContactsAsync({
       fields: [
@@ -157,11 +157,7 @@ export default class AmountEntry extends Component {
   }
 
   transferConfirmed = async (amount) => {
-    const token = await AsyncStorage.getItem('token')
-    TransectionService.sendMoney(token, amount, this.state.reference, this.state.note, this.fetchSuccess, this.fetchError)
-  }
-
-  fetchSuccess = (responseJson) => {
+    let responseJson = await TransectionService.sendMoney(amount, this.state.reference, this.state.note)
     if (responseJson.status === "success") {
       Alert.alert('Success',
         "TX Code: " + responseJson.data.tx_code,
@@ -172,12 +168,6 @@ export default class AmountEntry extends Component {
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK' }])
   }
 
   transferCenceled = () => {

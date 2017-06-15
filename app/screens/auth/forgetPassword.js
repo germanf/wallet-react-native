@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, Alert, StyleSheet, KeyboardAvoidingView, TouchableHighlight, Text, TextInput} from 'react-native'
+import React, { Component } from 'react'
+import { View, Alert, StyleSheet, KeyboardAvoidingView, TouchableHighlight, Text, TextInput } from 'react-native'
 import AuthService from './../../services/authService'
 
 export default class ForgetPassword extends Component {
@@ -7,43 +7,35 @@ export default class ForgetPassword extends Component {
     title: 'Forget Password',
   }
 
-  constructor() {
-      super()
-      this.state = {
-         email: '',
-         company: '',
-      }
-   }
+  constructor(props) {
+    super(props)
+    this.state = {
+      email: '',
+      company: '',
+    }
+  }
 
-   goToLogin = () => {
-     this.props.navigation.goBack()
-   }
+  goToLogin = () => {
+    this.props.navigation.goBack()
+  }
 
-   fetchSuccess = (responseJson) => {
-     if (responseJson.status === "success") {
-          Alert.alert('Success',
-            responseJson.message,
-            [{text: 'OK', onPress: () => this.goToLogin()}])
-        }
-        else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
-        }
-   }
-
-   fetchError = (error) => {
-     Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-   }
-   sendEmail = () => {
-     var body = JSON.stringify({
-          "identifier": this.state.email,
-          "company_id": this.state.company,
-        })
-     AuthService.forgetPassword(body, this.fetchSuccess, this.fetchError)
-   }
+  sendEmail = async () => {
+    var body = {
+      "identifier": this.state.email,
+      "company_id": this.state.company,
+    }
+    let responseJson = await AuthService.forgetPassword(body)
+    if (responseJson.status === "success") {
+      Alert.alert('Success',
+        responseJson.message,
+        [{ text: 'OK', onPress: () => this.goToLogin() }])
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
+  }
 
   render() {
     return (
@@ -54,13 +46,13 @@ export default class ForgetPassword extends Component {
             placeholder="Email"
             autoCapitalize="none"
             keyboardType="email-address"
-            onChangeText={(email) => this.setState({email})}
+            onChangeText={(email) => this.setState({ email })}
           />
           <TextInput
             style={styles.input}
             placeholder="Company Name"
             autoCapitalize="none"
-            onChangeText={(company) => this.setState({company})}
+            onChangeText={(company) => this.setState({ company })}
           />
           <TouchableHighlight
             style={styles.submit}
@@ -77,9 +69,9 @@ export default class ForgetPassword extends Component {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex:1,
-    backgroundColor:'white',
-    padding:15,
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 15,
   },
   container: {
     flexDirection: 'column',

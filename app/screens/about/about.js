@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, Image, Alert, AsyncStorage, Linking} from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, Image, Alert, Linking } from 'react-native'
 import UserInfoService from './../../services/userInfoService'
 
 export default class About extends Component {
@@ -7,8 +7,8 @@ export default class About extends Component {
     title: 'About',
   }
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
       company: {},
@@ -19,28 +19,18 @@ export default class About extends Component {
     this.getData()
   }
 
-  fetchSuccess = (responseJson) => {
-    if (responseJson.status === "success") {
-          this.setState({
-            company: responseJson.data,
-          })
-        }
-        else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
-        }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-  }
-
   getData = async () => {
-    const token = await AsyncStorage.getItem('token');
-    UserInfoService.getCompany(token, this.fetchSuccess, this.fetchError)
+    let responseJson = await UserInfoService.getCompany()
+    if (responseJson.status === "success") {
+      this.setState({
+        company: responseJson.data,
+      })
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
   openLink = () => {
@@ -50,8 +40,8 @@ export default class About extends Component {
       }
       else {
         Alert.alert('Error',
-            'Don\'t know how to open URI: ' + this.state.company.website,
-            [{text: 'OK'}])
+          'Don\'t know how to open URI: ' + this.state.company.website,
+          [{ text: 'OK' }])
       }
     })
   }
@@ -60,15 +50,15 @@ export default class About extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.details}>
-          <Text style={{fontSize:30}}>
+          <Text style={{ fontSize: 30 }}>
             {this.state.company.name}
           </Text>
           <View style={styles.description}>
-            <Text style={{fontSize:20}}>
+            <Text style={{ fontSize: 20 }}>
               {this.state.company.description}
             </Text>
             <Text
-              style={{fontSize:20, color:'blue'}}
+              style={{ fontSize: 20, color: 'blue' }}
               onPress={this.openLink}>
               (link)
             </Text>
@@ -77,8 +67,8 @@ export default class About extends Component {
         <View style={styles.logo}>
           {this.state.company.logo !== null ?
             <Image
-              style={{width: 200, height: 100}}
-              source={{uri: this.state.company.logo}}
+              style={{ width: 200, height: 100 }}
+              source={{ uri: this.state.company.logo }}
             /> :
             null
           }

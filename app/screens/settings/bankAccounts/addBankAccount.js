@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Alert, AsyncStorage, StyleSheet } from 'react-native'
+import { View, Alert, StyleSheet } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import AddBankAccountComponent from './bankAccountComponent'
 import SettingsService from './../../../services/settingsService'
@@ -65,7 +65,9 @@ export default class AddBankAccount extends Component {
     this.props.navigation.dispatch(resetAction)
   }
 
-  fetchSuccess = (responseJson) => {
+  add = async () => {
+    let responseJson = await SettingsService.addBankAccount(this.state)
+
     if (responseJson.status === "success") {
       this.goToHome()
     }
@@ -74,18 +76,6 @@ export default class AddBankAccount extends Component {
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
-  }
-
-  add = async () => {
-    //console.log(this.state)
-    const token = await AsyncStorage.getItem('token')
-    SettingsService.addBankAccount(token, this.state, this.fetchSuccess, this.fetchError)
   }
 
   render() {

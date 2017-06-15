@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, KeyboardAvoidingView, StyleSheet, TextInput, AsyncStorage, TouchableHighlight, Text, Alert} from 'react-native'
+import React, { Component } from 'react'
+import { View, KeyboardAvoidingView, StyleSheet, TextInput, TouchableHighlight, Text, Alert } from 'react-native'
 import SettingsService from './../../../services/settingsService'
 
 export default class AmountEntry extends Component {
@@ -10,12 +10,14 @@ export default class AmountEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      number : 0,
+      number: 0,
       primary: false,
     }
   }
 
-  fetchSuccess = (responseJson) => {
+  add = async () => {
+    let responseJson = await SettingsService.addMobile(this.state)
+
     if (responseJson.status === "success") {
           this.props.navigation.navigate("VerifyMobileNumber")
         }
@@ -26,33 +28,21 @@ export default class AmountEntry extends Component {
         }
   }
 
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
-  }
-
-  add = async() => {
-    const token = await AsyncStorage.getItem('token')
-
-    SettingsService.addMobile(token, this.state, this.fetchSuccess, this.fetchError)
-  }
-
   render() {
     return (
       <KeyboardAvoidingView style={styles.container} behavior={'padding'} keyboardVerticalOffset={70}>
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
           <TextInput
             style={styles.input}
             placeholder="Enter Number"
             autoCapitalize="none"
-            onChangeText={(number) => this.setState({number})}
+            onChangeText={(number) => this.setState({ number })}
           />
         </View>
         <TouchableHighlight
           style={styles.submit}
           onPress={this.add}>
-          <Text style={{color:'white', fontSize:20}}>
+          <Text style={{ color: 'white', fontSize: 20 }}>
             Save
           </Text>
         </TouchableHighlight>
@@ -63,7 +53,7 @@ export default class AmountEntry extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },
@@ -74,7 +64,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   input: {
     height: 60,

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, StyleSheet, ListView, Alert, AsyncStorage, TouchableHighlight, Text, RefreshControl } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
-import MobileNumber from './mobileNumberComponent'
+import MobileNumber from './../../../components/mobileNumber'
 import SettingsService from './../../../services/settingsService'
 
 export default class Settings extends Component {
@@ -26,7 +26,9 @@ export default class Settings extends Component {
     this.getData()
   }
 
-  fetchSuccessOnGetData = (responseJson) => {
+  getData = async () => {
+    let responseJson = await SettingsService.getAllMobiles()
+
     if (responseJson.status === "success") {
       const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2) });
       const data = responseJson.data;
@@ -41,17 +43,6 @@ export default class Settings extends Component {
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
-  }
-
-  getData = async () => {
-    const token = await AsyncStorage.getItem('token');
-    SettingsService.getAllMobiles(token, this.fetchSuccessOnGetData, this.fetchError)
   }
 
   reload = () => {
@@ -71,31 +62,16 @@ export default class Settings extends Component {
     this.props.navigation.dispatch(resetAction)
   }
 
-  fetchSuccessAndReload = (responseJson) => {
-    if (responseJson.status === "success") {
-      this.reload()
-    }
-    else {
-      Alert.alert('Error',
-        responseJson.message,
-        [{ text: 'OK' }])
-    }
-  }
-
   makePrimary = async (id) => {
     this.setState({
       loading: true,
       loadingMessage: 'Updating...',
     })
-    const token = await AsyncStorage.getItem('token')
     const body = { "primary": true }
-    SettingsService.makeMobilePrimary(token, id, body, this.fetchSuccessAndReload, this.fetchError)
-  }
+    let responseJson = await SettingsService.makeMobilePrimary(id, body)
 
-  fetchSuccessOnResendVerification = (responseJson) => {
     if (responseJson.status === "success") {
-      this.setState({ loading: false })
-      this.props.navigation.navigate("VerifyMobileNumber")
+      this.reload()
     }
     else {
       Alert.alert('Error',
@@ -109,7 +85,6 @@ export default class Settings extends Component {
       loading: true,
       loadingMessage: 'Sending Verification Code...',
     })
-    const token = await AsyncStorage.getItem('token');
     const userData = await AsyncStorage.getItem('user')
 
     const user = JSON.parse(userData)
@@ -119,7 +94,17 @@ export default class Settings extends Component {
       company_id: user.company,
     }
 
-    SettingsService.resendMobileVerification(token, body, this.fetchSuccessOnResendVerification, this.fetchError)
+    let responseJson = await SettingsService.resendMobileVerification(body)
+
+    if (responseJson.status === "success") {
+      this.setState({ loading: false })
+      this.props.navigation.navigate("VerifyMobileNumber")
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
   delete = async (id) => {
@@ -127,8 +112,17 @@ export default class Settings extends Component {
       loading: true,
       loadingMessage: 'Deleting...',
     })
-    const token = await AsyncStorage.getItem('token');
-    SettingsService.deleteMobile(token, id, this.fetchSuccessAndReload, this.fetchError)
+
+    let responseJson = await SettingsService.deleteMobile(id)
+
+    if (responseJson.status === "success") {
+      this.reload()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
   render() {

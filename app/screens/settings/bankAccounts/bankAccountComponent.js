@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {ScrollView, StyleSheet, TouchableHighlight, Text, TextInput, KeyboardAvoidingView} from 'react-native'
+import React, { Component } from 'react'
+import { ScrollView, StyleSheet, TouchableHighlight, Text, TextInput, KeyboardAvoidingView } from 'react-native'
 
 export default class BankAccountComponent extends Component {
 
@@ -67,7 +67,7 @@ export default class BankAccountComponent extends Component {
         <TouchableHighlight
           style={styles.submit}
           onPress={this.props.save}>
-          <Text style={{color:'white'}}>
+          <Text style={{ color: 'white' }}>
             Save
           </Text>
         </TouchableHighlight>
@@ -77,27 +77,27 @@ export default class BankAccountComponent extends Component {
 }
 
 const styles = StyleSheet.create({
-   container: {
-      flex:1,
-      flexDirection: 'column',
-   },
-   input: {
-      height: 60,
-      width: "100%",
-      padding: 10,
-      marginTop: 10,
-      borderColor: 'white',
-      borderWidth: 1,
-   },
-   submit: {
-      padding: 10,
-      marginTop: 10,
-      height: 50,
-      borderRadius: 8,
-      backgroundColor: '#2070A0',
-      width: "100%",
-      alignSelf: 'stretch',
-      alignItems: 'center',
-      justifyContent:'center',
-   },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  input: {
+    height: 60,
+    width: "100%",
+    padding: 10,
+    marginTop: 10,
+    borderColor: 'white',
+    borderWidth: 1,
+  },
+  submit: {
+    padding: 10,
+    marginTop: 10,
+    height: 50,
+    borderRadius: 8,
+    backgroundColor: '#2070A0',
+    width: "100%",
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 })

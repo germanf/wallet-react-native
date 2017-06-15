@@ -1,30 +1,25 @@
 import BaseService from './baseService'
 
-var getHeaders = (token) => {
-  var headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Authorization': 'Token ' + token,
-  }
-
-  return headers
-}
-
 var AccountService = {
-  getAllAccounts: (token, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    BaseService.get('accounts/', headers, successFunc, errorFunc)
+  getAllAccounts: () => {
+    return BaseService.get('accounts/')
   },
 
-  getAllAccountCurrencies: (reference, token, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    BaseService.get('accounts/' + reference + '/currencies/', headers, successFunc, errorFunc)
+  getMoreAccounts: (url) => {
+    return BaseService.getWithFullUrl(url)
   },
 
-  setActiveCurrency: (reference, code, token, successFunc, errorFunc) => {
-    var headers = getHeaders(token)
-    var body = JSON.stringify({"active": true})
-    BaseService.put('accounts/' + reference + '/currencies/' + code + '/', headers, body, successFunc, errorFunc)
+  getAllAccountCurrencies: (reference) => {
+    return BaseService.get('accounts/' + reference + '/currencies/')
+  },
+
+  getMoreAccountCurrencies: (url) => {
+    return BaseService.getWithFullUrl(url)
+  },
+
+  setActiveCurrency: (reference, code) => {
+    var data = {active: true}
+    return BaseService.put('accounts/' + reference + '/currencies/' + code + '/', data)
   },
 }
 

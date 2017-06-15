@@ -40,7 +40,7 @@ export default class AmountEntry extends Component {
     }
   }
 
-  changeAmount = (text) => {
+  amountChanged = (text) => {
     let amount = parseFloat(text)
     if (isNaN(amount)) {
       this.setState({amount: 0})
@@ -59,7 +59,7 @@ export default class AmountEntry extends Component {
             placeholder="Amount"
             autoCapitalize="none"
             keyboardType="numeric"
-            onChangeText={this.changeAmount}
+            onChangeText={this.amountChanged}
           />
           <TextInput
             style={styles.input}

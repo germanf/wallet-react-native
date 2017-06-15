@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
-import {View, Alert, AsyncStorage, StyleSheet} from 'react-native'
-import {NavigationActions} from 'react-navigation'
+import React, { Component } from 'react'
+import { View, Alert, StyleSheet } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import EditBitcoinAddressComponent from './bitcoinAddressComponent'
 import SettingsService from './../../../services/settingsService'
 
@@ -10,18 +10,18 @@ export default class AddBankAccount extends Component {
   }
 
   constructor(props) {
-      super(props)
-      const params = this.props.navigation.state.params.reference
-      this.state = {
-        id: params.id,
-        address: params.address,
-      }
-   }
+    super(props)
+    const params = this.props.navigation.state.params.reference
+    this.state = {
+      id: params.id,
+      address: params.address,
+    }
+  }
 
-   updateAddress = (address) => {
-      this.setState({address})
-   }
-   goToHome = () => {
+  updateAddress = (address) => {
+    this.setState({ address })
+  }
+  goToHome = () => {
     const resetAction = NavigationActions.reset({
       index: 1,
       actions: [
@@ -30,15 +30,16 @@ export default class AddBankAccount extends Component {
           params: {},
 
           // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Settings'}),
+          action: NavigationActions.navigate({ routeName: 'Settings' }),
         }),
-        NavigationActions.navigate({ routeName: 'SettingsBitcoinAddresses'}),
+        NavigationActions.navigate({ routeName: 'SettingsBitcoinAddresses' }),
       ],
     })
     this.props.navigation.dispatch(resetAction)
-   }
-   
-   fetchSuccess = (responseJson) => {
+  }
+
+  update = async () => {
+    let responseJson = await SettingsService.editBitcoinAddresses(this.state.id, this.state)
     if (responseJson.status === "success") {
       this.goToHome()
     }
@@ -48,18 +49,6 @@ export default class AddBankAccount extends Component {
         [{ text: 'OK' }])
     }
   }
-
-  fetchError = (error) => {
-    Alert.alert('Error',
-          error,
-          [{ text: 'OK', onPress: () => console.log('OK Pressed!') }])
-  }
-
-   update = async() => {
-     //console.log(this.state)
-     const token = await AsyncStorage.getItem('token')
-     SettingsService.editBitcoinAddresses(token, this.state.id, this.state, this.fetchSuccess, this.fetchError)
-   }
 
   render() {
     return (
@@ -76,8 +65,8 @@ export default class AddBankAccount extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-    backgroundColor:'white',
-    padding:15,
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 15,
   },
 })

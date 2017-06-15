@@ -60,8 +60,8 @@ export default class Account extends Component {
 
 const styles = StyleSheet.create({
   options: {
-    padding: 10,
     height: 80,
+    padding: 10,
     width: "100%",
     borderBottomWidth: 1,
     borderBottomColor: "lightgray",
@@ -71,8 +71,6 @@ const styles = StyleSheet.create({
   optionsElement: {
     flex:1,
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent:'center',
   },
   icon: {
     flex:1,

@@ -218,7 +218,7 @@ export default class AmountEntry extends Component {
       )
     }
     return (
-      <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
+      <KeyboardAvoidingView style={styles.container} behavior={'padding'} keyboardVerticalOffset={70} >
         <View style={{ flex: 1 }}>
           <TextInput
             style={styles.input}
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent:'center',
   },
   input: {
     height: 60,

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, StyleSheet, Image, AsyncStorage, ScrollView, Alert, Text, TouchableHighlight} from 'react-native'
+import {View, StyleSheet, Image, AsyncStorage, Alert, Text, TouchableHighlight} from 'react-native'
 import {NavigationActions} from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
 
@@ -90,18 +90,18 @@ export default class UploadImage extends Component {
           textContent={"Uploading..."}
           textStyle={{color: '#FFF'}}
         />
-        <ScrollView>
-        <TouchableHighlight onPress={null}>
+        <TouchableHighlight
+          style={{flex:1}}
+          onPress={null}>
           <Image
-            style={{height: this.state.image.height, width: this.state.image.width}}
+            style={{height: 300, width: 300, borderRadius: 150}}
             source={{uri: this.state.image.uri}}
           />
         </TouchableHighlight>
-        </ScrollView>
         <TouchableHighlight
           style={styles.submit}
           onPress={() => this.saveImage()}>
-          <Text style={{color:'white'}}>
+          <Text style={{color:'white', fontSize: 20}}>
             Upload
           </Text>
         </TouchableHighlight>
@@ -113,16 +113,14 @@ export default class UploadImage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 10,
     flexDirection: 'column',
     backgroundColor: 'white',
-    padding: 20,
     alignItems: 'center',
   },
   submit: {
-      padding: 10,
       marginTop: 10,
-      height: 50,
-      borderRadius: 8,
+      height: 60,
       backgroundColor: '#2070A0',
       width: "100%",
       alignSelf: 'stretch',

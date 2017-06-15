@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 export default class Account extends Component {
@@ -33,7 +32,6 @@ export default class Account extends Component {
 
 const styles = StyleSheet.create({
   options: {
-    padding: 10,
     height: 80,
     width: "100%",
     borderBottomWidth: 1,
@@ -44,8 +42,6 @@ const styles = StyleSheet.create({
   optionsElement: {
     flex:1,
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent:'center',
   },
   icon: {
     flex:1,

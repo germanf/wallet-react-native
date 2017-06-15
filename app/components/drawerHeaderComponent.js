@@ -26,10 +26,10 @@ export default class DrawerHeader extends Component {
           source={{uri: this.state.userInfo.profile !== null ? this.state.userInfo.profile : this.state.altImage}}
         />
         <View style={styles.outerContainer}>
-          <Text style={{color:'white', fontSize:16}}>
+          <Text style={{color:'white', fontSize:18}}>
             {this.state.userInfo.first_name + ' ' + this.state.userInfo.last_name}
           </Text>
-          <Text style={{color:'white', fontSize:11}}>
+          <Text style={{color:'white', fontSize:12}}>
             {this.state.userInfo.email}
           </Text>
         </View>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   stretch: {
     flex: 1,
     height: 70,
-    borderRadius: 30,
+    borderRadius: 35,
   },
   outerContainer: {
     flex: 3,

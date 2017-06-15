@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {View, Alert, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TextInput, AsyncStorage, TouchableHighlight} from 'react-native'
 import CountryPicker from 'react-native-country-picker-modal'
-import { Picker } from 'react-native-picker-dropdown'
+import Picker from './../../components/picker'
 
 export default class Settings extends Component {
   static navigationOptions = {
@@ -30,7 +30,7 @@ export default class Settings extends Component {
     const value = await AsyncStorage.getItem('user')
 
     const user = JSON.parse(value)
-    if (user.language === '') {
+    if (user.language === '' || !user.language) {
       user.language = 'en'
     }
     this.setState({
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     flexDirection:'row',
-    width:'100%', 
+    width:'100%',
     alignItems: 'center',
     justifyContent:'center',
   },

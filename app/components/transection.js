@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons'
+import Date from './../util/date.js'
 
 export default class Withdraw extends Component {
 
@@ -23,20 +24,20 @@ export default class Withdraw extends Component {
             />
           </View>
           <View style={styles.type}>
-            <Text style={{ fontSize: 25 }}>
-              {this.props.data.tx_type}
+            <Text style={{ fontSize: 20 }}>
+              {this.props.data.label}
             </Text>
             <Text style={{ fontSize: 13 }}>
-              {this.props.data.reference}
+              {this.props.data.note}
             </Text>
           </View>
         </View>
         <View style={styles.right}>
-          <Text style={{ fontSize: 20, color: 'black' }}>
+          <Text style={{ fontSize: 18, color: 'black' }}>
             {this.props.data.currency.symbol + " " + this.getAmount(this.props.data.amount, this.props.data.currency.divisibility)}
           </Text>
           <Text style={{ fontSize: 13, color: 'darkgray' }}>
-            {this.props.data.status}
+            {Date.getDateFromMiliseconds(this.props.data.updated)} | {this.props.data.status}
           </Text>
         </View>
       </View>

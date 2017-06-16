@@ -8,11 +8,11 @@ export default class Account extends Component {
       <TouchableHighlight
         style={styles.options} >
         <View style={styles.optionsElement}>
-          <Text style={{ fontSize: 22 }}>
+          <Text style={{ fontSize: 20 }}>
             {this.props.mobile.number}
           </Text>
           {this.props.mobile.verified === true ?
-            <Text style={{ fontSize: 16 }}>
+            <Text style={{ fontSize: 15 }}>
               Verified
             </Text> :
             null
@@ -23,7 +23,7 @@ export default class Account extends Component {
               <TouchableHighlight
                 style={[styles.button, { backgroundColor: '#2070A0' }]}
                 onPress={() => this.props.verify(this.props.mobile.number)} >
-                <Text style={{ color: 'white', fontSize: 20 }}>
+                <Text style={styles.buttonText}>
                   Verify
                 </Text>
               </TouchableHighlight> :
@@ -33,14 +33,14 @@ export default class Account extends Component {
               <TouchableHighlight
                 style={[styles.button, { backgroundColor: 'greenyellow' }]}
                 onPress={null} >
-                <Text style={{ color: 'white', fontSize: 20 }}>
+                <Text style={styles.buttonText}>
                   Primary
                 </Text>
               </TouchableHighlight> :
               <TouchableHighlight
                 style={[styles.button, { backgroundColor: '#2070A0' }]}
                 onPress={() => this.props.makePrimary(this.props.mobile.id)} >
-                <Text style={{ color: 'white', fontSize: 20 }}>
+                <Text style={styles.buttonText}>
                   Make Primary
                 </Text>
               </TouchableHighlight>
@@ -49,7 +49,7 @@ export default class Account extends Component {
               <TouchableHighlight
                 style={[styles.button, { backgroundColor: 'red' }]}
                 onPress={() => this.props.delete(this.props.mobile.id)} >
-                <Text style={{ color: 'white', fontSize: 20 }}>
+                <Text style={styles.buttonText}>
                   Delete
                 </Text>
               </TouchableHighlight> :
@@ -88,5 +88,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginRight: 6,
     padding: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
   },
 })

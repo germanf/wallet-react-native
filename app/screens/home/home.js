@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, TouchableHighlight, Text, AsyncStorage } from 'react-native'
-import { NavigationActions } from 'react-navigation'
+import { View, StyleSheet, TouchableHighlight, Text } from 'react-native'
 import Transections from './transections'
 import CurrentBalance from './currentBalance'
+import Auth from './../../util/auth'
 
 export default class Home extends Component {
   static navigationOptions = {
@@ -10,14 +10,7 @@ export default class Home extends Component {
   }
 
   logout = () => {
-    AsyncStorage.clear()
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Login' }),
-      ],
-    })
-    this.props.navigation.dispatch(resetAction)
+    Auth.logout(this.props.navigation)
   }
 
   render() {

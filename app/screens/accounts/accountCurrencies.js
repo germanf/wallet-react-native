@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { View, ListView, StyleSheet, Alert, RefreshControl } from 'react-native'
-import { NavigationActions } from 'react-navigation'
 import InfiniteScrollView from 'react-native-infinite-scroll-view'
 import AccountService from './../../services/accountService'
+import ResetNavigation from './../../util/resetNavigation'
 import Currency from './../../components/currency'
 
 export default class Accounts extends Component {
@@ -69,20 +69,7 @@ export default class Accounts extends Component {
   }
 
   reload = () => {
-    const resetAction = NavigationActions.reset({
-      index: 1,
-      actions: [
-        NavigationActions.navigate({
-          routeName: 'Home',
-          params: {},
-
-          // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Accounts' }),
-        }),
-        NavigationActions.navigate({ routeName: 'AccountCurrencies', params: { reference: this.state.reference } }),
-      ],
-    })
-    this.props.navigation.dispatch(resetAction)
+    ResetNavigation.dispatchUnderDrawerWithParams(this.props.navigation, 'Accounts', 'AccountCurrencies', { reference: this.state.reference })
   }
 
   setActive = async (code) => {

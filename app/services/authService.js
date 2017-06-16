@@ -2,7 +2,7 @@ import BaseService from './baseService'
 
 var authService = {
   login: (data) => {
-     return BaseService.post('auth/login/', data)
+    return BaseService.post('auth/login/', data)
   },
 
   signup: (data) => {

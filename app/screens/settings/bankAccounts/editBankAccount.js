@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { View, Alert, StyleSheet } from 'react-native'
-import { NavigationActions } from 'react-navigation'
 import EditBankAccountComponent from './bankAccountComponent'
 import SettingsService from './../../../services/settingsService'
+import ResetNavigation from './../../../util/resetNavigation'
 
 export default class EditBankAccount extends Component {
   static navigationOptions = {
@@ -50,20 +50,7 @@ export default class EditBankAccount extends Component {
     this.setState({ bic })
   }
   goToHome = () => {
-    const resetAction = NavigationActions.reset({
-      index: 1,
-      actions: [
-        NavigationActions.navigate({
-          routeName: 'Home',
-          params: {},
-
-          // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Settings' }),
-        }),
-        NavigationActions.navigate({ routeName: 'SettingsBankAccounts' }),
-      ],
-    })
-    this.props.navigation.dispatch(resetAction)
+    ResetNavigation.dispatchUnderDrawer(this.props.navigation, 'Settings', 'SettingsBankAccounts')
   }
 
   update = async () => {

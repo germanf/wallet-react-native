@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, KeyboardAvoidingView, StyleSheet, TextInput, TouchableHighlight, AsyncStorage, Text, Alert } from 'react-native'
 import TransectionService from './../../services/transectionService'
-
+import ResetNavigation from './../../util/resetNavigation'
 export default class AmountEntry extends Component {
   static navigationOptions = {
     title: 'Withdraw',
@@ -30,7 +30,7 @@ export default class AmountEntry extends Component {
         'Withdrawal Amount: ' + this.state.amount,
         [
           { text: 'Yes', onPress: this.withdrawConfirmed },
-          { text: 'No', onPress: this.withdrawCenceled, style: 'cancel' },
+          { text: 'No', onPress: () => ResetNavigation.dispatchToSingleRoute(this.props.navigation, "Home"), style: 'cancel' },
         ]
       )
     }
@@ -58,17 +58,13 @@ export default class AmountEntry extends Component {
     if (responseJson.status === "success") {
       Alert.alert('Success',
         "TX Code: " + responseJson.data.tx_code,
-        [{ text: 'OK', onPress: this.withdrawCenceled }])
+        [{ text: 'OK', onPress: () => ResetNavigation.dispatchToSingleRoute(this.props.navigation, "Home") }])
     }
     else {
       Alert.alert('Error',
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  withdrawCenceled = () => {
-    this.props.navigation.navigate("Home")
   }
 
   render() {

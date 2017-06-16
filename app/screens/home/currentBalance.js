@@ -28,9 +28,8 @@ export default class CurrentBalance extends Component {
 
   getBalanceInfo = async () => {
     let responseJson = await UserInfoService.getActiveAccount()
-    console.log(responseJson)
     if (responseJson.status === "success") {
-      const account = responseJson.data.results[0].balances[0]
+      const account = responseJson.data.results[0].currencies[0]
       AsyncStorage.setItem('currency', JSON.stringify(account.currency))
       this.setState({ symbol: account.currency.symbol })
       this.setState({ balance: this.setBalance(account.balance, account.currency.divisibility) })

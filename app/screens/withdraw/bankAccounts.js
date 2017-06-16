@@ -29,7 +29,7 @@ export default class BankAccounts extends Component {
       refreshing: true,
     })
     let responseJson = await SettingsService.getAllBankAccounts()
-
+    //console.log(responseJson)
     if (responseJson.status === "success") {
       const ds = new ListView.DataSource({
         rowHasChanged: (r1, r2) =>

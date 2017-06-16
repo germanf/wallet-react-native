@@ -1,7 +1,8 @@
-import React, {Component} from 'react'
-import {View, StyleSheet, Image, AsyncStorage, Alert, Text, TouchableHighlight} from 'react-native'
-import {NavigationActions} from 'react-navigation'
+import React, { Component } from 'react'
+import { View, StyleSheet, Image, AsyncStorage, Alert, Text, TouchableHighlight } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay'
+import UserInfoService from './../../../services/userInfoService'
+import ResetNavigation from './../../../util/resetNavigation'
 
 export default class UploadImage extends Component {
   static navigationOptions = {
@@ -18,25 +19,11 @@ export default class UploadImage extends Component {
   }
 
   goBackAndReload = () => {
-    const resetAction = NavigationActions.reset({
-      index: 1,
-      actions: [
-        NavigationActions.navigate({
-          routeName: 'Home',
-          params: {},
-
-          // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Settings'}),
-        }),
-        NavigationActions.navigate({ routeName: 'SettingsProfileImage'}),
-      ],
-    })
-    this.props.navigation.dispatch(resetAction)
+    ResetNavigation.dispatchUnderDrawer(this.props.navigation, "Settings", 'SettingsProfileImage')
   }
 
   saveImage = async () => {
-    this.setState({loading:true})
-    console.log(this.state.image)
+    this.setState({ loading: true })
     const uri = this.state.image.uri
     const parts = uri.split("/")
     const name = parts[parts.length - 1]
@@ -46,40 +33,17 @@ export default class UploadImage extends Component {
       type: 'image/jpg',
     }
 
-    const body = new FormData()
-    body.append('profile', file)
-
-    //console.log(body)
-
-    const value = await AsyncStorage.getItem('token')
-     fetch('https://rehive.com/api/3/user/', {
-        method: 'PATCH',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'multipart/form-data',
-          'Authorization': 'Token ' + value,
-        },
-        body,
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson)
-        if (responseJson.status === "success") {
-          AsyncStorage.removeItem('user')
-          AsyncStorage.setItem('user', JSON.stringify(responseJson.data))
-          this.goBackAndReload()
-        }
-        else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+    let responseJson = await UserInfoService.uploadProfileImage(file)
+    if (responseJson.status === "success") {
+      AsyncStorage.removeItem('user')
+      AsyncStorage.setItem('user', JSON.stringify(responseJson.data))
+      this.goBackAndReload()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
   render() {
@@ -88,20 +52,20 @@ export default class UploadImage extends Component {
         <Spinner
           visible={this.state.loading}
           textContent={"Uploading..."}
-          textStyle={{color: '#FFF'}}
+          textStyle={{ color: '#FFF' }}
         />
         <TouchableHighlight
-          style={{flex:1}}
+          style={{ flex: 1 }}
           onPress={null}>
           <Image
-            style={{height: 300, width: 300, borderRadius: 150}}
-            source={{uri: this.state.image.uri}}
+            style={{ height: 300, width: 300, borderRadius: 150 }}
+            source={{ uri: this.state.image.uri }}
           />
         </TouchableHighlight>
         <TouchableHighlight
           style={styles.submit}
           onPress={() => this.saveImage()}>
-          <Text style={{color:'white', fontSize: 20}}>
+          <Text style={{ color: 'white', fontSize: 20 }}>
             Upload
           </Text>
         </TouchableHighlight>
@@ -119,13 +83,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   submit: {
-      marginTop: 10,
-      height: 60,
-      backgroundColor: '#2070A0',
-      width: "100%",
-      alignSelf: 'stretch',
-      alignItems: 'center',
-      justifyContent:'center',
-   },
+    marginTop: 10,
+    height: 60,
+    backgroundColor: '#2070A0',
+    width: "100%",
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 })
 

@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
 
 export default class Account extends Component {
 
@@ -8,11 +8,11 @@ export default class Account extends Component {
       <TouchableHighlight
         style={styles.options} >
         <View style={styles.optionsElement}>
-          <Text style={{fontSize:22}}>
+          <Text style={{ fontSize: 22 }}>
             {this.props.email.email}
           </Text>
           {this.props.email.verified === true ?
-            <Text style={{fontSize:16}}>
+            <Text style={{ fontSize: 16 }}>
               Verified
             </Text> :
             null
@@ -21,9 +21,9 @@ export default class Account extends Component {
           <View style={styles.buttons}>
             {this.props.email.verified !== true ?
               <TouchableHighlight
-                style={[styles.button, {backgroundColor: '#2070A0'}]}
+                style={[styles.button, { backgroundColor: '#2070A0' }]}
                 onPress={() => this.props.verify(this.props.email.email)} >
-                <Text style={{color:'white', fontSize:20}}>
+                <Text style={{ color: 'white', fontSize: 20 }}>
                   Verify
                 </Text>
               </TouchableHighlight> :
@@ -31,25 +31,25 @@ export default class Account extends Component {
             }
             {this.props.email.primary === true ?
               <TouchableHighlight
-                style={[styles.button, {backgroundColor: 'greenyellow'}]}
+                style={[styles.button, { backgroundColor: 'greenyellow' }]}
                 onPress={null} >
-                <Text style={{color:'white', fontSize:20}}>
+                <Text style={{ color: 'white', fontSize: 20 }}>
                   Primary
                 </Text>
               </TouchableHighlight> :
               <TouchableHighlight
-                style={[styles.button, {backgroundColor: '#2070A0'}]}
+                style={[styles.button, { backgroundColor: '#2070A0' }]}
                 onPress={() => this.props.makePrimary(this.props.email.id)} >
-                <Text style={{color:'white', fontSize:20}}>
+                <Text style={{ color: 'white', fontSize: 20 }}>
                   Make Primary
                 </Text>
               </TouchableHighlight>
             }
             {this.props.email.primary !== true ?
               <TouchableHighlight
-                style={[styles.button, {backgroundColor: 'red'}]}
+                style={[styles.button, { backgroundColor: 'red' }]}
                 onPress={() => this.props.delete(this.props.email.id)} >
-                <Text style={{color:'white', fontSize:20}}>
+                <Text style={{ color: 'white', fontSize: 20 }}>
                   Delete
                 </Text>
               </TouchableHighlight> :
@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "lightgray",
     alignItems: 'flex-start',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   optionsElement: {
     flexDirection: 'column',
     alignItems: 'flex-start',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   buttons: {
     flexDirection: 'row',

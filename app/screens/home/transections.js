@@ -8,7 +8,6 @@ import InfiniteScrollView from 'react-native-infinite-scroll-view'
 import Transection from './../../components/transection'
 import TransectionService from './../../services/transectionService'
 
-
 export default class Transections extends Component {
   constructor(props) {
     super(props);

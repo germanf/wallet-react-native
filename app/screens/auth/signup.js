@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { View, Alert, AsyncStorage, StyleSheet, ScrollView, TouchableHighlight, Text, TextInput, KeyboardAvoidingView } from 'react-native'
-import { NavigationActions } from 'react-navigation'
+import { View, Alert, StyleSheet, ScrollView, TouchableHighlight, Text, TextInput, KeyboardAvoidingView } from 'react-native'
 import AuthService from './../../services/authService'
+import Auth from './../../util/auth'
 
 export default class Signup extends Component {
   static navigationOptions = {
@@ -21,23 +21,11 @@ export default class Signup extends Component {
     }
   }
 
-  goToHome = () => {
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Home' }),
-      ],
-    })
-    this.props.navigation.dispatch(resetAction)
-  }
-
   signup = async () => {
     let responseJson = await AuthService.signup(this.state)
     if (responseJson.status === "success") {
-      const loginInfo = responseJson.data;
-      AsyncStorage.setItem("token", loginInfo.token)
-      AsyncStorage.setItem("user", JSON.stringify(loginInfo.user))
-      this.goToHome()
+      const loginInfo = responseJson.data
+      Auth.login(this.props.navigation, loginInfo)
     }
     else {
       Alert.alert('Error',

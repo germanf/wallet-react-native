@@ -19,13 +19,13 @@ export default class AmountEntry extends Component {
     let responseJson = await SettingsService.addMobile(this.state)
 
     if (responseJson.status === "success") {
-          this.props.navigation.navigate("VerifyMobileNumber")
-        }
-        else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
-        }
+      this.props.navigation.navigate("VerifyMobileNumber")
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
   render() {

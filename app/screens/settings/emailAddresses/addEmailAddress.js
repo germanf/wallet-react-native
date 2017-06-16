@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, KeyboardAvoidingView, StyleSheet, TextInput, TouchableHighlight, Text, Alert } from 'react-native'
-import { NavigationActions } from 'react-navigation'
 import SettingsService from './../../../services/settingsService'
+import ResetNavigation from './../../../util/resetNavigation'
 
 export default class AmountEntry extends Component {
   static navigationOptions = {
@@ -17,20 +17,7 @@ export default class AmountEntry extends Component {
   }
 
   reload = () => {
-    const resetAction = NavigationActions.reset({
-      index: 1,
-      actions: [
-        NavigationActions.navigate({
-          routeName: 'Home',
-          params: {},
-
-          // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Settings' }),
-        }),
-        NavigationActions.navigate({ routeName: 'SettingsEmailAddresses' }),
-      ],
-    })
-    this.props.navigation.dispatch(resetAction)
+    ResetNavigation.dispatchUnderDrawer(this.props.navigation, 'Settings', 'SettingsEmailAddresses')
   }
 
   add = async () => {

@@ -6,11 +6,11 @@ import Deposit from './../screens/deposit/deposit'
 import Settings from './../screens/settings/settings'
 import Withdraw from './../screens/withdraw/withdraw'
 import About from './../screens/about/about'
-import Logout from './../screens/auth/logout'
 import Accounts from './../screens/accounts/accounts'
 import Receive from './../screens/receive/receive'
+import Logout from './../screens/auth/logout'
 import DrawerButton from './../components/drawerButton'
-import DrawerHeader from './../components/drawerHeaderComponent'
+import DrawerHeader from './../components/drawerHeader'
 
 const RouteConfigs = {
   Home: {

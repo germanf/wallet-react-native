@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, KeyboardAvoidingView, StyleSheet, TextInput, TouchableHighlight, Text, Alert} from 'react-native'
+import React, { Component } from 'react'
+import { View, KeyboardAvoidingView, StyleSheet, TextInput, TouchableHighlight, Text, Alert } from 'react-native'
 
 export default class AmountEntry extends Component {
   static navigationOptions = {
@@ -9,51 +9,51 @@ export default class AmountEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      amount : 0,
-      note : '',
+      amount: 0,
+      note: '',
     }
   }
 
   goToSendTo = () => {
     if (this.state.amount <= 0) {
       Alert.alert(
-         'Invalid',
-          'Enter valid amount',
-         [[{text: 'OK'}]]
+        'Invalid',
+        'Enter valid amount',
+        [[{ text: 'OK' }]]
       )
     }
     else {
-      this.props.navigation.navigate("SendTo", {amount: this.state.amount, note: this.state.note, reference: ''})
+      this.props.navigation.navigate("SendTo", { amount: this.state.amount, note: this.state.note, reference: '' })
     }
   }
 
   goToBarcodeScanner = () => {
     if (this.state.amount <= 0) {
       Alert.alert(
-         'Invalid',
-          'Enter valid amount',
-         [[{text: 'OK'}]]
+        'Invalid',
+        'Enter valid amount',
+        [[{ text: 'OK' }]]
       )
     }
     else {
-      this.props.navigation.navigate("QRcodeScanner", {amount: this.state.amount, note: this.state.note})
+      this.props.navigation.navigate("QRcodeScanner", { amount: this.state.amount, note: this.state.note })
     }
   }
 
   amountChanged = (text) => {
     let amount = parseFloat(text)
     if (isNaN(amount)) {
-      this.setState({amount: 0})
+      this.setState({ amount: 0 })
     }
     else {
-      this.setState({amount})
+      this.setState({ amount })
     }
   }
 
   render() {
     return (
       <KeyboardAvoidingView style={styles.container} behavior={'padding'} keyboardVerticalOffset={70}>
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
           <TextInput
             style={styles.input}
             placeholder="Amount"
@@ -65,20 +65,20 @@ export default class AmountEntry extends Component {
             style={styles.input}
             placeholder="Note"
             autoCapitalize="none"
-            onChangeText={(note) => this.setState({note})}
+            onChangeText={(note) => this.setState({ note })}
           />
         </View>
         <TouchableHighlight
           style={styles.submit}
           onPress={this.goToSendTo}>
-          <Text style={{color:'white', fontSize:20}}>
+          <Text style={{ color: 'white', fontSize: 20 }}>
             Next
           </Text>
         </TouchableHighlight>
         <TouchableHighlight
-          style={[styles.submit, {marginTop: 5}]}
+          style={[styles.submit, { marginTop: 5 }]}
           onPress={this.goToBarcodeScanner}>
-          <Text style={{color:'white', fontSize:20}}>
+          <Text style={{ color: 'white', fontSize: 20 }}>
             Scan QR code
           </Text>
         </TouchableHighlight>
@@ -89,7 +89,7 @@ export default class AmountEntry extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   input: {
     height: 60,

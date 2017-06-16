@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
@@ -16,7 +16,7 @@ export default class Account extends Component {
               name="radio-button-unchecked"
               size={50}
             />
-            <Text style={{fontSize:22, paddingLeft: 10}}>
+            <Text style={{ fontSize: 22, paddingLeft: 10 }}>
               {this.props.name}
             </Text>
           </View>
@@ -41,17 +41,17 @@ const styles = StyleSheet.create({
     borderBottomColor: "lightgray",
   },
   optionsElement: {
-    flex:1,
+    flex: 1,
     flexDirection: 'row',
   },
   optionsText: {
-    flex:2,
+    flex: 2,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
   optionsIcon: {
-    flex:1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-end',
   },

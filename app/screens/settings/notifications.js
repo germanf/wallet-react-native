@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { View, StyleSheet, ListView, Alert, RefreshControl } from 'react-native'
-import { NavigationActions } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
 import Notification from './../../components/notification'
 import SettingsService from './../../services/settingsService'
+import ResetNavigation from './../../util/resetNavigation'
 
 export default class Settings extends Component {
   static navigationOptions = {
@@ -11,7 +11,7 @@ export default class Settings extends Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       refreshing: false,
       loading: false,
@@ -44,20 +44,7 @@ export default class Settings extends Component {
   }
 
   reload = () => {
-    const resetAction = NavigationActions.reset({
-      index: 1,
-      actions: [
-        NavigationActions.navigate({
-          routeName: 'Home',
-          params: {},
-
-          // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: 'Settings' }),
-        }),
-        NavigationActions.navigate({ routeName: 'SettingsNotifications' }),
-      ],
-    })
-    this.props.navigation.dispatch(resetAction)
+    ResetNavigation.dispatchUnderDrawer(this.props.navigation, 'Settings', 'SettingsNotifications')
   }
 
   enableEmail = async (id, previous) => {

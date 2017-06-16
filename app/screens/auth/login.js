@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { View, Alert, AsyncStorage, KeyboardAvoidingView, StyleSheet, TouchableHighlight, Text, TextInput } from 'react-native'
-import { NavigationActions } from 'react-navigation'
 import AuthService from './../../services/authService'
+import Auth from './../../util/auth'
+import ResetNavigation from './../../util/resetNavigation'
 
 export default class Login extends Component {
   static navigationOptions = {
@@ -22,35 +23,23 @@ export default class Login extends Component {
     try {
       const token = await AsyncStorage.getItem('token')
       if (token != null) {
-        this.goToHome()
+        ResetNavigation.dispatchToSingleRoute(this.props.navigation, "Home")
       }
       return token
     } catch (error) {
     }
   }
 
-  goToHome = () => {
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Home' }),
-      ],
-    })
-    this.props.navigation.dispatch(resetAction)
-  }
-
-  login = async() => {
+  login = async () => {
     var body = {
-      "identifier": this.state.email,
-      "company_id": this.state.company,
+      "user": this.state.email,
+      "company": this.state.company,
       "password": this.state.password,
     }
     let responseJson = await AuthService.login(body)
     if (responseJson.status === "success") {
-      const loginInfo = responseJson.data;
-      AsyncStorage.setItem("token", loginInfo.token)
-      AsyncStorage.setItem("user", JSON.stringify(loginInfo.user))
-      this.goToHome()
+      const loginInfo = responseJson.data
+      Auth.login(this.props.navigation, loginInfo)
     }
     else {
       Alert.alert('Error',

@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class Withdraw extends Component {
@@ -55,7 +55,7 @@ export default class Withdraw extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },
@@ -66,20 +66,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "lightgray",
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   optionsElement: {
-    flex:1,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'flex-start',
+    justifyContent: 'flex-start',
   },
   optionsText: {
-    flex:1,
-    fontSize:22,
+    flex: 1,
+    fontSize: 22,
   },
   optionsIcon: {
-    flex:1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-end',
   },

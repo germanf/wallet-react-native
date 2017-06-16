@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { View, Alert, StyleSheet } from 'react-native'
-import { NavigationActions } from 'react-navigation'
 import AddBitcoinAddressComponent from './bitcoinAddressComponent'
 import SettingsService from './../../../services/settingsService'
+import ResetNavigation from './../../../util/resetNavigation'
 
 export default class AddBankAccount extends Component {
   static navigationOptions = {
@@ -19,29 +19,17 @@ export default class AddBankAccount extends Component {
   updateAddress = (address) => {
     this.setState({ address })
   }
-  goToHome = () => {
-    const params = this.props.navigation.state.params
-    const resetAction = NavigationActions.reset({
-      index: 1,
-      actions: [
-        NavigationActions.navigate({
-          routeName: 'Home',
-          params: {},
 
-          // navigate can have a nested navigate action that will be run inside the child router
-          action: NavigationActions.navigate({ routeName: params.parentRoute }),
-        }),
-        NavigationActions.navigate({ routeName: params.nextRoute }),
-      ],
-    })
-    this.props.navigation.dispatch(resetAction)
+  reload = () => {
+    const params = this.props.navigation.state.params
+    ResetNavigation.dispatchUnderDrawer(this.props.navigation, params.parentRoute, params.nextRoute)
   }
 
   add = async () => {
     let responseJson = await SettingsService.addBitcoinAddresses(this.state)
 
     if (responseJson.status === "success") {
-      this.goToHome()
+      this.reload()
     }
     else {
       Alert.alert('Error',

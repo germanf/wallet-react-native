@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 export default class Account extends Component {
@@ -17,10 +17,10 @@ export default class Account extends Component {
             />
           </View>
           <View style={styles.type}>
-            <Text style={{fontSize:25}}>
+            <Text style={{ fontSize: 25 }}>
               {this.props.name}
             </Text>
-            <Text style={{fontSize:13}}>
+            <Text style={{ fontSize: 13 }}>
               {this.props.reference}
             </Text>
           </View>
@@ -37,19 +37,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "lightgray",
     alignItems: 'flex-start',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   optionsElement: {
-    flex:1,
+    flex: 1,
     flexDirection: 'row',
   },
   icon: {
-    flex:1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   type: {
-    flex:4,
+    flex: 4,
     justifyContent: 'center',
     alignItems: 'flex-start',
   },

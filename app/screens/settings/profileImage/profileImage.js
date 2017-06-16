@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, StyleSheet, Image, AsyncStorage, TouchableHighlight} from 'react-native'
+import React, { Component } from 'react'
+import { View, StyleSheet, Image, AsyncStorage, TouchableHighlight } from 'react-native'
 import { ImagePicker } from 'expo'
 
 export default class ProfileImage extends Component {
@@ -23,7 +23,7 @@ export default class ProfileImage extends Component {
     const value = await AsyncStorage.getItem('user');
     const user = JSON.parse(value)
     if (user.profile !== null) {
-      this.setState({imageURI: user.profile})
+      this.setState({ imageURI: user.profile })
     }
   }
 
@@ -36,7 +36,7 @@ export default class ProfileImage extends Component {
     console.log(result)
 
     if (!result.cancelled) {
-      this.props.navigation.navigate("UploadImage", {image: result})
+      this.props.navigation.navigate("UploadImage", { image: result })
     }
   };
 
@@ -46,7 +46,7 @@ export default class ProfileImage extends Component {
         <TouchableHighlight onPress={() => this.pickImage()}>
           <Image
             style={styles.photo}
-            source={{uri: this.state.imageURI}}
+            source={{ uri: this.state.imageURI }}
           />
         </TouchableHighlight>
       </View>

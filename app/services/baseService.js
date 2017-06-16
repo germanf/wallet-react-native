@@ -26,12 +26,13 @@ let _apiCallWithData = async (url, method, data) => {
       body: JSON.stringify(data),
     })
     let responseJson = await response.json()
-    console.log(responseJson)
     return responseJson
   } catch (error) {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK' }])
+    Alert.alert(
+      "Error",
+      JSON.stringify(error),
+      [{ text: 'OK' }]
+    )
   }
 }
 
@@ -43,16 +44,40 @@ let _apiCallWithoutData = async (url, method) => {
       headers,
     })
     let responseJson = await response.json()
-    console.log(responseJson)
     return responseJson
   } catch (error) {
-    Alert.alert('Error',
-      error,
-      [{ text: 'OK' }])
+    Alert.alert(
+      "Error",
+      JSON.stringify(error),
+      [{ text: 'OK' }]
+    )
   }
 }
 
-var baseService = {
+let _apiCallFileUpload = async (url, method, data) => {
+  try {
+    const token = await AsyncStorage.getItem('token')
+    let headers = {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': 'Token ' + token,
+    }
+    let response = await fetch(url, {
+      method,
+      headers,
+      body: data,
+    })
+    let responseJson = await response.json()
+    return responseJson
+  } catch (error) {
+    Alert.alert(
+      "Error",
+      JSON.stringify(error),
+      [{ text: 'OK' }]
+    )
+  }
+}
+
+const baseService = {
 
   get: (endPoint) => {
     return _apiCallWithoutData(baseUrl + endPoint, "GET")
@@ -76,6 +101,10 @@ var baseService = {
 
   delete: (endPoint) => {
     return _apiCallWithoutData(baseUrl + endPoint, "DELETE", {})
+  },
+
+  fileUpload: (endPoint, data) => {
+    return _apiCallFileUpload(baseUrl + endPoint, "PATCH", data)
   },
 }
 

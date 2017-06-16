@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class Withdraw extends Component {
@@ -23,19 +23,19 @@ export default class Withdraw extends Component {
             />
           </View>
           <View style={styles.type}>
-            <Text style={{fontSize:25}}>
+            <Text style={{ fontSize: 25 }}>
               {this.props.data.tx_type}
             </Text>
-            <Text style={{fontSize:13}}>
+            <Text style={{ fontSize: 13 }}>
               {this.props.data.reference}
             </Text>
           </View>
         </View>
         <View style={styles.right}>
-          <Text style={{fontSize:20, color: 'black'}}>
+          <Text style={{ fontSize: 20, color: 'black' }}>
             {this.props.data.currency.symbol + " " + this.getAmount(this.props.data.amount, this.props.data.currency.divisibility)}
           </Text>
-          <Text style={{fontSize:13, color:'darkgray'}}>
+          <Text style={{ fontSize: 13, color: 'darkgray' }}>
             {this.props.data.status}
           </Text>
         </View>
@@ -53,22 +53,22 @@ const styles = StyleSheet.create({
     height: 70,
     backgroundColor: 'white',
   },
-  left:{
-    flex:3,
+  left: {
+    flex: 3,
     flexDirection: 'row',
   },
   icon: {
-    flex:1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   type: {
-    flex:3,
+    flex: 3,
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
-  right:{
-    flex:2,
+  right: {
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'flex-end',
   },

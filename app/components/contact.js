@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
 
 export default class Contact extends Component {
 
@@ -23,15 +23,15 @@ export default class Contact extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   contact: {
     height: 60,
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
   },

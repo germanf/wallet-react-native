@@ -1,7 +1,8 @@
-import React, {Component} from 'react'
-import {View, Alert, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TextInput, AsyncStorage, TouchableHighlight} from 'react-native'
+import React, { Component } from 'react'
+import { View, Alert, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TextInput, AsyncStorage, TouchableHighlight } from 'react-native'
 import CountryPicker from 'react-native-country-picker-modal'
 import Picker from './../../components/picker'
+import UserInfoService from './../../services/userInfoService'
 
 export default class Settings extends Component {
   static navigationOptions = {
@@ -45,39 +46,22 @@ export default class Settings extends Component {
   }
 
   save = async () => {
-    const value = await AsyncStorage.getItem('token')
-     fetch('https://rehive.com/api/3/user/', {
-        method: 'PATCH',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Token ' + value,
-        },
-        body: JSON.stringify(this.state),
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success") {
-          AsyncStorage.removeItem('user')
-          AsyncStorage.setItem('user', JSON.stringify(responseJson.data))
-          this.props.navigation.goBack()
-        }
-        else {
-          Alert.alert('Error',
-            responseJson.message,
-            [{text: 'OK'}])
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Error',
-            error,
-            [{text: 'OK'}])
-      })
+    let responseJson = await UserInfoService.updateUserDetails()
+    if (responseJson.status === "success") {
+      AsyncStorage.removeItem('user')
+      AsyncStorage.setItem('user', JSON.stringify(responseJson.data))
+      this.props.navigation.goBack()
+    }
+    else {
+      Alert.alert('Error',
+        responseJson.message,
+        [{ text: 'OK' }])
+    }
   }
 
   render() {
     return (
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         <KeyboardAvoidingView style={styles.container} behavior={'padding'} keyboardVerticalOffset={70}>
           <ScrollView keyboardDismissMode={'interactive'}>
             <View style={styles.inputContainer}>
@@ -89,7 +73,7 @@ export default class Settings extends Component {
                 placeholder=""
                 autoCapitalize="none"
                 value={this.state.first_name}
-                onChangeText={(text) => this.setState({first_name: text})}
+                onChangeText={(text) => this.setState({ first_name: text })}
               />
             </View>
             <View style={styles.inputContainer}>
@@ -101,7 +85,7 @@ export default class Settings extends Component {
                 placeholder=""
                 autoCapitalize="none"
                 value={this.state.last_name}
-                onChangeText={(text) => this.setState({last_name: text})}
+                onChangeText={(text) => this.setState({ last_name: text })}
               />
             </View>
             <View style={styles.inputContainer}>
@@ -113,31 +97,31 @@ export default class Settings extends Component {
                 placeholder=""
                 autoCapitalize="none"
                 value={this.state.id_number}
-                onChangeText={(text) => this.setState({id_number: text})}
+                onChangeText={(text) => this.setState({ id_number: text })}
               />
             </View>
             <View style={styles.pickerContainer}>
-              <Text style={[styles.text, {flex:1}]}>
+              <Text style={[styles.text, { flex: 1 }]}>
                 Country
               </Text>
               <CountryPicker
                 onChange={(value) => {
-                  this.setState({nationality: value.cca2});
+                  this.setState({ nationality: value.cca2 });
                 }}
                 cca2={this.state.nationality}
                 translation="eng"
-                styles={{flex:1, justifyContent: 'center'}}
+                styles={{ flex: 1, justifyContent: 'center' }}
               />
             </View>
-            <View style={[styles.pickerContainer, {height:58}]}>
-              <Text style={[styles.text, {flex:2}]}>
+            <View style={[styles.pickerContainer, { height: 58 }]}>
+              <Text style={[styles.text, { flex: 2 }]}>
                 Language
               </Text>
               <Picker
                 selectedValue={this.state.language}
-                style={{flex:1, justifyContent:'center'}}
+                style={{ flex: 1, justifyContent: 'center' }}
                 onValueChange={(lang) => {
-                  this.setState({language: lang})
+                  this.setState({ language: lang })
                 }}>
                 <Picker.Item label="English" value="en" />
                 <Picker.Item label="Africans" value="af" />
@@ -152,7 +136,7 @@ export default class Settings extends Component {
                 placeholder=""
                 autoCapitalize="none"
                 value={this.state.skype_name}
-                onChangeText={(text) => this.setState({skype_name: text})}
+                onChangeText={(text) => this.setState({ skype_name: text })}
               />
             </View>
             <View style={styles.inputContainer}>
@@ -164,14 +148,14 @@ export default class Settings extends Component {
                 placeholder=""
                 autoCapitalize="none"
                 value={this.state.mobile_number}
-                onChangeText={(text) => this.setState({mobile_number: text})}
+                onChangeText={(text) => this.setState({ mobile_number: text })}
               />
             </View>
           </ScrollView>
           <TouchableHighlight
             style={styles.submit}
             onPress={() => this.save()}>
-            <Text style={{color:'white'}}>
+            <Text style={{ color: 'white' }}>
               Save
             </Text>
           </TouchableHighlight>
@@ -183,7 +167,7 @@ export default class Settings extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },
@@ -203,22 +187,22 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   text: {
-    fontSize:20,
-    paddingLeft:10,
+    fontSize: 20,
+    paddingLeft: 10,
   },
   inputContainer: {
-    flexDirection:'column',
-    width:'100%',
+    flexDirection: 'column',
+    width: '100%',
     paddingTop: 10,
   },
   pickerContainer: {
-    flexDirection:'row',
-    width:'100%',
+    flexDirection: 'row',
+    width: '100%',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
 })
 

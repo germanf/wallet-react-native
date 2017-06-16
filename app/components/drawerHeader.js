@@ -1,21 +1,21 @@
-import React, {Component} from 'react';
-import { View, StyleSheet, AsyncStorage, Image, Text} from 'react-native';
+import React, { Component } from 'react';
+import { View, StyleSheet, AsyncStorage, Image, Text } from 'react-native';
 
 export default class DrawerHeader extends Component {
   constructor() {
-      super()
-      this.state = {
-         altImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgmT5tM-IGcFDpqZ87p9zKGaWQuzpvAcDKfOTPYfx5A9zOmbTh8RMMFg',
-         userInfo: {},
-      }
+    super()
+    this.state = {
+      altImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgmT5tM-IGcFDpqZ87p9zKGaWQuzpvAcDKfOTPYfx5A9zOmbTh8RMMFg',
+      userInfo: {},
+    }
 
-      this.getUserInfo()
-   }
+    this.getUserInfo()
+  }
 
   getUserInfo = () => {
     AsyncStorage.getItem('user').then((value) => {
-         this.setState({'userInfo': JSON.parse(value)});
-      });
+      this.setState({ 'userInfo': JSON.parse(value) });
+    });
   }
 
   render() {
@@ -23,13 +23,13 @@ export default class DrawerHeader extends Component {
       <View style={styles.container}>
         <Image
           style={styles.stretch}
-          source={{uri: this.state.userInfo.profile !== null ? this.state.userInfo.profile : this.state.altImage}}
+          source={{ uri: this.state.userInfo.profile !== null ? this.state.userInfo.profile : this.state.altImage }}
         />
         <View style={styles.outerContainer}>
-          <Text style={{color:'white', fontSize:18}}>
+          <Text style={{ color: 'white', fontSize: 18 }}>
             {this.state.userInfo.first_name + ' ' + this.state.userInfo.last_name}
           </Text>
-          <Text style={{color:'white', fontSize:12}}>
+          <Text style={{ color: 'white', fontSize: 12 }}>
             {this.state.userInfo.email}
           </Text>
         </View>
@@ -39,14 +39,14 @@ export default class DrawerHeader extends Component {
 }
 
 const styles = StyleSheet.create({
-  container:{
-    height:100,
+  container: {
+    height: 100,
     flexDirection: "row",
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
     marginTop: -10,
     marginBottom: 10,
-    marginLeft:15,
+    marginLeft: 15,
   },
   stretch: {
     flex: 1,

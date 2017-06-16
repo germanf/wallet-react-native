@@ -18,7 +18,7 @@ var AccountService = {
   },
 
   setActiveCurrency: (reference, code) => {
-    var data = {active: true}
+    var data = { active: true }
     return BaseService.put('accounts/' + reference + '/currencies/' + code + '/', data)
   },
 }

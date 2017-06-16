@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class Account extends Component {
@@ -21,7 +21,7 @@ export default class Account extends Component {
       balance = balance / 10
     }
 
-    this.setState({balance})
+    this.setState({ balance })
   }
 
   render() {
@@ -36,18 +36,18 @@ export default class Account extends Component {
             />
           </View>
           <View style={styles.type}>
-            <Text style={{fontSize:22}}>
+            <Text style={{ fontSize: 22 }}>
               {this.props.data.currency.code}
             </Text>
-            <Text style={{fontSize:15}}>
+            <Text style={{ fontSize: 15 }}>
               {this.props.data.currency.symbol + ' ' + this.state.balance}
             </Text>
           </View>
           <View style={styles.buttonView}>
             <TouchableHighlight
-              style={[styles.button, {backgroundColor: this.state.color}]}
+              style={[styles.button, { backgroundColor: this.state.color }]}
               onPress={this.props.data.active === true ? null : (code) => this.props.setActive(this.props.data.currency.code)} >
-              <Text style={{color:'white', fontSize:20}}>
+              <Text style={{ color: 'white', fontSize: 20 }}>
                 Active
               </Text>
             </TouchableHighlight>
@@ -66,29 +66,29 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "lightgray",
     alignItems: 'flex-start',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   optionsElement: {
-    flex:1,
+    flex: 1,
     flexDirection: 'row',
   },
   icon: {
-    flex:1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   type: {
-    flex:3,
+    flex: 3,
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
   buttonView: {
-    flex:1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   button: {
-    flex:1,
+    flex: 1,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',

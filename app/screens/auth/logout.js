@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, AsyncStorage, Text } from 'react-native'
-import { NavigationActions } from 'react-navigation'
+import { View, Text, StyleSheet } from 'react-native'
+import Auth from './../../util/auth'
 
 export default class Home extends Component {
 
@@ -9,21 +9,23 @@ export default class Home extends Component {
   }
 
   logout = async () => {
-    AsyncStorage.clear()
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Login' }),
-      ],
-    })
-    this.props.navigation.dispatch(resetAction)
+    Auth.logout(this.props.navigation)
   }
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
+      <View style={styles.container}>
         <Text style={{ fontSize: 30 }}>Logging Out</Text>
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+})

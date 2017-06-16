@@ -2,27 +2,27 @@ import BaseService from './baseService'
 
 var settingsService = {
   getAllBankAccounts: () => {
-    return BaseService.get('user/bank_accounts/')
+    return BaseService.get('user/bank-accounts/')
   },
 
   addBankAccount: (data) => {
-    return BaseService.post('user/bank_accounts/', data)
+    return BaseService.post('user/bank-accounts/', data)
   },
 
   editBankAccount: (id, data) => {
-    return BaseService.patch('user/bank_accounts/' + id + '/', data)
+    return BaseService.patch('user/bank-accounts/' + id + '/', data)
   },
 
   getAllBitcoinAddresses: () => {
-    return BaseService.get('user/bitcoin_accounts/')
+    return BaseService.get('user/bitcoin-accounts/')
   },
 
   addBitcoinAddresses: (data) => {
-    return BaseService.post('user/bitcoin_accounts/', data)
+    return BaseService.post('user/bitcoin-accounts/', data)
   },
 
   editBitcoinAddresses: (id, data) => {
-    return BaseService.patch('user/bitcoin_accounts/' + id + '/', data)
+    return BaseService.patch('user/bitcoin-accounts/' + id + '/', data)
   },
 
   getAllMobiles: () => {

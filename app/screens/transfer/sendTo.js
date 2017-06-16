@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { View, KeyboardAvoidingView, StyleSheet, TextInput, AsyncStorage, TouchableHighlight, Text, Alert, ListView, ActivityIndicator } from 'react-native'
 import Expo from 'expo'
+import { View, KeyboardAvoidingView, StyleSheet, TextInput, AsyncStorage, TouchableHighlight, Text, Alert, ListView, ActivityIndicator } from 'react-native'
 import TransectionService from './../../services/transectionService'
 import Contact from './../../components/contact'
+import ResetNavigation from './../../util/resetNavigation'
 
 export default class AmountEntry extends Component {
   static navigationOptions = {
@@ -151,7 +152,7 @@ export default class AmountEntry extends Component {
       'Send ' + currency.symbol + this.state.amount + ' to ' + this.state.reference,
       [
         { text: 'Yes', onPress: () => this.transferConfirmed(amount) },
-        { text: 'No', onPress: this.transferCenceled, style: 'cancel' },
+        { text: 'No', onPress: () => ResetNavigation.dispatchToSingleRoute(this.props.navigation, "Home"), style: 'cancel' },
       ]
     )
   }
@@ -161,17 +162,13 @@ export default class AmountEntry extends Component {
     if (responseJson.status === "success") {
       Alert.alert('Success',
         "TX Code: " + responseJson.data.tx_code,
-        [{ text: 'OK', onPress: this.transferCenceled }])
+        [{ text: 'OK', onPress: () => ResetNavigation.dispatchToSingleRoute(this.props.navigation, "Home") }])
     }
     else {
       Alert.alert('Error',
         responseJson.message,
         [{ text: 'OK' }])
     }
-  }
-
-  transferCenceled = () => {
-    this.props.navigation.navigate("Home")
   }
 
   render() {
@@ -255,7 +252,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   input: {
     height: 60,
